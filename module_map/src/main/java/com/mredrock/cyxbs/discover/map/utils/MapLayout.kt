@@ -15,9 +15,9 @@ import android.widget.ImageView
 import android.widget.Toast
 import com.davemorrissey.labs.subscaleview.ImageSource
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
+import com.mredrock.cyxbs.common.utils.extensions.dp2px
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.bean.IconBean
-import com.mredrock.cyxbs.discover.map.utils.DensityUtil.dp2px
 
 /**
  * 创建者：林潼
@@ -89,8 +89,8 @@ class MapLayout : FrameLayout, View.OnClickListener {
             override fun onReady() {
                 iconList.forEach { icon ->
                     val layoutParams = LayoutParams(
-                            dp2px(context, 45f),
-                            dp2px(context, 48f)
+                            context.dp2px(45f),
+                            context.dp2px(48f)
                     )
                     addView(icon, layoutParams)
                 }
@@ -138,8 +138,6 @@ class MapLayout : FrameLayout, View.OnClickListener {
                     )?.withDuration(1500)
                             ?.withInterruptible(true)?.start()
                     showIcon(icon)
-                    Toast.makeText(context, iconBean.id.toString(), Toast.LENGTH_SHORT)
-                            .show()
                 }
                 if (!(clickPoint.x > 732 && clickPoint.x < 6530 && clickPoint.y > 5640 && clickPoint.y < 9000)) {
                     closeAllIcon()
@@ -160,8 +158,8 @@ class MapLayout : FrameLayout, View.OnClickListener {
                     val screenPoint =
                             subsamplingScaleImageView.sourceToViewCoord(iconBean.sx, iconBean.sy)
                     if (screenPoint != null) {
-                        icon.x = screenPoint.x - dp2px(context, 45f) / 2
-                        icon.y = screenPoint.y - dp2px(context, 48f)
+                        icon.x = screenPoint.x - context.dp2px(45f) / 2
+                        icon.y = screenPoint.y - context.dp2px(48f)
                     }
                 }
 
@@ -184,16 +182,16 @@ class MapLayout : FrameLayout, View.OnClickListener {
         icon.tag = bean
         val screenPoint = subsamplingScaleImageView.sourceToViewCoord(bean.sx, bean.sy)
         if (screenPoint != null) {
-            icon.x = screenPoint.x - dp2px(context, 45f) / 2
-            icon.y = screenPoint.y - dp2px(context, 48f)
+            icon.x = screenPoint.x - context.dp2px(45f) / 2
+            icon.y = screenPoint.y - context.dp2px(48f)
         }
         icon.setOnClickListener(this)
         icon.visibility = View.GONE
         iconList.add(icon)
         if (subsamplingScaleImageView.isReady) {
             val layoutParams = LayoutParams(
-                    dp2px(context, 45f),
-                    dp2px(context, 48f)
+                    context.dp2px(45f),
+                    context.dp2px(48f)
             )
             addView(icon, layoutParams)
         }
@@ -211,8 +209,8 @@ class MapLayout : FrameLayout, View.OnClickListener {
             icon.tag = bean
             val screenPoint = subsamplingScaleImageView.sourceToViewCoord(bean.sx, bean.sy)
             if (screenPoint != null) {
-                icon.x = screenPoint.x - dp2px(context, 45f) / 2
-                icon.y = screenPoint.y - dp2px(context, 48f)
+                icon.x = screenPoint.x - context.dp2px(45f) / 2
+                icon.y = screenPoint.y - context.dp2px(48f)
             }
             icon.setOnClickListener(this)
             icon.visibility = View.GONE
