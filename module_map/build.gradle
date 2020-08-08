@@ -4,4 +4,5 @@ dependencies {
     implementation project(':lib_common')
     implementation project(':lib_account')
     kapt deps.arouter.compiler
+    implementation 'com.davemorrissey.labs:subsampling-scale-image-view-androidx:3.10.0'
 }
