@@ -340,6 +340,11 @@
 
     <color name="main_activity_login_et_hint_color" tools:ignore="ResourceName">#999999</color>
 
+    <!--   以下为掌邮地图使用的颜色-->
+    <!--   搜索地点的搜索框文字颜色-->
+    <color name="map_search_text_color" tools:ignore="ResourceName">#15315B</color>
+    <!--   搜索地点的搜索框背景颜色-->
+    <color name="map_search_background" tools:ignore="ResourceName">#E6E7EC</color>
 
 </resources>
 

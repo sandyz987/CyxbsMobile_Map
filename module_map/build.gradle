@@ -1,8 +1,13 @@
 apply from: module_config
+apply plugin: 'kotlin-android'
 
 dependencies {
     implementation project(':lib_common')
     implementation project(':lib_account')
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    //使用navigation，单activity模式
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.0'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.0'
     kapt deps.arouter.compiler
     implementation 'com.davemorrissey.labs:subsampling-scale-image-view-androidx:3.10.0'
 }

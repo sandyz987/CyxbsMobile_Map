@@ -1,11 +1,9 @@
-package com.mredrock.cyxbs.discover.map.ui.activity
+package com.mredrock.cyxbs.discover.map.ui.activity.activity
 
 import android.annotation.SuppressLint
-import android.app.ProgressDialog
 import android.os.Bundle
 import android.view.View
 import android.webkit.WebView
-import android.widget.Toast
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.mredrock.cyxbs.common.config.DISCOVER_MAP
 import com.mredrock.cyxbs.common.service.ServiceManager
@@ -17,10 +15,14 @@ import com.mredrock.cyxbs.discover.map.bean.IconBean
 import com.mredrock.cyxbs.discover.map.utils.MapLayout
 import kotlinx.android.synthetic.main.map_activity_map.*
 
+/**
+ * 单activity模式，所有fragment在此activity下，能拿到同一个viewModel实例
+ */
+
+
 @Route(path = DISCOVER_MAP)
 class MapActivity : BaseActivity() {
     override val isFragmentActivity = false
-    private lateinit var webView: WebView
 
     @SuppressLint("SetJavaScriptEnabled", "ObsoleteSdkInt")
     override fun onStart() {
@@ -41,19 +43,6 @@ class MapActivity : BaseActivity() {
 
         setFullScreen()
 
-        map_layout.addIcon(IconBean(0, 2945f, 6526f, 2430f, 3500f, 6210f, 6830f))
-        map_layout.addIcon(IconBean(1, 2830f, 7488f, 2430f, 3250f, 7245f, 7717f))
-        map_layout.setMyOnIconClickListener(object : MapLayout.OnIconClickListener {
-            override fun onIconClick(v: View) {
-                val bean = v.tag as IconBean
-                map_layout.focusToPoint(bean.sx, bean.sy)
-            }
 
-        })
-    }
-
-    override fun onStop() {
-        webView.destroy()
-        super.onStop()
     }
 }
