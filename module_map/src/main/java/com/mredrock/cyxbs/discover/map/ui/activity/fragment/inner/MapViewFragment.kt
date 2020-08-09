@@ -1,7 +1,6 @@
-package com.mredrock.cyxbs.discover.map.ui.activity.fragment
+package com.mredrock.cyxbs.discover.map.ui.activity.fragment.inner
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,9 +9,7 @@ import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.bean.IconBean
 import com.mredrock.cyxbs.discover.map.utils.MapLayout
 import com.mredrock.cyxbs.discover.map.viewmodels.MapViewModel
-import kotlinx.android.synthetic.main.map_activity_map.*
-import kotlinx.android.synthetic.main.map_fragment_main.*
-import kotlinx.android.synthetic.main.map_fragment_map.*
+import kotlinx.android.synthetic.main.map_fragment_map_view.*
 
 
 class MapViewFragment : BaseViewModelFragment<MapViewModel>() {
@@ -22,7 +19,7 @@ class MapViewFragment : BaseViewModelFragment<MapViewModel>() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.map_fragment_map, container, false)
+        return inflater.inflate(R.layout.map_fragment_map_view, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

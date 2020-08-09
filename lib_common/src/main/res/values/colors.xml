@@ -346,5 +346,7 @@
     <!--   搜索地点的搜索框背景颜色-->
     <color name="map_search_background" tools:ignore="ResourceName">#E6E7EC</color>
 
+    <color name="map_title_text_color" tools:ignore="ResourceName">#15315B</color>
+
 </resources>
 
