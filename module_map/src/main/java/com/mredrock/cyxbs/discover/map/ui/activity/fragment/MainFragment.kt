@@ -39,13 +39,11 @@ class MainFragment : BaseViewModelFragment<MapViewModel>() {
         initMapViewFragment()
         map_iv_back.setOnClickListener {
             Toast.makeText(requireContext(),manager?.backStackEntryCount.toString(),Toast.LENGTH_SHORT).show()
-            if(manager?.backStackEntryCount?: 0 < 1){
+            if(manager?.backStackEntryCount?: 0 == 0){
                 //此处填写退出MapActivity的逻辑
             }else{
-                //关闭搜索框
                 closeSearchFragment()
             }
-            //隐藏键盘
             KeyboardController.hideInputKeyboard(requireContext(),it)
         }
         //当搜索框被点击，打开搜索Fragment
@@ -70,16 +68,19 @@ class MainFragment : BaseViewModelFragment<MapViewModel>() {
         }else{
             transaction?.show(mapViewFragment)?.commit()
         }
+        manager?.popBackStack()
     }
 
 
     private fun openSearchFragment(){
+        if(manager?.backStackEntryCount?: 0 != 0){
+            //确保不重复打开搜索框
+            return
+        }
         val transaction = manager?.beginTransaction()
         transaction?.hide(mapViewFragment)
-
         if(!searchFragment.isAdded){
             transaction?.add(R.id.map_ll_inner_fragment,searchFragment)?.show(searchFragment)?.commit()
-
         }else{
             transaction?.show(searchFragment)?.commit()
         }
