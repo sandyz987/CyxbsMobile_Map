@@ -43,8 +43,7 @@
                 android:textSize="@dimen/map_search_edit_text_size"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/map_iv_back"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="搜索一个地点" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/map_iv_back"

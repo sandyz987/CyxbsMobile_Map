@@ -1,12 +1,15 @@
 package com.mredrock.cyxbs.discover.map.ui.activity.fragment.inner
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.mredrock.cyxbs.common.BaseApp
 import com.mredrock.cyxbs.common.ui.BaseViewModelFragment
+import com.mredrock.cyxbs.common.utils.extensions.getStatusBarHeight
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.bean.IconBean
 import com.mredrock.cyxbs.discover.map.component.MapLayout
@@ -14,6 +17,7 @@ import com.mredrock.cyxbs.discover.map.databinding.MapFragmentPlaceDetailContain
 import com.mredrock.cyxbs.discover.map.utils.KeyboardController
 import com.mredrock.cyxbs.discover.map.viewmodels.MapViewModel
 import kotlinx.android.synthetic.main.map_fragment_map_view.*
+import org.jetbrains.anko.topPadding
 
 
 class MapViewFragment : BaseViewModelFragment<MapViewModel>() {
