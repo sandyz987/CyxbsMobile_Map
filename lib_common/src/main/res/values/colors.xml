@@ -347,6 +347,13 @@
     <color name="map_search_background" tools:ignore="ResourceName">#E6E7EC</color>
 
     <color name="map_title_text_color" tools:ignore="ResourceName">#15315B</color>
-
+    <!--    地图可上拉下拉标识小块背景-->
+    <color name="map_table_drag_indicator_block_color" tools:ignore="ResourceName">#E2EDFB</color>
+    <!--    地图爱心（收藏）的颜色-->
+    <color name="map_ic_favorite_color" tools:ignore="ResourceName">#94A6C4</color>
+    <!--    地图更多的颜色-->
+    <color name="map_text_detail_more_color" tools:ignore="ResourceName">#ABBBD7</color>
+    <!--    地图与大家分享文字的颜色-->
+    <color name="map_text_detail_upload" tools:ignore="ResourceName">#23477F</color>
 </resources>
 

@@ -1,25 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/whiteBackground"
-    tools:context=".ui.activity.fragment.inner.MapViewFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <data>
+
+    </data>
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/whiteBackground"
+        tools:context=".ui.activity.fragment.inner.MapViewFragment">
 
-        <com.mredrock.cyxbs.discover.map.utils.MapLayout
-            android:id="@+id/map_layout"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/map_cl_map_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        </com.mredrock.cyxbs.discover.map.utils.MapLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</FrameLayout>
+            <LinearLayout
+                android:id="@+id/map_ll_map_view_my_favorite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:background="?selectableItemBackground"
+                android:clickable="true"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:paddingStart="4dp"
+                android:paddingTop="4dp"
+                android:paddingEnd="4dp"
+                android:paddingBottom="4dp"
+                app:layout_constraintBottom_toTopOf="@+id/map_gl_map_view"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/map_iv_map_view_my_favorite"
+                    android:layout_width="23dp"
+                    android:layout_height="17dp"
+                    app:srcCompat="@drawable/map_ic_my_favorate" />
+
+                <TextView
+                    android:id="@+id/map_tv_map_view_my_favorite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="@string/map_place_map_view_my_favorite"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
+            <HorizontalScrollView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="1dp"
+                app:layout_constraintBottom_toBottomOf="@+id/map_ll_map_view_my_favorite"
+                app:layout_constraintEnd_toStartOf="@+id/map_ll_map_view_my_favorite"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/map_ll_map_view_my_favorite">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal" />
+            </HorizontalScrollView>
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/map_gl_map_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.08" />
+
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
+                android:id="@+id/content"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:animateLayoutChanges="true"
+                android:fitsSystemWindows="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/map_gl_map_view"
+                tools:background="@color/windowBackground"
+                tools:context=".ui.MainActivity">
+
+                <com.mredrock.cyxbs.discover.map.component.MapLayout
+                    android:id="@+id/map_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                </com.mredrock.cyxbs.discover.map.component.MapLayout>
+
+                <FrameLayout
+                    android:id="@+id/map_bottom_sheet_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="500dp"
+                    app:behavior_peekHeight="120dp"
+                    app:layout_behavior="@string/bottom_sheet_behavior">
+
+                </FrameLayout>
+
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </FrameLayout>
+</layout>

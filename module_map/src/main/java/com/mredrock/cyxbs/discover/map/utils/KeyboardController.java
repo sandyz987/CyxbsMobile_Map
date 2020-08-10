@@ -15,6 +15,8 @@ public class KeyboardController {
     /**
      * 隐藏键盘
      * 弹窗弹出的时候把键盘隐藏掉
+     *
+     * @param v 要获取焦点的view，一般填editText，隐藏时无所谓
      */
     public static void hideInputKeyboard(Context context, View v) {
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);

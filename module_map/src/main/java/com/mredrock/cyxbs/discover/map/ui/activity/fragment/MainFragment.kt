@@ -38,9 +38,10 @@ class MainFragment : BaseViewModelFragment<MapViewModel>() {
         super.onViewCreated(view, savedInstanceState)
         initMapViewFragment()
         map_iv_back.setOnClickListener {
-            Toast.makeText(requireContext(),manager?.backStackEntryCount.toString(),Toast.LENGTH_SHORT).show()
+            //Toast.makeText(requireContext(),manager?.backStackEntryCount.toString(),Toast.LENGTH_SHORT).show()
             if(manager?.backStackEntryCount?: 0 == 0){
                 //此处填写退出MapActivity的逻辑
+                activity?.finish()
             }else{
                 closeSearchFragment()
             }
@@ -57,14 +58,14 @@ class MainFragment : BaseViewModelFragment<MapViewModel>() {
 
     private fun initMapViewFragment(){
         val transaction = manager?.beginTransaction()
-        transaction?.add(R.id.map_ll_inner_fragment,mapViewFragment)?.commit()
+        transaction?.add(R.id.map_ll_map_fragment, mapViewFragment)?.commit()
     }
 
     private fun closeSearchFragment(){
         val transaction = manager?.beginTransaction()
         transaction?.hide(searchFragment)
         if(!mapViewFragment.isAdded){
-            transaction?.add(R.id.map_ll_inner_fragment,mapViewFragment)?.commit()
+            transaction?.add(R.id.map_ll_map_fragment, mapViewFragment)?.commit()
         }else{
             transaction?.show(mapViewFragment)?.commit()
         }
@@ -80,7 +81,7 @@ class MainFragment : BaseViewModelFragment<MapViewModel>() {
         val transaction = manager?.beginTransaction()
         transaction?.hide(mapViewFragment)
         if(!searchFragment.isAdded){
-            transaction?.add(R.id.map_ll_inner_fragment,searchFragment)?.show(searchFragment)?.commit()
+            transaction?.add(R.id.map_ll_map_fragment, searchFragment)?.show(searchFragment)?.commit()
         }else{
             transaction?.show(searchFragment)?.commit()
         }

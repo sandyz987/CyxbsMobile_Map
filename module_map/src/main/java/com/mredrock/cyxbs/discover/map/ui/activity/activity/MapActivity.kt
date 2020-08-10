@@ -2,8 +2,6 @@ package com.mredrock.cyxbs.discover.map.ui.activity.activity
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.View
-import android.webkit.WebView
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.mredrock.cyxbs.common.config.DISCOVER_MAP
 import com.mredrock.cyxbs.common.service.ServiceManager
@@ -11,9 +9,6 @@ import com.mredrock.cyxbs.common.service.account.IAccountService
 import com.mredrock.cyxbs.common.ui.BaseActivity
 import com.mredrock.cyxbs.common.utils.extensions.setFullScreen
 import com.mredrock.cyxbs.discover.map.R
-import com.mredrock.cyxbs.discover.map.bean.IconBean
-import com.mredrock.cyxbs.discover.map.utils.MapLayout
-import kotlinx.android.synthetic.main.map_activity_map.*
 
 /**
  * 单activity模式，所有fragment在此activity下，能拿到同一个viewModel实例
@@ -40,7 +35,6 @@ class MapActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.map_activity_map)
-
         setFullScreen()
 
 

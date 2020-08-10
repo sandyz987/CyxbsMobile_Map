@@ -1,4 +1,4 @@
-package com.mredrock.cyxbs.discover.map.utils
+package com.mredrock.cyxbs.discover.map.component
 
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
@@ -352,5 +352,6 @@ class MapLayout : FrameLayout, View.OnClickListener {
     fun setMyOnIconClickListener(onIconClickListener: OnIconClickListener) {
         this.onIconClickListener = onIconClickListener
     }
+
 
 }
