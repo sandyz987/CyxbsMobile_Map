@@ -16,6 +16,14 @@ class MapViewFragment : BaseViewModelFragment<MapViewModel>() {
     override val viewModelClass: Class<MapViewModel>
         get() = MapViewModel::class.java
 
+    /**
+     * 假设 Id = 0 太极运动场,Id = 1 风华运动场 。。。
+     */
+    companion object {
+        const val SPORT_TAIJI = 0
+        const val SPORT_FENGHUA = 1
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -31,6 +39,17 @@ class MapViewFragment : BaseViewModelFragment<MapViewModel>() {
             override fun onIconClick(v: View) {
                 val bean = v.tag as IconBean
                 map_layout.focusToPoint(bean.sx, bean.sy)
+                /**
+                 * 在此处添加标签响应事件
+                 */
+                when (bean.id) {
+                    SPORT_TAIJI -> {
+                        viewModel.toastEvent.value = R.string.map_tag_sport_taiji
+                    }
+                    SPORT_FENGHUA -> {
+                        viewModel.toastEvent.value = R.string.map_tag_sport_fenghua
+                    }
+                }
             }
 
         })

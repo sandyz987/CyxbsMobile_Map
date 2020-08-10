@@ -12,7 +12,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
-import android.widget.Toast
 import com.davemorrissey.labs.subscaleview.ImageSource
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.mredrock.cyxbs.common.utils.extensions.dp2px
@@ -317,14 +316,23 @@ class MapLayout : FrameLayout, View.OnClickListener {
         }
     }
 
+    /**
+     * 从资源文件中设置
+     */
     fun setImageFromRes(resId: Int) {
         imageSource = ImageSource.resource(resId)
     }
 
+    /**
+     * 设置预览图
+     */
     fun setImagePreviewFromRes(resId: Int, dimenX: Int, dimenY: Int) {
 
     }
 
+    /**
+     * 放大并平移到某点
+     */
     fun focusToPoint(sx: Float, sy: Float) {
         subsamplingScaleImageView.animateScaleAndCenter(
                 1f,

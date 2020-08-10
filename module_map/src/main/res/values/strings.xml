@@ -2,5 +2,7 @@
 <resources>
     <string name="map_search_edit_hint">搜索一个地点…</string>
     <string name="map_title">掌邮地图</string>
+    <string name="map_tag_sport_taiji">太极运动场</string>
+    <string name="map_tag_sport_fenghua">风华运动场</string>
 
 </resources>
