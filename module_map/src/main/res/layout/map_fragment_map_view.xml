@@ -51,6 +51,7 @@
             </LinearLayout>
 
             <HorizontalScrollView
+                android:id="@+id/map_horizontalscrollview"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginStart="8dp"
@@ -73,6 +74,17 @@
                 android:orientation="horizontal"
                 app:layout_constraintGuide_percent="0.08" />
 
+            <com.mredrock.cyxbs.discover.map.component.MapLayout
+                android:id="@+id/map_layout"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="@+id/content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/map_gl_map_view">
+
+            </com.mredrock.cyxbs.discover.map.component.MapLayout>
+
             <androidx.coordinatorlayout.widget.CoordinatorLayout
                 android:id="@+id/content"
                 android:layout_width="0dp"
@@ -85,13 +97,6 @@
                 app:layout_constraintTop_toTopOf="@+id/map_gl_map_view"
                 tools:background="@color/windowBackground"
                 tools:context=".ui.MainActivity">
-
-                <com.mredrock.cyxbs.discover.map.component.MapLayout
-                    android:id="@+id/map_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                </com.mredrock.cyxbs.discover.map.component.MapLayout>
 
                 <FrameLayout
                     android:id="@+id/map_bottom_sheet_content"
