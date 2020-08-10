@@ -42,16 +42,22 @@ class MainFragment : BaseViewModelFragment<MapViewModel>() {
             if(manager?.backStackEntryCount?: 0 == 0){
                 //此处填写退出MapActivity的逻辑
                 activity?.finish()
-            }else{
+            } else {
                 closeSearchFragment()
+                map_et_search.clearFocus()
             }
-            KeyboardController.hideInputKeyboard(requireContext(),it)
+            KeyboardController.hideInputKeyboard(requireContext(), it)
         }
         //当搜索框被点击，打开搜索Fragment
         map_et_search.setOnClickListener {
             openSearchFragment()
         }
-
+        //上面这个事件在editText没有焦点时收不到事件，于是加一个
+        map_et_search.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus) {
+                openSearchFragment()
+            }
+        }
 
 
     }
