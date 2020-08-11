@@ -48,10 +48,9 @@ class MapViewModel : BaseViewModel() {
                     false
                 }
                 .safeSubscribeBy {
-                    //it是请求返回的数据，以后的网络请求都照着这个模板写
                     mapInfo.value = it.data
                 }.lifeCycle()
-        TestData.getButtonInfo()//网络请求替换为：apiService.getMapInfo()
+        TestData.getButtonInfo()
                 .setSchedulers()
                 .doOnErrorWithDefaultErrorHandler {
                     toastEvent.value = R.string.map_network_connect_error
@@ -63,8 +62,17 @@ class MapViewModel : BaseViewModel() {
 
     }
 
-
-
+    fun showPlaceDetails(placeId: Int) {
+        TestData.getPlaceDetails(placeId)
+                .setSchedulers()
+                .doOnErrorWithDefaultErrorHandler {
+                    toastEvent.value = R.string.map_network_connect_error
+                    false
+                }
+                .safeSubscribeBy {
+                    placeDetails.value = it.data
+                }.lifeCycle()
+    }
 
 
 }

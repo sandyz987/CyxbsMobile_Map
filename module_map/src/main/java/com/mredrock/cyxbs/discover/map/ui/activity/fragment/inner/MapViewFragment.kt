@@ -15,7 +15,7 @@ import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.bean.IconBean
 import com.mredrock.cyxbs.discover.map.bean.PlaceItem
 import com.mredrock.cyxbs.discover.map.component.MapLayout
-import com.mredrock.cyxbs.discover.map.ui.activity.adpter.SymbolRvAdapter
+import com.mredrock.cyxbs.discover.map.ui.activity.adapter.SymbolRvAdapter
 import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
 import kotlinx.android.synthetic.main.map_fragment_map_view.*
 
@@ -26,9 +26,7 @@ class MapViewFragment : Fragment() {
     private val placeData = mutableListOf<PlaceItem>()
 
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.map_fragment_map_view, container, false)
     }
 
@@ -63,34 +61,21 @@ class MapViewFragment : Fragment() {
             }
             map_layout.addSomeIcons(iconList)
         })
-
+        /**
+         * 设置地点点击事件
+         */
         map_layout.setMyOnIconClickListener(object : MapLayout.OnIconClickListener {
             override fun onIconClick(v: View) {
                 val bean = v.tag as IconBean
                 map_layout.focusToPoint(bean.sx, bean.sy)
-                /**
-                 * 在此处添加标签响应事件
-                 */
-                placeData.forEach {
-                    if (bean.id.toString() == it.placeId) {
-                        /**
-                         * 测试部分，记得删除
-                         */
-                        Toast.makeText(context, it.placeName, Toast.LENGTH_SHORT).show()
-                    }
-
-                }
+                viewModel.showPlaceDetails(bean.id)
             }
 
         })
         map_layout.setMyOnPlaceClickListener(object : MapLayout.OnPlaceClickListener {
             override fun onPlaceClick(v: View) {
                 val bean = v.tag as IconBean
-                /**
-                 * 测试部分，记得删除
-                 * id为 bean.id
-                 */
-                Toast.makeText(context, bean.id.toString(), Toast.LENGTH_SHORT).show()
+                //viewModel.showPlaceDetails(bean.id)
             }
 
         })
@@ -116,6 +101,12 @@ class MapViewFragment : Fragment() {
                 Observer { t ->
                     adapter?.setList(t.buttonInfo)
                     adapter?.notifyDataSetChanged()
+                }
+        )
+        viewModel.placeDetails.observe(
+                viewLifecycleOwner,
+                Observer { t ->
+                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
                 }
         )
 

@@ -23,6 +23,9 @@ import com.mredrock.cyxbs.discover.map.widget.ProgressDialog
  * 时间：2020/8/6
  * 内容：基于Sub-samplingScaleImageView，继承自FrameLayout的MapLayout
  */
+
+const val FOCUS_ANIMATION_DURATION = 800L
+
 class MapLayout : FrameLayout, View.OnClickListener {
     /** Sub-samplingScaleImageView第三方控件 */
     private val subsamplingScaleImageView = SubsamplingScaleImageView(context)
@@ -79,7 +82,7 @@ class MapLayout : FrameLayout, View.OnClickListener {
                 SubsamplingScaleImageView.OnImageEventListener {
             override fun onImageLoaded() {
                 subsamplingScaleImageView.animateScaleAndCenter(1f, PointF(1560f, 8640f))
-                        ?.withDuration(1500)
+                        ?.withDuration(FOCUS_ANIMATION_DURATION)
                         ?.withInterruptible(true)?.start()
             }
 
@@ -142,7 +145,7 @@ class MapLayout : FrameLayout, View.OnClickListener {
                     subsamplingScaleImageView.animateScaleAndCenter(
                             1f,
                             PointF(iconBean.sx, iconBean.sy)
-                    )?.withDuration(1500)
+                    )?.withDuration(FOCUS_ANIMATION_DURATION)
                             ?.withInterruptible(true)?.start()
                     showIcon(icon)
                     onPlaceClickListener?.onPlaceClick(icon)
@@ -346,7 +349,7 @@ class MapLayout : FrameLayout, View.OnClickListener {
         subsamplingScaleImageView.animateScaleAndCenter(
                 1f,
                 PointF(sx, sy)
-        )?.withDuration(1500)
+        )?.withDuration(FOCUS_ANIMATION_DURATION)
                 ?.withInterruptible(true)?.start()
     }
 
