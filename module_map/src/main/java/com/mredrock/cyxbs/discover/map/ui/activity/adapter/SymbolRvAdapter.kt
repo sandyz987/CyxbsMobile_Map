@@ -1,4 +1,4 @@
-package com.mredrock.cyxbs.discover.map.ui.activity.adpter
+package com.mredrock.cyxbs.discover.map.ui.activity.adapter
 
 import android.animation.ValueAnimator
 import android.content.Context
