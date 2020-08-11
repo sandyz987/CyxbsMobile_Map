@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.ViewModelProvider
 import com.mredrock.cyxbs.common.ui.BaseViewModelFragment
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.ui.activity.fragment.inner.MapViewFragment
@@ -17,8 +19,8 @@ import kotlinx.android.synthetic.main.map_fragment_main.*
 
 //该MainFragment使用FragmentTransaction管理两个Fragment
 
-class MainFragment : BaseViewModelFragment<MapViewModel>() {
-    override val viewModelClass = MapViewModel::class.java
+class MainFragment : Fragment() {
+    private lateinit var viewModel: MapViewModel
 
     private val manager: FragmentManager?
         get() = activity?.supportFragmentManager
@@ -36,6 +38,7 @@ class MainFragment : BaseViewModelFragment<MapViewModel>() {
     @SuppressLint("RestrictedApi")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel = ViewModelProvider(requireActivity()).get(MapViewModel::class.java)
         initMapViewFragment()
         map_iv_back.setOnClickListener {
             //Toast.makeText(requireContext(),manager?.backStackEntryCount.toString(),Toast.LENGTH_SHORT).show()

@@ -14,6 +14,8 @@ import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
 
 /**
  * 单activity模式，所有fragment在此activity下，能拿到同一个viewModel实例
+ * Fragment不能继承BaseViewModelFragment，因为获得的viewModel是不同实例，必须：
+ * ViewModelProvider(requireActivity()).get(MapViewModel::class.java)来获得实例
  */
 
 
@@ -39,6 +41,6 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.map_activity_map)
 
-        viewModel.init()
+
     }
 }
