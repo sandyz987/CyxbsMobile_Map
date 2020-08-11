@@ -2,12 +2,11 @@ package com.mredrock.cyxbs.discover.map.model
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.mredrock.cyxbs.common.bean.RedrockApiStatus
 import com.mredrock.cyxbs.common.bean.RedrockApiWrapper
+import com.mredrock.cyxbs.discover.map.bean.FavoritePlace
 import com.mredrock.cyxbs.discover.map.bean.MapInfo
+import com.mredrock.cyxbs.discover.map.bean.PlaceDetails
 import io.reactivex.Observable
-import io.reactivex.ObservableEmitter
-import io.reactivex.ObservableOnSubscribe
 
 /**
  *@author zhangzhe
@@ -18,23 +17,153 @@ import io.reactivex.ObservableOnSubscribe
 
 object TestData {
     /**
-     * 直接转成数据类返回
+     * 地图基本信息接口
+     * 目前只返回 中心食堂id2 和 腾飞门id1
      */
-    fun getMapInfo(): Observable<MapInfo> {
-        val gson = Gson()
-        return Observable.create {
-            gson.fromJson<MapInfo>(mapInfoString, object : TypeToken<RedrockApiWrapper<MapInfo>>() {}.type)
+    private val gson = Gson()
+    fun getMapInfo() = Observable.create<RedrockApiWrapper<MapInfo>> {
+        it.onNext(gson.fromJson(mapInfoString, object : TypeToken<RedrockApiWrapper<MapInfo>>() {}.type))
+    }
+
+    /**
+     * 筛选接口
+     * @param code 筛选条件
+     * @return 返回list装int，符合条件的地点id
+     * 现在暂时返回[1,2]，因为“地图基本信息”接口只返回了两个地点，测试用
+     */
+    fun getScreen(code: String) = Observable.create<RedrockApiWrapper<List<Int>>> {
+        it.onNext(gson.fromJson(screenString, object : TypeToken<RedrockApiWrapper<List<Int>>>() {}.type))
+    }
+
+    /**
+     * 获得收藏接口，{nickname：最爱去的食堂 id：2}  和  {nickname：漂亮的新校门 id：1}
+     */
+    fun getFavorite() = Observable.create<RedrockApiWrapper<List<FavoritePlace>>> {
+        it.onNext(gson.fromJson(favoriteString, object : TypeToken<RedrockApiWrapper<List<FavoritePlace>>>() {}.type))
+    }
+
+    /**
+     * 地点详细接口
+     * 目前只返回 中心食堂id2 和 腾飞门id1
+     * @param placeId 返回对应地点的地点详细
+     */
+    fun getPlaceDetails(placeId: Int): Observable<RedrockApiWrapper<PlaceDetails>> {
+        val s = if (placeId == 1) place1DetailsString else place2DetailsString
+        return Observable.create<RedrockApiWrapper<PlaceDetails>> { em ->
+            em.onNext(gson.fromJson(s, object : TypeToken<RedrockApiWrapper<PlaceDetails>>() {}.type))
         }
     }
+
 
 }
 
 /**
- * 返回的字符串
+ * 接口的字符串
  */
+
+//id = 1 的地点信息字符串
+const val place1DetailsString =
+        "{\n" +
+                "    \"status\":200,\n" +
+                "    \"info\":\"success\",\n" +
+                "    \"version\":\"1.0\",\n" +
+                "    \"id\":0,\n" +
+                "    \"data\":\n" +
+                "    {\n" +
+                "        \"place_name\":\"崇文门\",\n" +
+                "        \"place_attribute\":\n" +
+                "        [\n" +
+                "            \"校门\",\n" +
+                "            \"标签\",\n" +
+                "            \"标签\",\n" +
+                "            \"标签\",\n" +
+                "            \"标签\",\n" +
+                "            \"标签\",\n" +
+                "            \"标签\",\n" +
+                "            \"标签\"\n" +
+                "        ],\n" +
+                "        \"is_collected\":true,\n" +
+                "        \"tags\":\n" +
+                "        [\n" +
+                "            \"新生报到\",\n" +
+                "            \"开门时间：6:00-23:00\"\n" +
+                "        ],\n" +
+                "        \"images\":\n" +
+                "        [\n" +
+                "            \"https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=3271944503,17290708&fm=26&gp=0.jpg\",\n" +
+                "            \"https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=3271944503,17290708&fm=26&gp=0.jpg\",\n" +
+                "            \"https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=3271944503,17290708&fm=26&gp=0.jpg\"\n" +
+                "        ]\n" +
+                "    }\n" +
+                "}"
+
+//id = 2 的地点信息字符串
+const val place2DetailsString =
+        "{\n" +
+                "    \"status\":200,\n" +
+                "    \"info\":\"success\",\n" +
+                "    \"version\":\"1.0\",\n" +
+                "    \"id\":0,\n" +
+                "    \"data\":\n" +
+                "    {\n" +
+                "        \"place_name\":\"中心食堂\",\n" +
+                "        \"place_attribute\":\n" +
+                "        [\n" +
+                "            \"食堂\",\n" +
+                "            \"标签\"\n" +
+                "        ],\n" +
+                "        \"is_collected\":true,\n" +
+                "        \"tags\":\n" +
+                "        [\n" +
+                "            \"新生报到\",\n" +
+                "            \"开饭时间：7:00-20:00\"\n" +
+                "        ],\n" +
+                "        \"images\":\n" +
+                "        [\n" +
+                "            \"https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=3271944503,17290708&fm=26&gp=0.jpg\",\n" +
+                "            \"https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=3271944503,17290708&fm=26&gp=0.jpg\",\n" +
+                "            \"https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=3271944503,17290708&fm=26&gp=0.jpg\"\n" +
+                "        ]\n" +
+                "    }\n" +
+                "}"
+
+const val favoriteString =
+        "{\n" +
+                "    \"status\":200,\n" +
+                "    \"info\":\"success\",\n" +
+                "    \"id\":0,\n" +
+                "    \"version\":\"1.0\",\n" +
+                "    \"data\":\n" +
+                "    [\n" +
+                "        {\n" +
+                "            \"place_nickname\":\"最爱去的食堂\",\n" +
+                "            \"place_id\":2\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"place_nickname\":\"漂亮的新校门\",\n" +
+                "            \"place_id\":1\n" +
+                "        },\n" +
+                "            ...\n" +
+                "    ]\n" +
+                "}"
+
+const val screenString =
+        "{\n" +
+                "    \"status\":200,\n" +
+                "    \"info\":\"success\",\n" +
+                "    \"id\":0,\n" +
+                "    \"version\":\"1.0\",\n" +
+                "    \"data\":\n" +
+                "    [\n" +
+                "        1,2\n" +
+                "    ]\n" +
+                "}"
+
 const val mapInfoString = "{\n" +
-        "    \"status\":200\n" +
-        "    \"info\":\"success\"\n" +
+        "    \"status\":200,\n" +
+        "    \"info\":\"success\",\n" +
+        "    \"version\":\"1\"," +
+        "    \"id\":0," +
         "    \"data\":" +
         "       {\n" +
         "        \"hot_word\": \"腾飞门\",\n" +

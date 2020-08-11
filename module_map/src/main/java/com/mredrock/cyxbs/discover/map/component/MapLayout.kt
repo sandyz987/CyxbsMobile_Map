@@ -2,7 +2,6 @@ package com.mredrock.cyxbs.discover.map.component
 
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
-import android.app.ProgressDialog
 import android.content.Context
 import android.graphics.PointF
 import android.util.AttributeSet
@@ -17,6 +16,7 @@ import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.mredrock.cyxbs.common.utils.extensions.dp2px
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.bean.IconBean
+import com.mredrock.cyxbs.discover.map.widget.ProgressDialog
 
 /**
  * 创建者：林潼
@@ -61,9 +61,7 @@ class MapLayout : FrameLayout, View.OnClickListener {
      */
     @SuppressLint("ClickableViewAccessibility")
     private fun initView() {
-        val dialog = ProgressDialog(context)
-        dialog.setMessage("加载中...")
-        dialog.show()
+        ProgressDialog.show(context, "提示", "加载中...", false)
         val rootParams =
                 LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         subsamplingScaleImageView.setMinimumScaleType(SubsamplingScaleImageView.SCALE_TYPE_CENTER_CROP)
@@ -93,7 +91,7 @@ class MapLayout : FrameLayout, View.OnClickListener {
                     )
                     addView(icon, layoutParams)
                 }
-                dialog.dismiss()
+                ProgressDialog.hide()
             }
 
             override fun onTileLoadError(e: Exception?) {
