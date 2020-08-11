@@ -7,8 +7,10 @@ import com.mredrock.cyxbs.common.config.DISCOVER_MAP
 import com.mredrock.cyxbs.common.service.ServiceManager
 import com.mredrock.cyxbs.common.service.account.IAccountService
 import com.mredrock.cyxbs.common.ui.BaseActivity
+import com.mredrock.cyxbs.common.ui.BaseViewModelActivity
 import com.mredrock.cyxbs.common.utils.extensions.setFullScreen
 import com.mredrock.cyxbs.discover.map.R
+import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
 
 /**
  * 单activity模式，所有fragment在此activity下，能拿到同一个viewModel实例
@@ -16,8 +18,9 @@ import com.mredrock.cyxbs.discover.map.R
 
 
 @Route(path = DISCOVER_MAP)
-class MapActivity : BaseActivity() {
+class MapActivity : BaseViewModelActivity<MapViewModel>() {
     override val isFragmentActivity = false
+    override val viewModelClass = MapViewModel::class.java
 
     @SuppressLint("SetJavaScriptEnabled", "ObsoleteSdkInt")
     override fun onStart() {
@@ -36,6 +39,6 @@ class MapActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.map_activity_map)
 
-
+        viewModel.init()
     }
 }
