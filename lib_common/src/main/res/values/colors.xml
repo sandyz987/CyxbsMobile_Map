@@ -355,5 +355,7 @@
     <color name="map_text_detail_more_color" tools:ignore="ResourceName">#ABBBD7</color>
     <!--    地图与大家分享文字的颜色-->
     <color name="map_text_detail_upload" tools:ignore="ResourceName">#23477F</color>
+    <!--    标签颜色-->
+    <color name="map_text_symbol" tools:ignore="ResourceName">#15305B</color>
 </resources>
 
