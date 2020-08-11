@@ -13,7 +13,7 @@ import com.mredrock.cyxbs.discover.map.R
 /**
  *@author zhangzhe
  *@date 2020/8/9
- *@description
+ *@description 带动画效果的搜索框自定义view，所有逻辑均在本类中
  */
 
 class SearchEditText : androidx.appcompat.widget.AppCompatEditText {

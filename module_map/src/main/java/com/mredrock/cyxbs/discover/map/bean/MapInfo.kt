@@ -1,5 +1,6 @@
 package com.mredrock.cyxbs.discover.map.bean
 
+import android.text.style.BackgroundColorSpan
 import com.google.gson.annotations.SerializedName
 
 /**
@@ -8,7 +9,7 @@ import com.google.gson.annotations.SerializedName
  *@description 主要接口，用来获取地图的底图，基本信息（包括各个地点的坐标等），完全对应接口文档
  */
 
-data class MapInfo (
+data class MapInfo(
         @SerializedName("hot_word")
         var hotWord: String,
         @SerializedName("place_list")
@@ -18,5 +19,7 @@ data class MapInfo (
         @SerializedName("map_width")
         var mapWidth: String,
         @SerializedName("map_height")
-        var mapHeight: String
+        var mapHeight: String,
+        @SerializedName("map_background_color")
+        var mapBackgroundColor: String
 )

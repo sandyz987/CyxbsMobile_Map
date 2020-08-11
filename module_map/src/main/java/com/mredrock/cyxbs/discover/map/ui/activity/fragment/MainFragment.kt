@@ -2,18 +2,17 @@ package com.mredrock.cyxbs.discover.map.ui.activity.fragment
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.FragmentManager
 import com.mredrock.cyxbs.common.ui.BaseViewModelFragment
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.ui.activity.fragment.inner.MapViewFragment
 import com.mredrock.cyxbs.discover.map.ui.activity.fragment.inner.SearchFragment
-import com.mredrock.cyxbs.discover.map.utils.KeyboardController
-import com.mredrock.cyxbs.discover.map.viewmodels.MapViewModel
+import com.mredrock.cyxbs.discover.map.util.KeyboardController
+import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
 import kotlinx.android.synthetic.main.map_fragment_main.*
 
 //该MainFragment使用FragmentTransaction管理两个Fragment
@@ -45,7 +44,6 @@ class MainFragment : BaseViewModelFragment<MapViewModel>() {
                 activity?.finish()
             } else {
                 closeSearchFragment()
-                map_et_search.clearFocus()
             }
             KeyboardController.hideInputKeyboard(requireContext(), it)
         }
@@ -59,6 +57,10 @@ class MainFragment : BaseViewModelFragment<MapViewModel>() {
                 openSearchFragment()
             }
         }
+        //在这里搜索
+        map_et_search.doOnTextChanged { text, start, count, after ->
+
+        }
 
 
     }
@@ -69,7 +71,7 @@ class MainFragment : BaseViewModelFragment<MapViewModel>() {
     }
 
     private fun closeSearchFragment(){
-        val transaction = manager?.beginTransaction()?.setCustomAnimations(R.animator.map_slide_in_left,R.animator.map_slide_out_right,0,0)
+        val transaction = manager?.beginTransaction()?.setCustomAnimations(R.animator.map_slide_from_left, R.animator.map_slide_to_right, R.animator.map_slide_from_right, R.animator.map_slide_to_left)
         transaction?.hide(searchFragment)
         if(!mapViewFragment.isAdded){
             transaction?.add(R.id.map_ll_map_fragment, mapViewFragment)?.commit()
@@ -85,7 +87,7 @@ class MainFragment : BaseViewModelFragment<MapViewModel>() {
             //确保不重复打开搜索框
             return
         }
-        val transaction = manager?.beginTransaction()?.setCustomAnimations(R.animator.map_slide_in_left,R.animator.map_slide_out_right,0,0)
+        val transaction = manager?.beginTransaction()?.setCustomAnimations(R.animator.map_slide_from_right, R.animator.map_slide_to_left, R.animator.map_slide_from_left, R.animator.map_slide_to_right)
         transaction?.hide(mapViewFragment)
         if(!searchFragment.isAdded){
             transaction?.add(R.id.map_ll_map_fragment, searchFragment)?.show(searchFragment)?.commit()

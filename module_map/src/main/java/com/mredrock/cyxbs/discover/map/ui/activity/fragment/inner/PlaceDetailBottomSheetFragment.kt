@@ -8,11 +8,11 @@ import androidx.databinding.DataBindingUtil
 import com.mredrock.cyxbs.common.ui.BaseViewModelFragment
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.databinding.MapFragmentPlaceDetailContainerBinding
-import com.mredrock.cyxbs.discover.map.viewmodels.MapViewModel
+import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
 
 class PlaceDetailBottomSheetFragment : BaseViewModelFragment<MapViewModel>() {
     override val viewModelClass = MapViewModel::class.java
-    lateinit var mBinding: MapFragmentPlaceDetailContainerBinding
+    private lateinit var mBinding: MapFragmentPlaceDetailContainerBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {

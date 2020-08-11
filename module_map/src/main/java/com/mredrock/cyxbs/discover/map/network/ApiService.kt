@@ -12,7 +12,7 @@ import retrofit2.http.POST
 /**
  *@author zhangzhe
  *@date 2020/8/8
- *@description 掌邮地图网络请求，需要用getApiService获得而不是getCommonApiService
+ *@description 掌邮地图网络请求，需要用getApiService获得而不是getCommonApiService（如果有token）
  */
 
 internal interface ApiService {
