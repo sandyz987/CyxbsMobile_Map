@@ -66,7 +66,6 @@ class MapViewFragment : BaseViewModelFragment<MapViewModel>() {
             commit()
         }
 
-
     }
 
 }
