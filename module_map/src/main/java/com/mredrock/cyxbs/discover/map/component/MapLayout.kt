@@ -32,7 +32,10 @@ class MapLayout : FrameLayout, View.OnClickListener {
 
     /** 标签array list */
     private val iconList = mutableListOf<ImageView>()
+
     private var onIconClickListener: OnIconClickListener? = null
+
+    private var onPlaceClickListener: OnPlaceClickListener? = null
 
     /**
      *下面四个为继承FrameLayout的构造器方法
@@ -128,13 +131,21 @@ class MapLayout : FrameLayout, View.OnClickListener {
         subsamplingScaleImageView.setOnClickListener {
             iconList.forEach { icon ->
                 val iconBean = icon.tag as IconBean
-                if (clickPoint.x > iconBean.leftX && clickPoint.x < iconBean.rightX && clickPoint.y > iconBean.leftY && clickPoint.y < iconBean.rightY) {
+                if ((clickPoint.x > iconBean.leftX
+                                && clickPoint.x < iconBean.rightX
+                                && clickPoint.y > iconBean.bottomY
+                                && clickPoint.y < iconBean.topY) ||
+                        (clickPoint.x > iconBean.tagLeftX
+                                && clickPoint.x < iconBean.tagRightX
+                                && clickPoint.y > iconBean.tagBottomY
+                                && clickPoint.y < iconBean.tagTopY)) {
                     subsamplingScaleImageView.animateScaleAndCenter(
                             1f,
                             PointF(iconBean.sx, iconBean.sy)
                     )?.withDuration(1500)
                             ?.withInterruptible(true)?.start()
                     showIcon(icon)
+                    onPlaceClickListener?.onPlaceClick(icon)
                 }
                 if (!(clickPoint.x > 732 && clickPoint.x < 6530 && clickPoint.y > 5640 && clickPoint.y < 9000)) {
                     closeAllIcon()
@@ -254,7 +265,7 @@ class MapLayout : FrameLayout, View.OnClickListener {
     /**
      *关闭所有的标签
      */
-    private fun closeAllIcon() {
+    fun closeAllIcon() {
         var delayTime = 0
         iconList.forEach { icon ->
             val animator = ValueAnimator.ofFloat(1f, 1.5f, 0f, 0.5f, 0f)
@@ -277,7 +288,7 @@ class MapLayout : FrameLayout, View.OnClickListener {
     /**
      *展示所有的标签
      */
-    private fun showAllIcon() {
+    fun showAllIcon() {
         iconList.forEach { icon ->
             icon.visibility = View.VISIBLE
             val animator = ValueAnimator.ofFloat(0f, 1.2f, 0.8f, 1f)
@@ -347,9 +358,32 @@ class MapLayout : FrameLayout, View.OnClickListener {
         fun onIconClick(v: View)
     }
 
+    /**
+     * 地图点击回调
+     */
+    interface OnPlaceClickListener {
+        fun onPlaceClick(v: View)
+    }
+
     fun setMyOnIconClickListener(onIconClickListener: OnIconClickListener) {
         this.onIconClickListener = onIconClickListener
     }
 
+    fun setMyOnPlaceClickListener(onPlaceClickListener: OnPlaceClickListener) {
+        this.onPlaceClickListener = onPlaceClickListener
+    }
 
+    /**
+     * public的方法，传入icon的id就可以展示此icon
+     */
+    fun showIcon(id: String) {
+        iconList.forEach {
+            val bean = it.tag as IconBean
+            val beanId = bean.id.toString()
+            if (id == beanId) {
+                showIcon(it)
+                return
+            }
+        }
+    }
 }

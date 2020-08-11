@@ -9,6 +9,10 @@ data class IconBean(
         val sy: Float,
         val leftX: Float,
         val rightX: Float,
-        val leftY: Float,
-        val rightY: Float
+        val bottomY: Float,
+        val topY: Float,
+        val tagLeftX: Float,
+        val tagRightX: Float,
+        val tagBottomY: Float,
+        val tagTopY: Float
 )

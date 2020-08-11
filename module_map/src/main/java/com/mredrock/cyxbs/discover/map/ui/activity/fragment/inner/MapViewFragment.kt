@@ -11,10 +11,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.mredrock.cyxbs.common.ui.BaseViewModelFragment
 import com.mredrock.cyxbs.discover.map.R
-import com.mredrock.cyxbs.discover.map.bean.ButtonInfo
 import com.mredrock.cyxbs.discover.map.bean.IconBean
+import com.mredrock.cyxbs.discover.map.bean.PlaceItem
 import com.mredrock.cyxbs.discover.map.component.MapLayout
 import com.mredrock.cyxbs.discover.map.ui.activity.adpter.SymbolRvAdapter
 import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
@@ -24,14 +23,8 @@ import kotlinx.android.synthetic.main.map_fragment_map_view.*
 class MapViewFragment : Fragment() {
     private lateinit var viewModel: MapViewModel
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<FrameLayout>
+    private val placeData = mutableListOf<PlaceItem>()
 
-    /**
-     * 假设 Id = 0 太极运动场,Id = 1 风华运动场 。。。
-     */
-    companion object {
-        const val SPORT_TAIJI = 0
-        const val SPORT_FENGHUA = 1
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -45,8 +38,32 @@ class MapViewFragment : Fragment() {
         /**
          * 初始化地图view
          */
-        map_layout.addIcon(IconBean(0, 2945f, 6526f, 2430f, 3500f, 6210f, 6830f))
-        map_layout.addIcon(IconBean(1, 2830f, 7488f, 2430f, 3250f, 7245f, 7717f))
+        viewModel.mapInfo.observe(viewLifecycleOwner, Observer { data ->
+            placeData.clear()
+            placeData.addAll(data.placeList)
+            val list = data.placeList
+            val iconList = mutableListOf<IconBean>()
+            list.forEach { bean ->
+                val buildingList = bean.buildingList
+                buildingList.forEach { building ->
+                    iconList.add(IconBean(bean.placeId.toInt(),
+                            bean.placeCenterX.toFloat(),
+                            bean.placeCenterY.toFloat(),
+                            building.buildingLeft.toFloat(),
+                            building.buildingRight.toFloat(),
+                            building.buildingTop.toFloat(),
+                            building.buildingBottom.toFloat(),
+                            bean.tagLeft.toFloat(),
+                            bean.tagRight.toFloat(),
+                            bean.tagTop.toFloat(),
+                            bean.tagBottom.toFloat()
+                    ))
+                }
+
+            }
+            map_layout.addSomeIcons(iconList)
+        })
+
         map_layout.setMyOnIconClickListener(object : MapLayout.OnIconClickListener {
             override fun onIconClick(v: View) {
                 val bean = v.tag as IconBean
@@ -54,14 +71,26 @@ class MapViewFragment : Fragment() {
                 /**
                  * 在此处添加标签响应事件
                  */
-                when (bean.id) {
-                    SPORT_TAIJI -> {
-                        viewModel.toastEvent.value = R.string.map_tag_sport_taiji
+                placeData.forEach {
+                    if (bean.id.toString() == it.placeId) {
+                        /**
+                         * 测试部分，记得删除
+                         */
+                        Toast.makeText(context, it.placeName, Toast.LENGTH_SHORT).show()
                     }
-                    SPORT_FENGHUA -> {
-                        viewModel.toastEvent.value = R.string.map_tag_sport_fenghua
-                    }
+
                 }
+            }
+
+        })
+        map_layout.setMyOnPlaceClickListener(object : MapLayout.OnPlaceClickListener {
+            override fun onPlaceClick(v: View) {
+                val bean = v.tag as IconBean
+                /**
+                 * 测试部分，记得删除
+                 * id为 bean.id
+                 */
+                Toast.makeText(context, bean.id.toString(), Toast.LENGTH_SHORT).show()
             }
 
         })
@@ -84,7 +113,7 @@ class MapViewFragment : Fragment() {
         //注册监听
         viewModel.buttonInfo.observe(
                 viewLifecycleOwner,
-                Observer<ButtonInfo> { t ->
+                Observer { t ->
                     adapter?.setList(t.buttonInfo)
                     adapter?.notifyDataSetChanged()
                 }
