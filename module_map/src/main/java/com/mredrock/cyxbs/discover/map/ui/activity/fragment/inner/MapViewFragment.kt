@@ -11,6 +11,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.mredrock.cyxbs.common.utils.extensions.gone
+import com.mredrock.cyxbs.common.utils.extensions.invisible
+import com.mredrock.cyxbs.common.utils.extensions.visible
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.bean.IconBean
 import com.mredrock.cyxbs.discover.map.bean.PlaceItem
@@ -83,6 +86,7 @@ class MapViewFragment : Fragment() {
          * 初始化bottomSheet
          */
         bottomSheetBehavior = BottomSheetBehavior.from(map_bottom_sheet_content)
+        map_bottom_sheet_content.invisible()
         activity?.supportFragmentManager?.beginTransaction()?.apply {
             add(R.id.map_bottom_sheet_content, PlaceDetailBottomSheetFragment())
             commit()
@@ -95,7 +99,9 @@ class MapViewFragment : Fragment() {
         map_rv_symbol_places.layoutManager = linearLayoutManager
         val adapter = context?.let { SymbolRvAdapter(it, mutableListOf()) }
         map_rv_symbol_places.adapter = adapter
-        //注册监听
+        /**
+         * 注册监听
+         */
         viewModel.buttonInfo.observe(
                 viewLifecycleOwner,
                 Observer { t ->
@@ -106,7 +112,9 @@ class MapViewFragment : Fragment() {
         viewModel.placeDetails.observe(
                 viewLifecycleOwner,
                 Observer { t ->
+                    map_bottom_sheet_content.visible()
                     bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+
                 }
         )
 

@@ -15,7 +15,7 @@ import retrofit2.http.POST
  *@description 掌邮地图网络请求，需要用getApiService获得而不是getCommonApiService（如果有token）
  */
 
-internal interface ApiService {
+internal interface MapApiService {
     @POST("/map/map_info")
     fun getMapInfo(): Observable<RedrockApiWrapper<MapInfo>>
 

@@ -31,7 +31,7 @@ class BannerRvAdapter(val context: Context, private val mList: MutableList<Strin
     override fun getItemCount(): Int {
         if (mList == null)
             return 1
-        return mList?.size ?: 0
+        return mList.size ?: 0
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

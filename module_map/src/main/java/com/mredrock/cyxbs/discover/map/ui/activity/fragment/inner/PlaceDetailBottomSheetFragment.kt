@@ -42,7 +42,7 @@ class PlaceDetailBottomSheetFragment : Fragment() {
                 ?: 0, context?.dp2px(10f)
                 ?: 0).addPageTransformer(ScaleInTransformer()).adapter = bannerAdapter
         /**
-         * 对要显示的内容监听，如果变化则弹出
+         * 对要显示的内容监听
          */
         viewModel.placeDetails.observe(
                 viewLifecycleOwner,
