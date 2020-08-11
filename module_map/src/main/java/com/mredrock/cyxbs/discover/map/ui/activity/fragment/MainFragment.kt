@@ -69,7 +69,7 @@ class MainFragment : BaseViewModelFragment<MapViewModel>() {
     }
 
     private fun closeSearchFragment(){
-        val transaction = manager?.beginTransaction()
+        val transaction = manager?.beginTransaction()?.setCustomAnimations(R.animator.map_slide_in_left,R.animator.map_slide_out_right)
         transaction?.hide(searchFragment)
         if(!mapViewFragment.isAdded){
             transaction?.add(R.id.map_ll_map_fragment, mapViewFragment)?.commit()
@@ -85,7 +85,7 @@ class MainFragment : BaseViewModelFragment<MapViewModel>() {
             //确保不重复打开搜索框
             return
         }
-        val transaction = manager?.beginTransaction()
+        val transaction = manager?.beginTransaction()?.setCustomAnimations(R.animator.map_slide_in_left,R.animator.map_slide_out_right)
         transaction?.hide(mapViewFragment)
         if(!searchFragment.isAdded){
             transaction?.add(R.id.map_ll_map_fragment, searchFragment)?.show(searchFragment)?.commit()
