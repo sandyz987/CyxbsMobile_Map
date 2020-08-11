@@ -1,19 +1,24 @@
 package com.mredrock.cyxbs.discover.map.ui.activity.fragment.inner
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.mredrock.cyxbs.common.ui.BaseViewModelFragment
+import com.mredrock.cyxbs.common.utils.extensions.dp2px
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.bean.PlaceDetails
 import com.mredrock.cyxbs.discover.map.databinding.MapFragmentPlaceDetailContainerBinding
+import com.mredrock.cyxbs.discover.map.ui.activity.adpter.BannerRvAdapter
 import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
+import com.to.aboomy.pager2banner.IndicatorView
+import com.to.aboomy.pager2banner.ScaleInTransformer
+import kotlinx.android.synthetic.main.map_fragment_place_detail_container.*
+
 
 class PlaceDetailBottomSheetFragment : Fragment() {
     private lateinit var viewModel: MapViewModel
@@ -29,6 +34,13 @@ class PlaceDetailBottomSheetFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(requireActivity()).get(MapViewModel::class.java)
+        val indicator = IndicatorView(context)
+                .setIndicatorColor(Color.DKGRAY)
+                .setIndicatorSelectorColor(Color.WHITE)
+        val bannerAdapter = context?.let { BannerRvAdapter(it, mutableListOf()) }
+        map_banner_detail_image.setIndicator(indicator).setPageMargin(context?.dp2px(20f)
+                ?: 0, context?.dp2px(10f)
+                ?: 0).addPageTransformer(ScaleInTransformer()).adapter = bannerAdapter
         /**
          * 对要显示的内容监听，如果变化则弹出
          */
@@ -36,6 +48,10 @@ class PlaceDetailBottomSheetFragment : Fragment() {
                 viewLifecycleOwner,
                 Observer<PlaceDetails> { t ->
                     mBinding.placeDetails = t
+                    if (bannerAdapter != null) {
+                        bannerAdapter.setList(t.images)
+                        bannerAdapter.notifyDataSetChanged()
+                    }
                 }
         )
     }

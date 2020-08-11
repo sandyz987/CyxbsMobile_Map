@@ -108,7 +108,7 @@ class MapViewFragment : Fragment() {
          */
         val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         map_rv_symbol_places.layoutManager = linearLayoutManager
-        val adapter = context?.let { SymbolRvAdapter(it, listOf()) }
+        val adapter = context?.let { SymbolRvAdapter(it, mutableListOf()) }
         map_rv_symbol_places.adapter = adapter
         //注册监听
         viewModel.buttonInfo.observe(

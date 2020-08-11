@@ -12,7 +12,7 @@ import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.bean.InfoItem
 import kotlinx.android.synthetic.main.map_recycle_item_symbol_places.view.*
 
-class SymbolRvAdapter(val context: Context, private var mList: List<InfoItem>?) : RecyclerView.Adapter<SymbolRvAdapter.ViewHolder>() {
+class SymbolRvAdapter(val context: Context, private val mList: MutableList<InfoItem>?) : RecyclerView.Adapter<SymbolRvAdapter.ViewHolder>() {
 
     lateinit var curSelectorItem: AppCompatCheckedTextView
 
@@ -30,18 +30,18 @@ class SymbolRvAdapter(val context: Context, private var mList: List<InfoItem>?) 
     override fun getItemCount(): Int {
         if (mList == null)
             return 1
-        return mList?.size ?: 0
+        return mList.size ?: 0
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (mList != null) {
             curSelectorItem = holder.symbol
-            if (mList!![position].isHot) {
+            if (mList[position].isHot) {
                 holder.hot.visibility = View.VISIBLE
             } else {
                 holder.hot.visibility = View.INVISIBLE
             }
-            holder.symbol.text = mList!![position].title
+            holder.symbol.text = mList[position].title
             holder.symbol.setOnClickListener { v ->
                 /**
                  * 二次点击取消选择
@@ -87,7 +87,11 @@ class SymbolRvAdapter(val context: Context, private var mList: List<InfoItem>?) 
     }
 
     fun setList(list: List<InfoItem>) {
-        mList = list
+        if (mList != null) {
+            mList.clear()
+            mList.addAll(list)
+        }
+
     }
 
 }

@@ -128,7 +128,7 @@
                             android:textColor="@color/map_text_detail_upload"
                             android:textSize="13sp"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/map_rv_detail_image" />
+                            app:layout_constraintTop_toBottomOf="@+id/map_banner_detail_image" />
 
                         <TextView
                             android:id="@+id/map_tv_detail_detail_text"
@@ -169,8 +169,8 @@
                             app:layout_constraintTop_toTopOf="@+id/map_tv_detail_more"
                             app:srcCompat="@drawable/map_ic_detail_more" />
 
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/map_rv_detail_image"
+                        <com.to.aboomy.pager2banner.Banner
+                            android:id="@+id/map_banner_detail_image"
                             android:layout_width="0dp"
                             android:layout_height="200dp"
                             android:layout_marginTop="8dp"
