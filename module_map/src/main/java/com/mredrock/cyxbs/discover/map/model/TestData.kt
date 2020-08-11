@@ -20,10 +20,10 @@ object TestData {
     /**
      * 直接转成数据类返回
      */
-    fun getMapInfo(): Observable<MapInfo> {
+    fun getMapInfo(): Observable<RedrockApiWrapper<MapInfo>> {
         val gson = Gson()
         return Observable.create {
-            gson.fromJson<MapInfo>(mapInfoString, object : TypeToken<RedrockApiWrapper<MapInfo>>() {}.type)
+            gson.fromJson<RedrockApiWrapper<MapInfo>>(mapInfoString, object : TypeToken<RedrockApiWrapper<MapInfo>>() {}.type)
         }
     }
 
