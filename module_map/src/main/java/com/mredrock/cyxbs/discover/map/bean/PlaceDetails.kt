@@ -31,8 +31,6 @@ data class PlaceDetails(
         var placeName: String,
         @SerializedName("place_attribute")
         var placeAttribute: List<String>,
-        @SerializedName("is_collected")
-        var isCollected: Boolean,
         var tags: List<String>,
         var images: List<String>
 )

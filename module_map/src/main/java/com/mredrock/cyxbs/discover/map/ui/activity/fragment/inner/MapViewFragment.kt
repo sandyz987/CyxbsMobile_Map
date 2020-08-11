@@ -5,21 +5,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.mredrock.cyxbs.common.ui.BaseViewModelFragment
 import com.mredrock.cyxbs.discover.map.R
+import com.mredrock.cyxbs.discover.map.bean.ButtonInfo
 import com.mredrock.cyxbs.discover.map.bean.IconBean
-import com.mredrock.cyxbs.discover.map.bean.SymbolBean
 import com.mredrock.cyxbs.discover.map.component.MapLayout
 import com.mredrock.cyxbs.discover.map.ui.activity.adpter.SymbolRvAdapter
 import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
 import kotlinx.android.synthetic.main.map_fragment_map_view.*
 
 
-class MapViewFragment : BaseViewModelFragment<MapViewModel>() {
-    override val viewModelClass = MapViewModel::class.java
+class MapViewFragment : Fragment() {
+    private lateinit var viewModel: MapViewModel
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<FrameLayout>
 
     /**
@@ -38,6 +41,7 @@ class MapViewFragment : BaseViewModelFragment<MapViewModel>() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        viewModel = ViewModelProvider(requireActivity()).get(MapViewModel::class.java)
         /**
          * 初始化地图view
          */
@@ -70,11 +74,23 @@ class MapViewFragment : BaseViewModelFragment<MapViewModel>() {
             commit()
         }
 
-        val linearLayoutManager = LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
+        /**
+         * 初始化标签adapter（搜索框下方按钮）
+         */
+        val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         map_rv_symbol_places.layoutManager = linearLayoutManager
-        val list = listOf(SymbolBean("新生报到处",true),SymbolBean("食堂",false),SymbolBean("新生报到处hahahahahaha",true),SymbolBean("名字越长标签越帅",false))
-        val adapter = context?.let { SymbolRvAdapter(it,list) }
+        val adapter = context?.let { SymbolRvAdapter(it, listOf()) }
         map_rv_symbol_places.adapter = adapter
+        //注册监听
+        viewModel.buttonInfo.observe(
+                viewLifecycleOwner,
+                Observer<ButtonInfo> { t ->
+                    adapter?.setList(t.buttonInfo)
+                    adapter?.notifyDataSetChanged()
+                }
+        )
+
+
     }
 
 }

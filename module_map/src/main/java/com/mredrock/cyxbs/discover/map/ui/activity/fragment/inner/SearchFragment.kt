@@ -26,10 +26,6 @@ class SearchFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(requireActivity()).get(MapViewModel::class.java)
-        map_button.setOnClickListener {
-            viewModel.init()
-            //viewModel.placeDetails.value = PlaceDetails("143231342134124132", MutableList(10,{i->i.toString()}),false,MutableList(10,{i->i.toString()}),MutableList(10,{i->i.toString()}))//it.data
-        }
     }
 
 }

@@ -3,6 +3,7 @@ package com.mredrock.cyxbs.discover.map.model
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.mredrock.cyxbs.common.bean.RedrockApiWrapper
+import com.mredrock.cyxbs.discover.map.bean.ButtonInfo
 import com.mredrock.cyxbs.discover.map.bean.FavoritePlace
 import com.mredrock.cyxbs.discover.map.bean.MapInfo
 import com.mredrock.cyxbs.discover.map.bean.PlaceDetails
@@ -54,12 +55,41 @@ object TestData {
         }
     }
 
+    fun getButtonInfo(): Observable<RedrockApiWrapper<ButtonInfo>> {
+        return Observable.create<RedrockApiWrapper<ButtonInfo>> { em ->
+            em.onNext(gson.fromJson(buttonInfoString, object : TypeToken<RedrockApiWrapper<ButtonInfo>>() {}.type))
+        }
+    }
 
 }
 
 /**
  * 接口的字符串
  */
+
+const val buttonInfoString =
+        "{\n" +
+                "    \"status\":200,\n" +
+                "    \"info\":\"success\",\n" +
+                "    \"version\":\"1.0\",\n" +
+                "    \"id\":0,\n" +
+                "    \"data\":\n" +
+                "    {\n" +
+                "        \"button_info\":\n" +
+                "        [\n" +
+                "            {\n" +
+                "                \"title\":\"新生报到处\",\n" +
+                "                \"code\":\"新生报到点\",\n" +
+                "                \"is_hot\":true\n" +
+                "            },\n" +
+                "            {\n" +
+                "                \"title\":\"食堂\",\n" +
+                "                \"code\":\"食堂\",\n" +
+                "                \"is_hot\":false\n" +
+                "            }\n" +
+                "        ]\n" +
+                "    }\n" +
+                "}"
 
 //id = 1 的地点信息字符串
 const val place1DetailsString =
@@ -82,7 +112,6 @@ const val place1DetailsString =
                 "            \"标签\",\n" +
                 "            \"标签\"\n" +
                 "        ],\n" +
-                "        \"is_collected\":true,\n" +
                 "        \"tags\":\n" +
                 "        [\n" +
                 "            \"新生报到\",\n" +

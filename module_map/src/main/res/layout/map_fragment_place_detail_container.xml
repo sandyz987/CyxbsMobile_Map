@@ -57,7 +57,7 @@
 
                         <com.mredrock.cyxbs.discover.map.component.MarqueeTextView
                             android:id="@+id/map_tv_detail_place_name"
-                            android:layout_width="0dp"
+                            android:layout_width="300dp"
                             android:layout_height="wrap_content"
                             android:ellipsize="marquee"
                             android:focusable="true"
@@ -65,10 +65,10 @@
                             android:paddingStart="0dp"
                             android:paddingEnd="15dp"
                             android:singleLine="true"
+                            android:text="@{placeDetails.placeName}"
                             android:textColor="@color/levelTwoFontColor"
                             android:textSize="22sp"
                             android:textStyle="bold"
-                            android:text="@{placeDetails.placeName}"
                             android:visibility="visible"
                             app:layout_constraintBottom_toTopOf="@id/map_rv_detail_place_attribute"
                             app:layout_constraintStart_toStartOf="parent"
