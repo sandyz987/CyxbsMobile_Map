@@ -44,6 +44,9 @@ class MapViewModel : BaseViewModel() {
     //详细页面正在显示的地点id
     var showingPlaceId = -1
 
+    //是否显示bottomSheet，用于监听并隐藏
+    val bottomSheetIsShowing = MutableLiveData<Boolean>(false)
+
 
     //在唯一的activity的onCreate调用，获取地图数据（地点list），下载地图应该在此处完成（就是文档上第一个接口）
     fun init() {
@@ -87,6 +90,7 @@ class MapViewModel : BaseViewModel() {
                 .safeSubscribeBy {
                     showingPlaceId = placeId
                     placeDetails.value = it.data
+                    bottomSheetIsShowing.value = true
                 }.lifeCycle()
     }
 

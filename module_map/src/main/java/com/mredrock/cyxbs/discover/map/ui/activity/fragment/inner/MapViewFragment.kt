@@ -85,6 +85,14 @@ class MapViewFragment : Fragment() {
 
         })
         /**
+         *
+         */
+        map_layout.setMyOnNoPlaceClickListener(object : MapLayout.OnNoPlaceClickListener {
+            override fun onNoPlaceClick() {
+
+            }
+        })
+        /**
          * 监听点击到建筑区域的点击事件
          */
         map_layout.setMyOnPlaceClickListener(object : MapLayout.OnPlaceClickListener {
@@ -100,7 +108,8 @@ class MapViewFragment : Fragment() {
          */
         map_layout.setMyOnNoPlaceClickListener(object : MapLayout.OnNoPlaceClickListener {
             override fun onNoPlaceClick() {
-
+                //通知隐藏底部栏
+                viewModel.bottomSheetIsShowing.value = false
             }
         })
         /**
@@ -154,17 +163,21 @@ class MapViewFragment : Fragment() {
         )
 
 
-        viewModel.placeDetails.observe(
+        viewModel.bottomSheetIsShowing.observe(
                 viewLifecycleOwner,
                 Observer {
-                    //展开底部栏
-                    map_bottom_sheet_content.visible()
-                    //下面这两句，因为低版本依赖的bottomSheetBehavior，当内部view高度发生变化时，不会及时修正高度，故手动测量
-                    //换成高版本依赖可以删除
-                    map_bottom_sheet_content.requestLayout()
-                    map_bottom_sheet_content.invalidate()
-                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-                    map_bottom_sheet_content.onTouchEvent(MotionEvent.obtain(0L, 0L, MotionEvent.ACTION_DOWN, 50f, 50f, 1))
+                    if (it) {
+                        //展开底部栏
+                        map_bottom_sheet_content.visible()
+                        //下面这两句，因为低版本依赖的bottomSheetBehavior，当内部view高度发生变化时，不会及时修正高度，故手动测量
+                        //换成高版本依赖可以删除
+                        map_bottom_sheet_content.requestLayout()
+                        map_bottom_sheet_content.invalidate()
+                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                    } else {
+                        //半隐藏底部栏
+                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                    }
                 }
         )
         viewModel.favoriteList.observe(
