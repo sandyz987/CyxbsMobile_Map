@@ -31,14 +31,14 @@ class BannerRvAdapter(val context: Context, private val mList: MutableList<Strin
     override fun getItemCount(): Int {
         if (mList == null)
             return 1
-        return mList.size ?: 0
+        if (mList.size > 10)
+            return 10
+        return mList.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (mList != null) {
-           holder.imageView.setImageFromUrl(mList[position])
-
-
+            holder.imageView.setImageFromUrl(mList[position])
         }
     }
 

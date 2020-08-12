@@ -149,9 +149,9 @@ const val place2DetailsString =
                 "        ],\n" +
                 "        \"images\":\n" +
                 "        [\n" +
-                "            \"https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=3271944503,17290708&fm=26&gp=0.jpg\",\n" +
-                "            \"https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=3271944503,17290708&fm=26&gp=0.jpg\",\n" +
-                "            \"https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=3271944503,17290708&fm=26&gp=0.jpg\"\n" +
+                "            \"https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=982417989,4270285044&fm=26&gp=0.jpg\",\n" +
+                "            \"https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3549813042,1783346451&fm=26&gp=0.jpg\",\n" +
+                "            \"https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=591674105,1532042351&fm=15&gp=0.jpg\"\n" +
                 "        ]\n" +
                 "    }\n" +
                 "}"
