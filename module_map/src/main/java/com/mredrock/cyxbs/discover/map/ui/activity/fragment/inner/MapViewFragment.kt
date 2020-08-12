@@ -1,6 +1,7 @@
 package com.mredrock.cyxbs.discover.map.ui.activity.fragment.inner
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -23,6 +24,7 @@ import com.mredrock.cyxbs.discover.map.bean.FavoritePlace
 import com.mredrock.cyxbs.discover.map.bean.IconBean
 import com.mredrock.cyxbs.discover.map.bean.PlaceItem
 import com.mredrock.cyxbs.discover.map.component.MapLayout
+import com.mredrock.cyxbs.discover.map.ui.activity.activity.VRActivity
 import com.mredrock.cyxbs.discover.map.ui.activity.adapter.FavoriteListAdapter
 import com.mredrock.cyxbs.discover.map.ui.activity.adapter.SymbolRvAdapter
 import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
@@ -189,6 +191,10 @@ class MapViewFragment : Fragment() {
         )
 
 
+        map_iv_vr.setOnClickListener {
+            val intent = Intent(context,VRActivity::class.java)
+            startActivity(intent)
+        }
     }
 
 }
