@@ -12,7 +12,7 @@ import io.reactivex.Observable
 /**
  *@author zhangzhe
  *@date 2020/8/11
- *@description 生成测试数据
+ *@description 生成测试数据，所有测试数据应写在这里
  */
 
 
@@ -173,8 +173,7 @@ const val favoriteString =
                 "        {\n" +
                 "            \"place_nickname\":\"漂亮的新校门\",\n" +
                 "            \"place_id\":1\n" +
-                "        },\n" +
-                "            ...\n" +
+                "        }\n" +
                 "    ]\n" +
                 "}"
 

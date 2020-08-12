@@ -15,6 +15,7 @@
         android:layout_height="match_parent"
         android:background="@drawable/map_layer_list_detail_container_background"
         android:orientation="vertical"
+
         android:paddingTop="15dp">
 
         <FrameLayout

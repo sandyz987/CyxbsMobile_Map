@@ -130,6 +130,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:behavior_peekHeight="120dp"
+                    app:behavior_hideable="true"
                     app:layout_behavior="@string/bottom_sheet_behavior">
 
                 </FrameLayout>

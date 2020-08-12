@@ -2,4 +2,5 @@
 <resources>
     <dimen name="map_search_edit_text_size">17sp</dimen>
     <dimen name="map_title_text_size">21sp</dimen>
+    <dimen name="map_favorite_list_size">15sp</dimen>
 </resources>

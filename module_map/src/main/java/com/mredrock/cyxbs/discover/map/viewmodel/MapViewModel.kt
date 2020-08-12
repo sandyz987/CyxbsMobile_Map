@@ -10,6 +10,7 @@ import com.mredrock.cyxbs.common.utils.extensions.setSchedulers
 import com.mredrock.cyxbs.common.viewmodel.BaseViewModel
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.bean.ButtonInfo
+import com.mredrock.cyxbs.discover.map.bean.FavoritePlace
 import com.mredrock.cyxbs.discover.map.bean.MapInfo
 import com.mredrock.cyxbs.discover.map.bean.PlaceDetails
 import com.mredrock.cyxbs.discover.map.model.TestData
@@ -30,6 +31,9 @@ class MapViewModel : BaseViewModel() {
 
     //搜索框下方按钮内容
     val buttonInfo = MutableLiveData<ButtonInfo>()
+
+    //喜欢列表内容
+    val favoriteList = MutableLiveData<MutableList<FavoritePlace>>()
 
     //地点详细弹出框要显示的内容（由PlaceDetailBottomSheetFragment观察）
     val placeDetails = MutableLiveData<PlaceDetails>()
@@ -60,8 +64,12 @@ class MapViewModel : BaseViewModel() {
                     buttonInfo.value = it.data
                 }.lifeCycle()
 
+        //第一次先获得一次收藏列表
+        getFavoriteList()
+
     }
 
+    //当地图标签被点击，执行此网络请求，在对应的fragment观察数据即可
     fun showPlaceDetails(placeId: Int) {
         TestData.getPlaceDetails(placeId)
                 .setSchedulers()
@@ -71,6 +79,18 @@ class MapViewModel : BaseViewModel() {
                 }
                 .safeSubscribeBy {
                     placeDetails.value = it.data
+                }.lifeCycle()
+    }
+
+    fun getFavoriteList() {
+        TestData.getFavorite()
+                .setSchedulers()
+                .doOnErrorWithDefaultErrorHandler {
+                    toastEvent.value = R.string.map_network_connect_error
+                    false
+                }
+                .safeSubscribeBy {
+                    favoriteList.value = it.data.toMutableList()
                 }.lifeCycle()
     }
 
