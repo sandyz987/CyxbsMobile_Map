@@ -14,6 +14,8 @@ import android.widget.ImageView
 import com.davemorrissey.labs.subscaleview.ImageSource
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.mredrock.cyxbs.common.utils.extensions.dp2px
+import com.mredrock.cyxbs.common.utils.extensions.gone
+import com.mredrock.cyxbs.common.utils.extensions.visible
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.bean.IconBean
 import com.mredrock.cyxbs.discover.map.widget.ProgressDialog
@@ -206,7 +208,7 @@ class MapLayout : FrameLayout, View.OnClickListener {
             icon.y = screenPoint.y - context.dp2px(48f)
         }
         icon.setOnClickListener(this)
-        icon.visibility = View.GONE
+        icon.gone()
         iconList.add(icon)
         if (subsamplingScaleImageView.isReady) {
             val layoutParams = LayoutParams(
@@ -233,7 +235,7 @@ class MapLayout : FrameLayout, View.OnClickListener {
                 icon.y = screenPoint.y - context.dp2px(48f)
             }
             icon.setOnClickListener(this)
-            icon.visibility = View.GONE
+           icon.gone()
             iconList.add(icon)
         }
 
@@ -252,7 +254,7 @@ class MapLayout : FrameLayout, View.OnClickListener {
             icon.scaleX = currentValue
             icon.scaleY = currentValue
             if (currentValue == 0f) {
-                icon.visibility = View.GONE
+                icon.gone()
             }
         }
         animator.start()
@@ -263,7 +265,7 @@ class MapLayout : FrameLayout, View.OnClickListener {
      * icon：要展示的标签
      */
     private fun showIcon(icon: ImageView) {
-        icon.visibility = View.VISIBLE
+        icon.visible()
         val animator = ValueAnimator.ofFloat(0f, 1.2f, 0.8f, 1f)
         animator.duration = 500
         animator.addUpdateListener {
@@ -287,7 +289,7 @@ class MapLayout : FrameLayout, View.OnClickListener {
                 icon.scaleX = currentValue
                 icon.scaleY = currentValue
                 if (currentValue == 0f) {
-                    icon.visibility = View.GONE
+                   icon.gone()
                 }
             }
             animator.startDelay = delayTime.toLong()
