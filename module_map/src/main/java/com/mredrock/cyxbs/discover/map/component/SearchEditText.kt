@@ -25,6 +25,8 @@ class SearchEditText : androidx.appcompat.widget.AppCompatEditText {
         resources.getDrawable(R.drawable.map_ic_search, null).toBitmap()
     }
 
+    private var isEmpty = true
+
     private var offsetXHint = 0f
     private var offsetXClear = 200f
     private var textIsNotEmpty = false
@@ -33,8 +35,10 @@ class SearchEditText : androidx.appcompat.widget.AppCompatEditText {
                 field = value
                 if (value) {
                     hideHintAnimation()
+                    isEmpty = false
                 } else {
                     showHintAnimation()
+                    isEmpty = true
                 }
             }
         }
@@ -93,6 +97,9 @@ class SearchEditText : androidx.appcompat.widget.AppCompatEditText {
 
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
+        if (isEmpty) {
+            return super.onTouchEvent(event)
+        }
         val x = event?.x ?: 0f
         val y = event?.y ?: 0f
         //手动判断是否点击了清空按钮

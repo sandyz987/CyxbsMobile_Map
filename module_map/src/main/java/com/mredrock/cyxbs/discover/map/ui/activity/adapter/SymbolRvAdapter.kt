@@ -84,7 +84,7 @@ class SymbolRvAdapter(val context: Context, private val mList: MutableList<InfoI
     fun setList(list: List<InfoItem>) {
         mList.clear()
         mList.addAll(list)
-
+        notifyDataSetChanged()
 
     }
 
