@@ -357,5 +357,10 @@
     <color name="map_text_detail_upload" tools:ignore="ResourceName">#23477F</color>
     <!--    标签颜色-->
     <color name="map_text_symbol" tools:ignore="ResourceName">#15305B</color>
+    <!--    详情页地点描述颜色-->
+    <color name="map_text_detail_attribute" tools:ignore="ResourceName">#778AA9</color>
+    <!--    详情页地点标签颜色-->
+    <color name="map_text_detail_tag" tools:ignore="ResourceName">#234780</color>
+
 </resources>
 

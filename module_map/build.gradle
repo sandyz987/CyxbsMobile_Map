@@ -11,4 +11,5 @@ dependencies {
     kapt deps.arouter.compiler
     implementation 'com.davemorrissey.labs:subsampling-scale-image-view-androidx:3.10.0'
     implementation 'com.to.aboomy:pager2banner:1.0.1'
+    implementation 'com.beloo.widget:ChipsLayoutManager:0.3.7@aar'
 }
