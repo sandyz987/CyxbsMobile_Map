@@ -1,20 +1,17 @@
 package com.mredrock.cyxbs.discover.map.ui.activity.adpter
 
-import android.animation.ValueAnimator
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatCheckedTextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.mredrock.cyxbs.common.utils.extensions.setImageFromUrl
 import com.mredrock.cyxbs.discover.map.R
-import com.mredrock.cyxbs.discover.map.bean.InfoItem
 import com.mredrock.cyxbs.discover.map.component.RoundRectImageView
 import kotlinx.android.synthetic.main.map_banner_item_detail.view.*
 
-class BannerRvAdapter(val context: Context, private val mList: MutableList<String>?) : RecyclerView.Adapter<BannerRvAdapter.ViewHolder>() {
+class BannerRvAdapter(val context: Context, private val mList: MutableList<String>) : RecyclerView.Adapter<BannerRvAdapter.ViewHolder>() {
 
     lateinit var curSelectorItem: AppCompatCheckedTextView
 
@@ -29,26 +26,20 @@ class BannerRvAdapter(val context: Context, private val mList: MutableList<Strin
     }
 
     override fun getItemCount(): Int {
-        if (mList == null)
-            return 1
         if (mList.size > 10)
             return 10
         return mList.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if (mList != null) {
-            holder.imageView.setImageFromUrl(mList[position])
-        }
+        holder.imageView.setImageFromUrl(mList[position])
+
     }
 
 
     fun setList(list: List<String>) {
-        if (mList != null) {
-            mList.clear()
-            mList.addAll(list)
-        }
-
+        mList.clear()
+        mList.addAll(list)
     }
 
 }

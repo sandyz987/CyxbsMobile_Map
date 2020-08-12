@@ -11,7 +11,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.mredrock.cyxbs.common.utils.extensions.dp2px
 import com.mredrock.cyxbs.discover.map.R
-import com.mredrock.cyxbs.discover.map.bean.PlaceDetails
 import com.mredrock.cyxbs.discover.map.databinding.MapFragmentPlaceDetailContainerBinding
 import com.mredrock.cyxbs.discover.map.ui.activity.adpter.BannerRvAdapter
 import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
@@ -23,7 +22,6 @@ import kotlinx.android.synthetic.main.map_fragment_place_detail_container.*
 class PlaceDetailBottomSheetFragment : Fragment() {
     private lateinit var viewModel: MapViewModel
     private lateinit var mBinding: MapFragmentPlaceDetailContainerBinding
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.map_fragment_place_detail_container, container, false)
@@ -51,7 +49,7 @@ class PlaceDetailBottomSheetFragment : Fragment() {
          */
         viewModel.placeDetails.observe(
                 viewLifecycleOwner,
-                Observer<PlaceDetails> { t ->
+                Observer { t ->
                     mBinding.placeDetails = t
                     if (bannerAdapter != null) {
                         bannerAdapter.setList(t.images)
