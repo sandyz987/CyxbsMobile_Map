@@ -82,7 +82,11 @@ class MainFragment : Fragment() {
 
     private fun initMapViewFragment() {
         val transaction = manager?.beginTransaction()
-        transaction?.add(R.id.map_ll_map_fragment, mapViewFragment)?.commit()
+        if (!mapViewFragment.isAdded) {
+            transaction?.add(R.id.map_ll_map_fragment, mapViewFragment)?.commit()
+        } else {
+            transaction?.show(mapViewFragment)?.commit()
+        }
     }
 
     private fun closeSearchFragment() {

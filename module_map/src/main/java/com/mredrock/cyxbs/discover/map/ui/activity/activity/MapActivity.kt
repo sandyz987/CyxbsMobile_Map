@@ -10,7 +10,10 @@ import com.mredrock.cyxbs.common.ui.BaseActivity
 import com.mredrock.cyxbs.common.ui.BaseViewModelActivity
 import com.mredrock.cyxbs.common.utils.extensions.setFullScreen
 import com.mredrock.cyxbs.discover.map.R
+import com.mredrock.cyxbs.discover.map.ui.activity.fragment.MainFragment
+import com.mredrock.cyxbs.discover.map.ui.activity.fragment.inner.MapViewFragment
 import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
+import kotlinx.android.synthetic.main.map_activity_map.*
 
 /**
  * 单activity模式，所有fragment在此activity下，能拿到同一个viewModel实例
@@ -23,6 +26,7 @@ import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
 class MapActivity : BaseViewModelActivity<MapViewModel>() {
     override val isFragmentActivity = false
     override val viewModelClass = MapViewModel::class.java
+    val fragmentManager = supportFragmentManager
 
     @SuppressLint("SetJavaScriptEnabled", "ObsoleteSdkInt")
     override fun onStart() {
@@ -40,7 +44,9 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.map_activity_map)
+        //初始化viewModel
         viewModel.init()
+        fragmentManager.beginTransaction().add(R.id.map_fl_main_fragment, MainFragment()).commit()
 
     }
 }

@@ -15,7 +15,7 @@ class FavoriteEditFragment : Fragment() {
     private lateinit var viewModel: MapViewModel
     private lateinit var mBinding: MapFragmentFavoriteEditBinding
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.map_recycle_item_favorite_list, container, false)
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.map_fragment_favorite_edit, container, false)
         return mBinding.root
     }
 

@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager
 import com.mredrock.cyxbs.common.utils.extensions.dp2px
@@ -108,11 +109,11 @@ class PlaceDetailBottomSheetFragment : Fragment() {
                         }
                         if (isFavor != null) {
                             map_iv_detail_favorite.gone()
-                            map_tv_place_nickname.visible()
-                            map_tv_place_nickname.text = isFavor
+                            map_tv_detail_place_nickname.visible()
+                            map_tv_detail_place_nickname.text = isFavor
                         } else {
                             map_iv_detail_favorite.visible()
-                            map_tv_place_nickname.gone()
+                            map_tv_detail_place_nickname.gone()
                         }
                     }
 
