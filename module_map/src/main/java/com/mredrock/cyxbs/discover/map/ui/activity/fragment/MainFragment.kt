@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.mredrock.cyxbs.common.ui.BaseViewModelFragment
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.ui.activity.fragment.inner.MapViewFragment
 import com.mredrock.cyxbs.discover.map.ui.activity.fragment.inner.SearchFragment
@@ -34,7 +34,6 @@ class MainFragment : Fragment() {
     }
 
 
-
     @SuppressLint("RestrictedApi")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -42,7 +41,7 @@ class MainFragment : Fragment() {
         initMapViewFragment()
         map_iv_back.setOnClickListener {
             //Toast.makeText(requireContext(),manager?.backStackEntryCount.toString(),Toast.LENGTH_SHORT).show()
-            if(manager?.backStackEntryCount?: 0 == 0){
+            if (manager?.backStackEntryCount ?: 0 == 0) {
                 //此处填写退出MapActivity的逻辑
                 activity?.finish()
             } else {
@@ -66,41 +65,52 @@ class MainFragment : Fragment() {
         }
 
 
+        viewModel.isAnimation.observe(viewLifecycleOwner, Observer { isAnimation ->
+            if (isAnimation) {
+                map_et_search.animate().alpha(0f).duration = 500
+                map_et_search.isEnabled = false
+                map_iv_back.animate().alpha(0f).duration = 500
+                map_iv_back.isEnabled = false
+            } else {
+                map_et_search.animate().alpha(1f).duration = 500
+                map_et_search.isEnabled = true
+                map_iv_back.animate().alpha(1f).duration = 500
+                map_iv_back.isEnabled = true
+            }
+        })
     }
 
-    private fun initMapViewFragment(){
+    private fun initMapViewFragment() {
         val transaction = manager?.beginTransaction()
         transaction?.add(R.id.map_ll_map_fragment, mapViewFragment)?.commit()
     }
 
-    private fun closeSearchFragment(){
+    private fun closeSearchFragment() {
         val transaction = manager?.beginTransaction()?.setCustomAnimations(R.animator.map_slide_from_left, R.animator.map_slide_to_right, R.animator.map_slide_from_right, R.animator.map_slide_to_left)
         transaction?.hide(searchFragment)
-        if(!mapViewFragment.isAdded){
+        if (!mapViewFragment.isAdded) {
             transaction?.add(R.id.map_ll_map_fragment, mapViewFragment)?.commit()
-        }else{
+        } else {
             transaction?.show(mapViewFragment)?.commit()
         }
         manager?.popBackStack()
     }
 
 
-    private fun openSearchFragment(){
-        if(manager?.backStackEntryCount?: 0 != 0){
+    private fun openSearchFragment() {
+        if (manager?.backStackEntryCount ?: 0 != 0) {
             //确保不重复打开搜索框
             return
         }
         val transaction = manager?.beginTransaction()?.setCustomAnimations(R.animator.map_slide_from_right, R.animator.map_slide_to_left, R.animator.map_slide_from_left, R.animator.map_slide_to_right)
         transaction?.hide(mapViewFragment)
-        if(!searchFragment.isAdded){
+        if (!searchFragment.isAdded) {
             transaction?.add(R.id.map_ll_map_fragment, searchFragment)?.show(searchFragment)?.commit()
-        }else{
+        } else {
             transaction?.show(searchFragment)?.commit()
         }
         transaction?.addToBackStack("search")
     }
-
-
 
 
 }

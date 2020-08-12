@@ -1,13 +1,14 @@
 package com.mredrock.cyxbs.discover.map.ui.activity.fragment.inner
 
+import android.animation.Animator
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
+import android.view.ViewAnimationUtils
 import android.view.ViewGroup
+import android.view.animation.DecelerateInterpolator
 import android.widget.FrameLayout
 import android.widget.PopupWindow
 import androidx.fragment.app.Fragment
@@ -20,7 +21,6 @@ import com.mredrock.cyxbs.common.utils.extensions.dp2px
 import com.mredrock.cyxbs.common.utils.extensions.invisible
 import com.mredrock.cyxbs.common.utils.extensions.visible
 import com.mredrock.cyxbs.discover.map.R
-import com.mredrock.cyxbs.discover.map.bean.FavoritePlace
 import com.mredrock.cyxbs.discover.map.bean.IconBean
 import com.mredrock.cyxbs.discover.map.bean.PlaceItem
 import com.mredrock.cyxbs.discover.map.component.MapLayout
@@ -29,8 +29,6 @@ import com.mredrock.cyxbs.discover.map.ui.activity.adapter.FavoriteListAdapter
 import com.mredrock.cyxbs.discover.map.ui.activity.adapter.SymbolRvAdapter
 import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
 import kotlinx.android.synthetic.main.map_fragment_map_view.*
-import org.jetbrains.anko.sdk27.coroutines.onFocusChange
-import org.jetbrains.anko.sdk27.coroutines.onTouch
 
 
 class MapViewFragment : Fragment() {
@@ -192,9 +190,40 @@ class MapViewFragment : Fragment() {
 
 
         map_iv_vr.setOnClickListener {
-            val intent = Intent(context,VRActivity::class.java)
-            startActivity(intent)
+            val xc: Int = (map_root_map_view.left + map_root_map_view.right) / 2
+            val yc: Int = (map_root_map_view.top + map_root_map_view.bottom) / 2
+            val animator = ViewAnimationUtils.createCircularReveal(map_root_map_view, xc, yc, map_root_map_view.height.toFloat() + 100f, 0f)
+            animator.interpolator = DecelerateInterpolator()
+            animator.duration = 1000
+            animator.addListener(object : Animator.AnimatorListener {
+                override fun onAnimationRepeat(p0: Animator?) {
+
+                }
+
+                override fun onAnimationEnd(p0: Animator?) {
+                    val intent = Intent(context, VRActivity::class.java)
+                    startActivity(intent)
+                }
+
+                override fun onAnimationCancel(p0: Animator?) {
+
+                }
+
+                override fun onAnimationStart(p0: Animator?) {
+                    viewModel.isAnimation.value = true
+                    map_root_map_view.animate().alpha(0f).duration = 1000
+                }
+
+            })
+            animator.start()
+
+
         }
     }
 
+    override fun onResume() {
+        map_root_map_view.animate().alpha(1f).duration = 1000
+        viewModel.isAnimation.value = false
+        super.onResume()
+    }
 }

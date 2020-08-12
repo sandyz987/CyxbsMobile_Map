@@ -1,9 +1,6 @@
 package com.mredrock.cyxbs.discover.map.viewmodel
 
-import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
-import com.mredrock.cyxbs.common.BaseApp
 import com.mredrock.cyxbs.common.utils.extensions.doOnErrorWithDefaultErrorHandler
 import com.mredrock.cyxbs.common.utils.extensions.safeSubscribeBy
 import com.mredrock.cyxbs.common.utils.extensions.setSchedulers
@@ -14,9 +11,6 @@ import com.mredrock.cyxbs.discover.map.bean.FavoritePlace
 import com.mredrock.cyxbs.discover.map.bean.MapInfo
 import com.mredrock.cyxbs.discover.map.bean.PlaceDetails
 import com.mredrock.cyxbs.discover.map.model.TestData
-import com.mredrock.cyxbs.discover.map.widget.ProgressDialog
-import io.reactivex.schedulers.Schedulers
-import okhttp3.internal.notify
 
 /**
  *@author zhangzhe
@@ -47,6 +41,8 @@ class MapViewModel : BaseViewModel() {
     //是否显示bottomSheet，用于监听并隐藏
     val bottomSheetIsShowing = MutableLiveData<Boolean>(false)
 
+    //是否在动画中
+    val isAnimation = MutableLiveData(false)
 
     //在唯一的activity的onCreate调用，获取地图数据（地点list），下载地图应该在此处完成（就是文档上第一个接口）
     fun init() {
