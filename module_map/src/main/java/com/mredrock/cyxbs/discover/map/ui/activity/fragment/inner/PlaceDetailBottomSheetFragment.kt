@@ -61,7 +61,7 @@ class PlaceDetailBottomSheetFragment : Fragment() {
         val chipsLayoutManager = ChipsLayoutManager.newBuilder(context)
                 .setChildGravity(Gravity.TOP)
                 .setScrollingEnabled(true)
-                .setMaxViewsInRow(2)
+                .setMaxViewsInRow(6)
                 .setGravityResolver { Gravity.START }
                 .setRowBreaker { position -> position == 6 || position == 11 || position == 2 }
                 .setOrientation(ChipsLayoutManager.HORIZONTAL)
