@@ -3,6 +3,7 @@ package com.mredrock.cyxbs.discover.map.component
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.BitmapFactory
 import android.graphics.PointF
 import android.util.AttributeSet
 import android.view.GestureDetector
@@ -19,6 +20,9 @@ import com.mredrock.cyxbs.common.utils.extensions.visible
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.bean.IconBean
 import com.mredrock.cyxbs.discover.map.widget.ProgressDialog
+import org.jetbrains.anko.displayMetrics
+import java.util.logging.Handler
+import kotlin.math.sqrt
 
 /**
  * 创建者：林潼
@@ -36,7 +40,7 @@ class MapLayout : FrameLayout, View.OnClickListener {
     private val subsamplingScaleImageView = SubsamplingScaleImageView(context)
 
     /** 图片来源 */
-    private var imageSource = ImageSource.resource(R.mipmap.map_high)
+    private var imageSource = ImageSource.resource(R.drawable.map_high)
 
     /** 标签array list */
     private val iconList = mutableListOf<ImageView>()
@@ -74,14 +78,34 @@ class MapLayout : FrameLayout, View.OnClickListener {
      */
     @SuppressLint("ClickableViewAccessibility")
     private fun initView() {
-        ProgressDialog.show(context, "提示", "加载中...", false)
+
         val rootParams =
                 LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        /** 真实dpi<400的手机会非常卡，需要适配*/
         subsamplingScaleImageView.setMinimumScaleType(SubsamplingScaleImageView.SCALE_TYPE_CENTER_CROP)
+
+        /** 计算真实的dpi*/
+        val xdpi: Float = context.displayMetrics.xdpi
+        val ydpi: Float = context.displayMetrics.ydpi
+        val width: Int = context.displayMetrics.widthPixels
+        val height: Int = context.displayMetrics.heightPixels
+
+        val width2 = width / xdpi * (width / xdpi)
+        val height2 = height / ydpi * (height / ydpi)
+        val myRealDensity = sqrt(width2 + height2)
+
+        val realDpi = sqrt((((width * width) + (height * height)).toDouble())) / myRealDensity
+
+        /** 适配dpi<400的机型*/
+        if (realDpi < 400) {
+            subsamplingScaleImageView.setMinimumTileDpi(300)
+            ProgressDialog.show(context, "本机低于400Dpi，放大加载高清地图可能会较慢", "加载中...", false)
+        } else ProgressDialog.show(context, "提示", "加载中...", false)
+
         subsamplingScaleImageView.setDoubleTapZoomScale(1f)
         subsamplingScaleImageView.setImage(
                 imageSource.dimensions(7460, 13268),
-                ImageSource.resource(R.mipmap.map)
+                ImageSource.resource(R.drawable.map)
         )
         addView(subsamplingScaleImageView, rootParams)
 
@@ -104,7 +128,12 @@ class MapLayout : FrameLayout, View.OnClickListener {
                     )
                     addView(icon, layoutParams)
                 }
-                ProgressDialog.hide()
+                if (realDpi < 400) {
+                    android.os.Handler().postDelayed({
+                        ProgressDialog.hide()
+                    }, 3000
+                    )
+                } else ProgressDialog.hide()
             }
 
             override fun onTileLoadError(e: Exception?) {
@@ -161,7 +190,7 @@ class MapLayout : FrameLayout, View.OnClickListener {
                     count++
                     closeIcon(icon)
                     if (count == iconList.size)
-                    onNoPlaceClickListener?.onNoPlaceClick()
+                        onNoPlaceClickListener?.onNoPlaceClick()
                 }
 
             }
@@ -235,7 +264,7 @@ class MapLayout : FrameLayout, View.OnClickListener {
                 icon.y = screenPoint.y - context.dp2px(48f)
             }
             icon.setOnClickListener(this)
-           icon.gone()
+            icon.gone()
             iconList.add(icon)
         }
 
@@ -289,7 +318,7 @@ class MapLayout : FrameLayout, View.OnClickListener {
                 icon.scaleX = currentValue
                 icon.scaleY = currentValue
                 if (currentValue == 0f) {
-                   icon.gone()
+                    icon.gone()
                 }
             }
             animator.startDelay = delayTime.toLong()
@@ -415,15 +444,16 @@ class MapLayout : FrameLayout, View.OnClickListener {
     /**
      * 根据多个id展示多个icon
      */
-    fun showSomeIcons(ids:List<String>){
-        ids.forEach { id->
-            for (i in 0 until iconList.size){
+    fun showSomeIcons(ids: List<String>) {
+        ids.forEach { id ->
+            for (i in 0 until iconList.size) {
                 val iconBean = iconList[i].tag as IconBean
-                if (iconBean.id.toString() == id){
+                if (iconBean.id.toString() == id) {
                     showIcon(iconList[i])
                     break
                 }
             }
         }
     }
+    
 }
