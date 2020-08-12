@@ -40,7 +40,6 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.map_activity_map)
-        setFullScreen()
         viewModel.init()
 
     }
