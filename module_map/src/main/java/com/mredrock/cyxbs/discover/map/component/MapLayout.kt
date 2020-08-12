@@ -409,4 +409,19 @@ class MapLayout : FrameLayout, View.OnClickListener {
             }
         }
     }
+
+    /**
+     * 根据多个id展示多个icon
+     */
+    fun showSomeIcons(ids:List<String>){
+        ids.forEach { id->
+            for (i in 0 until iconList.size){
+                val iconBean = iconList[i].tag as IconBean
+                if (iconBean.id.toString() == id){
+                    showIcon(iconList[i])
+                    break
+                }
+            }
+        }
+    }
 }
