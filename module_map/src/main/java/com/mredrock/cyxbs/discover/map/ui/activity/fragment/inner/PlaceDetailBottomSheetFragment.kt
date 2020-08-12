@@ -13,7 +13,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager
 import com.mredrock.cyxbs.common.utils.extensions.dp2px
+import com.mredrock.cyxbs.common.utils.extensions.gone
+import com.mredrock.cyxbs.common.utils.extensions.visible
 import com.mredrock.cyxbs.discover.map.R
+import com.mredrock.cyxbs.discover.map.bean.FavoritePlace
 import com.mredrock.cyxbs.discover.map.databinding.MapFragmentPlaceDetailContainerBinding
 import com.mredrock.cyxbs.discover.map.ui.activity.adapter.DetailAttributeRvAdapter
 import com.mredrock.cyxbs.discover.map.ui.activity.adapter.DetailTagRvAdapter
@@ -38,6 +41,10 @@ class PlaceDetailBottomSheetFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(requireActivity()).get(MapViewModel::class.java)
 
+
+        /**
+         * 初始化adapter和layoutManager
+         */
         val indicator = IndicatorView(context)
                 .setIndicatorColor(Color.DKGRAY)
                 .setIndicatorSelectorColor(Color.WHITE)
@@ -75,7 +82,9 @@ class PlaceDetailBottomSheetFragment : Fragment() {
         viewModel.placeDetails.observe(
                 viewLifecycleOwner,
                 Observer { t ->
+                    //数据绑定
                     mBinding.placeDetails = t
+                    //数据传给adapter
                     if (bannerAdapter != null) {
                         bannerAdapter.setList(t.images)
                         bannerAdapter.notifyDataSetChanged()
@@ -89,8 +98,33 @@ class PlaceDetailBottomSheetFragment : Fragment() {
                         attributeAdapter.setList(t.placeAttribute)
                         attributeAdapter.notifyDataSetChanged()
                     }
+                    //判断是否收藏过该地点，如果收藏了则显示出收藏的nickname
+                    viewModel.favoriteList.value?.let {
+                        var isFavor: String? = null
+                        for (favoritePlace: FavoritePlace in it) {
+                            if (viewModel.showingPlaceId == favoritePlace.placeId) {
+                                isFavor = favoritePlace.placeNickname
+                            }
+                        }
+                        if (isFavor != null) {
+                            map_iv_detail_favorite.gone()
+                            map_tv_place_nickname.visible()
+                            map_tv_place_nickname.text = isFavor
+                        } else {
+                            map_iv_detail_favorite.visible()
+                            map_tv_place_nickname.gone()
+                        }
+                    }
+
                 }
         )
+        /**
+         * 添加点击事件
+         */
+        map_iv_detail_favorite.setOnClickListener {
+            //打开收藏编辑页面
+            viewModel.fragmentFavoriteEditIsShowing.value = true
+        }
     }
 
 

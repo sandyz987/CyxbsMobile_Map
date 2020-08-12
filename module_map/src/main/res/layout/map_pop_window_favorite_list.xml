@@ -15,5 +15,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:map_max_height="240dp"
-        tools:listitem="@layout/map_item_favorite_list" />
+        tools:listitem="@layout/map_recycle_item_favorite_list" />
 </androidx.constraintlayout.widget.ConstraintLayout>

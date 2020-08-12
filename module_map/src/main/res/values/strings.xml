@@ -8,9 +8,9 @@
     <string name="map_place_detail_about">关于该地点</string>
     <string name="map_place_map_view_my_favorite">我的收藏</string>
     <string name="map_network_connect_error">网络请求失败</string>
-    <!--  测试用名称-->
-    <string name="map_tag_sport_taiji">太极运动场</string>
-    <string name="map_tag_sport_fenghua">风华运动场</string>
-
+    <string name="map_favorite_cancel">取消</string>
+    <string name="map_favorite_accept">确定</string>
+    <string name="map_favorite_recommend_text">推荐</string>
+    <string name="map_favorite_cancel_favorite">不再收藏该地点</string>
 
 </resources>

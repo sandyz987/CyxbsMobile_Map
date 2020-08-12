@@ -9,4 +9,8 @@
         android:name="com.mredrock.cyxbs.discover.map.ui.activity.fragment.MainFragment"
         android:label="map_fragment_main"
         tools:layout="@layout/map_fragment_main" />
+    <fragment
+        android:id="@+id/map_favoriteeditfragment"
+        android:name="com.mredrock.cyxbs.discover.map.ui.activity.fragment.FavoriteEditFragment"
+        android:label="FavoriteEditFragment" />
 </navigation>

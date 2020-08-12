@@ -38,6 +38,13 @@ class MapViewModel : BaseViewModel() {
     //地点详细弹出框要显示的内容（由PlaceDetailBottomSheetFragment观察）
     val placeDetails = MutableLiveData<PlaceDetails>()
 
+    //是否正在显示收藏页面
+    val fragmentFavoriteEditIsShowing = MutableLiveData<Boolean>(false)
+
+    //详细页面正在显示的地点id
+    var showingPlaceId = -1
+
+
     //在唯一的activity的onCreate调用，获取地图数据（地点list），下载地图应该在此处完成（就是文档上第一个接口）
     fun init() {
         //ProgressDialog.show(BaseApp.context,"提示","请稍后",false)//ProgressDialog.hide()
@@ -78,6 +85,7 @@ class MapViewModel : BaseViewModel() {
                     false
                 }
                 .safeSubscribeBy {
+                    showingPlaceId = placeId
                     placeDetails.value = it.data
                 }.lifeCycle()
     }

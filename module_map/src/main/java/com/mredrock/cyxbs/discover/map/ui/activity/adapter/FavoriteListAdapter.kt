@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.bean.FavoritePlace
-import kotlinx.android.synthetic.main.map_item_favorite_list.view.*
+import kotlinx.android.synthetic.main.map_recycle_item_favorite_list.view.*
 
 /**
  *@author zhangzhe
@@ -22,7 +22,7 @@ class FavoriteListAdapter(context: Context, private var mList: MutableList<Favor
 
     override fun onCreateViewHolder(container: ViewGroup, viewType: Int): ViewHolder {
 
-        return ViewHolder(mLayoutInflater.inflate(R.layout.map_item_favorite_list, container, false))
+        return ViewHolder(mLayoutInflater.inflate(R.layout.map_recycle_item_favorite_list, container, false))
 
     }
 
