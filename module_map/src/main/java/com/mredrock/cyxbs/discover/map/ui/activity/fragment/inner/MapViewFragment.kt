@@ -5,13 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.mredrock.cyxbs.common.utils.extensions.gone
 import com.mredrock.cyxbs.common.utils.extensions.invisible
 import com.mredrock.cyxbs.common.utils.extensions.visible
 import com.mredrock.cyxbs.discover.map.R
@@ -75,12 +73,24 @@ class MapViewFragment : Fragment() {
             }
 
         })
+        /**
+         * 监听点击到建筑区域的点击事件
+         */
         map_layout.setMyOnPlaceClickListener(object : MapLayout.OnPlaceClickListener {
             override fun onPlaceClick(v: View) {
                 val bean = v.tag as IconBean
                 //viewModel.showPlaceDetails(bean.id)
             }
 
+        })
+
+        /**
+         * 监听点击到非建筑区域的点击事件
+         */
+        map_layout.setMyOnNoPlaceClickListener(object : MapLayout.OnNoPlaceClickListener {
+            override fun onNoPlaceClick() {
+
+            }
         })
         /**
          * 初始化bottomSheet

@@ -25,11 +25,11 @@ import com.mredrock.cyxbs.discover.map.widget.ProgressDialog
  */
 
 
-
 class MapLayout : FrameLayout, View.OnClickListener {
-    companion object{
+    companion object {
         const val FOCUS_ANIMATION_DURATION = 800L
     }
+
     /** Sub-samplingScaleImageView第三方控件 */
     private val subsamplingScaleImageView = SubsamplingScaleImageView(context)
 
@@ -42,6 +42,8 @@ class MapLayout : FrameLayout, View.OnClickListener {
     private var onIconClickListener: OnIconClickListener? = null
 
     private var onPlaceClickListener: OnPlaceClickListener? = null
+
+    private var onNoPlaceClickListener: OnNoPlaceClickListener? = null
 
     /**
      *下面四个为继承FrameLayout的构造器方法
@@ -121,7 +123,7 @@ class MapLayout : FrameLayout, View.OnClickListener {
 
         })
         /**点击的位置 */
-        var clickPoint = PointF(1660f, 7200f)
+        var clickPoint = PointF(0f, 0f)
 
         /**通过此方法获得点击的位置 */
         val gestureDetector =
@@ -135,6 +137,7 @@ class MapLayout : FrameLayout, View.OnClickListener {
                 })
         /**监听点击事件 */
         subsamplingScaleImageView.setOnClickListener {
+            var count = 0
             iconList.forEach { icon ->
                 val iconBean = icon.tag as IconBean
                 if ((clickPoint.x > iconBean.leftX
@@ -152,7 +155,12 @@ class MapLayout : FrameLayout, View.OnClickListener {
                             ?.withInterruptible(true)?.start()
                     showIcon(icon)
                     onPlaceClickListener?.onPlaceClick(icon)
-                } else closeIcon(icon)
+                } else {
+                    count++
+                    closeIcon(icon)
+                    if (count == iconList.size)
+                    onNoPlaceClickListener?.onNoPlaceClick()
+                }
 
             }
 
@@ -369,12 +377,23 @@ class MapLayout : FrameLayout, View.OnClickListener {
         fun onPlaceClick(v: View)
     }
 
+    /**
+     * 点击非建筑地区回调
+     */
+    interface OnNoPlaceClickListener {
+        fun onNoPlaceClick()
+    }
+
     fun setMyOnIconClickListener(onIconClickListener: OnIconClickListener) {
         this.onIconClickListener = onIconClickListener
     }
 
     fun setMyOnPlaceClickListener(onPlaceClickListener: OnPlaceClickListener) {
         this.onPlaceClickListener = onPlaceClickListener
+    }
+
+    fun setMyOnNoPlaceClickListener(onNoPlaceClickListener: OnNoPlaceClickListener) {
+        this.onNoPlaceClickListener = onNoPlaceClickListener
     }
 
     /**
