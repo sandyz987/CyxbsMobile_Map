@@ -86,7 +86,7 @@ class PlaceDetailBottomSheetFragment : Fragment() {
                         tagAdapter.notifyDataSetChanged()
                     }
                     if (attributeAdapter != null) {
-                        attributeAdapter.setList(t.tags)
+                        attributeAdapter.setList(t.placeAttribute)
                         attributeAdapter.notifyDataSetChanged()
                     }
                 }
