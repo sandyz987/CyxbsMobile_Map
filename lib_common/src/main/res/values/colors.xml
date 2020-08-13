@@ -344,7 +344,7 @@
     <!--   搜索地点的搜索框文字颜色-->
     <color name="map_search_text_color" tools:ignore="ResourceName">#15315B</color>
     <!--   搜索地点的搜索框背景颜色-->
-    <color name="map_search_background" tools:ignore="ResourceName">#E6E7EC</color>
+    <color name="map_search_edit_text_background" tools:ignore="ResourceName">#E6E7EC</color>
 
     <color name="map_title_text_color" tools:ignore="ResourceName">#15315B</color>
     <!--    地图可上拉下拉标识小块背景-->
@@ -381,6 +381,7 @@
 
     <color name="map_search_history_text_color" tools:ignore="ResourceName">#778AA9</color>
     <color name="map_search_clear_text_color" tools:ignore="ResourceName">#ABBCD8</color>
+    <color name="map_search_background_color" tools:ignore="ResourceName">#FFFFFF</color>
 
 </resources>
 

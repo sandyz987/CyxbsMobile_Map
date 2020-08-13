@@ -45,7 +45,9 @@ class MainFragment : Fragment() {
                 //此处填写退出MapActivity的逻辑
                 activity?.finish()
             } else {
+                map_et_search.setText("")
                 closeSearchFragment()
+
             }
             KeyboardController.hideInputKeyboard(requireContext(), it)
         }
@@ -58,10 +60,6 @@ class MainFragment : Fragment() {
             if (hasFocus) {
                 openSearchFragment()
             }
-        }
-        //在这里搜索
-        map_et_search.doOnTextChanged { text, start, count, after ->
-
         }
 
 
@@ -78,6 +76,13 @@ class MainFragment : Fragment() {
                 map_iv_back.isEnabled = true
             }
         })
+
+        /**
+         * 搜索框的内容发生改变，直接把内容传给viewModel
+         */
+        map_et_search.doOnTextChanged { text, start, count, after ->
+            viewModel.searchText.value = text.toString()
+        }
     }
 
     private fun initMapViewFragment() {

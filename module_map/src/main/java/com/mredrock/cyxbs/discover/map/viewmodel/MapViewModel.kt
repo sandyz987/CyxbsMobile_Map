@@ -44,6 +44,9 @@ class MapViewModel : BaseViewModel() {
     //是否在动画中
     val isAnimation = MutableLiveData(false)
 
+    //搜索框的文字，只用在搜索界面fragment观察本变量即可实现搜索
+    val searchText = MutableLiveData<String>("")
+
     //在唯一的activity的onCreate调用，获取地图数据（地点list），下载地图应该在此处完成（就是文档上第一个接口）
     fun init() {
         //ProgressDialog.show(BaseApp.context,"提示","请稍后",false)//ProgressDialog.hide()

@@ -81,7 +81,6 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
                         fragmentManager.popBackStack()
 
                     }
-                    Log.e("sandyzhang", fragmentManager.backStackEntryCount.toString())
                 }
         )
 
