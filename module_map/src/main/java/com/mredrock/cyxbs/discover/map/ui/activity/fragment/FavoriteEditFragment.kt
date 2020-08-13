@@ -26,6 +26,7 @@ class FavoriteEditFragment : Fragment() {
         map_tv_favorite_cancel.setOnClickListener {
             viewModel.fragmentFavoriteEditIsShowing.value = false
         }
+        map_et_favorite_nickname.maxStringLength = 8
     }
 
 }

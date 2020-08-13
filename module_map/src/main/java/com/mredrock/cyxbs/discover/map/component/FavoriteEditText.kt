@@ -14,17 +14,22 @@ import com.mredrock.cyxbs.discover.map.R
 /**
  *@author zhangzhe
  *@date 2020/8/9
- *@description 带动画效果的搜索框自定义view，所有逻辑均在本类中
+ *@description
  */
 
-class SearchEditText : androidx.appcompat.widget.AppCompatEditText {
+class FavoriteEditText : androidx.appcompat.widget.AppCompatEditText {
 
     private val clearBitmap: Bitmap by lazy {
         resources.getDrawable(R.drawable.map_ic_search_clear, null).toBitmap()
     }
-    private val searchBitmap: Bitmap by lazy {
-        resources.getDrawable(R.drawable.map_ic_search, null).toBitmap()
-    }
+
+    var maxStringLength: Int? = null
+        set(value) {
+            field = value
+            notifyStringChange()
+        }
+
+    private var lastText = ""
 
     private var isEmpty = true
 
@@ -50,8 +55,8 @@ class SearchEditText : androidx.appcompat.widget.AppCompatEditText {
         (fontMetrics.bottom - fontMetrics.top) / 2f - fontMetrics.bottom + height / 2
     }
 
-    //显示热词字符串，需要在代码中设置进去要显示的热词
-    public var hintString: String = ""
+    //显示文字长度
+    private var hintString: String = ""
         set(value) {
             field = value
             invalidate()
@@ -77,20 +82,20 @@ class SearchEditText : androidx.appcompat.widget.AppCompatEditText {
         paint = Paint()
         paint.textSize = 35f
         paint.isAntiAlias = true
-        hintString = "大家都在搜：风雨操场"
+        hintString = "0/256"
 
     }
 
     override fun onTextChanged(text: CharSequence?, start: Int, lengthBefore: Int, lengthAfter: Int) {
         super.onTextChanged(text, start, lengthBefore, lengthAfter)
         textIsNotEmpty = text?.length ?: 0 != 0
+        notifyStringChange()
     }
 
     override fun draw(canvas: Canvas?) {
         super.draw(canvas)
-        //搜索图标和搜索默认显示文字
-        canvas?.drawText(hintString, offsetXHint + (width - hintWidth) / 2f, hintBaseline, paint)
-        canvas?.drawBitmap(searchBitmap, offsetXHint + (width - hintWidth) / 2 - searchBitmap.width - 10f, (height - searchBitmap.height) / 2f, Paint())
+        //显示文本长度
+        canvas?.drawText(hintString, -offsetXHint + (width - hintWidth) - context.dp2px(8f), hintBaseline, paint)
         //清空按钮
         canvas?.drawBitmap(clearBitmap, offsetXClear + width - clearBitmap.width - context.dp2px(8f), (height - clearBitmap.height) / 2f, Paint())
 
@@ -117,7 +122,7 @@ class SearchEditText : androidx.appcompat.widget.AppCompatEditText {
 
 
     private fun showHintAnimation() {
-        val anim1 = ValueAnimator.ofFloat(width.toFloat(), 0f)
+        val anim1 = ValueAnimator.ofFloat(clearBitmap.width.toFloat(), 0f)
         anim1.repeatCount = 0
         anim1.repeatMode = ValueAnimator.REVERSE
         anim1.duration = 300
@@ -141,7 +146,7 @@ class SearchEditText : androidx.appcompat.widget.AppCompatEditText {
     }
 
     private fun hideHintAnimation() {
-        val anim1 = ValueAnimator.ofFloat(0f, width.toFloat())
+        val anim1 = ValueAnimator.ofFloat(0f, clearBitmap.width.toFloat())
         anim1.repeatCount = 0
         anim1.repeatMode = ValueAnimator.REVERSE
         anim1.duration = 300
@@ -161,6 +166,18 @@ class SearchEditText : androidx.appcompat.widget.AppCompatEditText {
             postInvalidate()
         }
         anim2.start()
+    }
+
+    fun notifyStringChange() {
+        if (text.toString().length > maxStringLength ?: 256) {
+            setText(lastText)
+            setSelection(text.toString().length)
+        } else {
+            lastText = text.toString()
+        }
+        if (maxStringLength != null) {
+            hintString = text.toString().length.toString() + "/" + maxStringLength.toString()
+        }
     }
 
 

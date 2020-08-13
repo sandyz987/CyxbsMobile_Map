@@ -30,13 +30,14 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/map_tv_favorite_recommend" />
 
-            <com.mredrock.cyxbs.discover.map.component.SearchEditText
+            <com.mredrock.cyxbs.discover.map.component.FavoriteEditText
                 android:id="@+id/map_et_favorite_nickname"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
+                android:hint="@string/map_favorite_et_hint"
                 android:background="@drawable/map_shape_search_background"
                 android:gravity="center_vertical"
                 android:imeOptions="actionNext"

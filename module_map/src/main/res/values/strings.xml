@@ -12,5 +12,6 @@
     <string name="map_favorite_accept">确定</string>
     <string name="map_favorite_recommend_text">推荐</string>
     <string name="map_favorite_cancel_favorite">不再收藏该地点</string>
+    <string name="map_favorite_et_hint">我的收藏</string>
 
 </resources>
