@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.res.TypedArray
 import android.util.AttributeSet
 import androidx.recyclerview.widget.RecyclerView
+import com.mredrock.cyxbs.common.utils.extensions.dp2px
 import com.mredrock.cyxbs.discover.map.R
 
 
@@ -35,10 +36,10 @@ class MaxHeightRecyclerView : RecyclerView {
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        var heightMeasureSpec = heightMeasureSpec
+        var heightMeasureSpec2 = heightMeasureSpec
         if (mMaxHeight > 0) {
-            heightMeasureSpec = MeasureSpec.makeMeasureSpec(mMaxHeight, MeasureSpec.AT_MOST)
+            heightMeasureSpec2 = MeasureSpec.makeMeasureSpec(mMaxHeight, MeasureSpec.AT_MOST)
         }
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec2 - context.dp2px(2f))
     }
 }

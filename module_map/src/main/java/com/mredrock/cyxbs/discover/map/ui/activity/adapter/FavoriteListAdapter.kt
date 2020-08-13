@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.mredrock.cyxbs.common.utils.extensions.gone
+import com.mredrock.cyxbs.common.utils.extensions.visible
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.bean.FavoritePlace
 import kotlinx.android.synthetic.main.map_recycle_item_favorite_list.view.*
@@ -33,18 +35,23 @@ class FavoriteListAdapter(context: Context, private var mList: MutableList<Favor
     }
 
     override fun getItemCount(): Int {
-
         return mList.size
 
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.placeNickname.text = mList[position].placeNickname
+        if (position == mList.size - 1) {
+            holder.line.gone()
+        } else {
+            holder.line.visible()
+        }
     }
 
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val placeNickname = itemView.map_tv_favorite_list_item_text
+        val line = itemView.map_view_favorite_line
     }
 
 }

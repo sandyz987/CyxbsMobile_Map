@@ -374,7 +374,8 @@
     <color name="map_favorite_recommend_color" tools:ignore="ResourceName">#778AA9</color>
     <color name="map_favorite_cancel_favorite_text_color" tools:ignore="ResourceName">#01CAF0
     </color>
-    <color name="map_detail_place_nickname_color" tools:ignore="ResourceName">#47DAFA</color>
+    <color name="map_detail_place_nickname_text_color" tools:ignore="ResourceName">#47DAFA</color>
+    <color name="map_detail_place_more_text_color" tools:ignore="ResourceName">#778AA9</color>
 
 </resources>
 

@@ -22,7 +22,7 @@
         tools:text="不开心时想去的点" />
 
     <View
-        android:id="@+id/map_view"
+        android:id="@+id/map_view_favorite_line"
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginStart="16dp"
