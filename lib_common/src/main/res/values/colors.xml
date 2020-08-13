@@ -365,7 +365,9 @@
     <!--    喜欢条目文字颜色-->
     <color name="map_text_favorite_item" tools:ignore="ResourceName">#253E65</color>
     <!--   喜欢地点弹窗的背景-->
-    <color name="map_pop_up_window_favorite_color" tools:ignore="ResourceName">#FFFFFF</color>
+    <color name="map_pop_up_window_favorite_background_color" tools:ignore="ResourceName">#FFFFFF
+    </color>
+    <color name="map_favorite_edit_background_color" tools:ignore="ResourceName">#FFFFFF</color>
 
     <color name="map_favorite_accept_text_color" tools:ignore="ResourceName">#234780</color>
     <color name="map_favorite_cancel_text_color" tools:ignore="ResourceName">#778AA9</color>

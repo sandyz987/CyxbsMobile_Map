@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.databinding.MapFragmentFavoriteEditBinding
 import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
+import kotlinx.android.synthetic.main.map_fragment_favorite_edit.*
 
 class FavoriteEditFragment : Fragment() {
     private lateinit var viewModel: MapViewModel
@@ -22,7 +23,9 @@ class FavoriteEditFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(requireActivity()).get(MapViewModel::class.java)
-
+        map_tv_favorite_cancel.setOnClickListener {
+            viewModel.fragmentFavoriteEditIsShowing.value = false
+        }
     }
 
 }

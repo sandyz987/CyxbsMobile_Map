@@ -2,6 +2,10 @@ package com.mredrock.cyxbs.discover.map.ui.activity.activity
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
+import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.Observer
+import androidx.room.Transaction
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.mredrock.cyxbs.common.config.DISCOVER_MAP
 import com.mredrock.cyxbs.common.service.ServiceManager
@@ -10,6 +14,7 @@ import com.mredrock.cyxbs.common.ui.BaseActivity
 import com.mredrock.cyxbs.common.ui.BaseViewModelActivity
 import com.mredrock.cyxbs.common.utils.extensions.setFullScreen
 import com.mredrock.cyxbs.discover.map.R
+import com.mredrock.cyxbs.discover.map.ui.activity.fragment.FavoriteEditFragment
 import com.mredrock.cyxbs.discover.map.ui.activity.fragment.MainFragment
 import com.mredrock.cyxbs.discover.map.ui.activity.fragment.inner.MapViewFragment
 import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
@@ -26,7 +31,9 @@ import kotlinx.android.synthetic.main.map_activity_map.*
 class MapActivity : BaseViewModelActivity<MapViewModel>() {
     override val isFragmentActivity = false
     override val viewModelClass = MapViewModel::class.java
-    val fragmentManager = supportFragmentManager
+    private val fragmentManager = supportFragmentManager
+    private val mainFragment = MainFragment()
+    private val favoriteEditFragment = FavoriteEditFragment()
 
     @SuppressLint("SetJavaScriptEnabled", "ObsoleteSdkInt")
     override fun onStart() {
@@ -46,7 +53,33 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         setContentView(R.layout.map_activity_map)
         //初始化viewModel
         viewModel.init()
-        fragmentManager.beginTransaction().add(R.id.map_fl_main_fragment, MainFragment()).commit()
+        fragmentManager.beginTransaction().add(R.id.map_fl_main_fragment, mainFragment).show(mainFragment).commit()
+
+        viewModel.fragmentFavoriteEditIsShowing.observe(
+                this@MapActivity,
+                Observer<Boolean> { t ->
+                    if (t == true) {
+                        val transaction = fragmentManager.beginTransaction()
+                        transaction.hide(mainFragment)
+                        if (!favoriteEditFragment.isAdded) {
+                            transaction.add(R.id.map_fl_main_fragment, favoriteEditFragment)
+                        }
+                        transaction
+                                .show(favoriteEditFragment)
+                                .addToBackStack("favorite_edit")
+                                .commit()
+                    } else {
+                        fragmentManager.beginTransaction()
+                                .hide(favoriteEditFragment)
+                                .show(mainFragment)
+                                .commit()
+                        fragmentManager.popBackStack()
+
+                    }
+                    Log.e("sandyzhang", fragmentManager.backStackEntryCount.toString())
+                }
+        )
 
     }
+
 }

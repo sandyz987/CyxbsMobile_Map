@@ -10,7 +10,10 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.activity.fragment.FavoriteEditFragment">
+        android:clickable="true"
+        android:background="@color/map_favorite_edit_background_color"
+        tools:context=".ui.activity.fragment.FavoriteEditFragment"
+        android:focusable="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -58,11 +61,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="20dp"
+                android:text="将该收藏改为"
                 android:textColor="@color/map_favorite_change_color"
                 android:textSize="@dimen/map_favorite_change_text_size"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/map_tv_favorite_place_name"
-                android:text="将该收藏改为" />
+                app:layout_constraintTop_toBottomOf="@+id/map_tv_favorite_place_name" />
 
             <TextView
                 android:id="@+id/map_tv_favorite_recommend"
@@ -70,11 +73,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="20dp"
+                android:text="@string/map_favorite_recommend_text"
                 android:textColor="@color/map_favorite_recommend_color"
                 android:textSize="@dimen/map_favorite_recommend_text_size"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/map_et_favorite_nickname"
-                android:text="@string/map_favorite_recommend_text" />
+                app:layout_constraintTop_toBottomOf="@+id/map_et_favorite_nickname" />
 
             <TextView
                 android:id="@+id/map_tv_favorite_cancel"

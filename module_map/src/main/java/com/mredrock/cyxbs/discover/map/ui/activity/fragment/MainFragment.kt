@@ -92,11 +92,7 @@ class MainFragment : Fragment() {
     private fun closeSearchFragment() {
         val transaction = manager?.beginTransaction()?.setCustomAnimations(R.animator.map_slide_from_left, R.animator.map_slide_to_right, R.animator.map_slide_from_right, R.animator.map_slide_to_left)
         transaction?.hide(searchFragment)
-        if (!mapViewFragment.isAdded) {
-            transaction?.add(R.id.map_ll_map_fragment, mapViewFragment)?.commit()
-        } else {
-            transaction?.show(mapViewFragment)?.commit()
-        }
+        transaction?.show(mapViewFragment)?.commit()
         manager?.popBackStack()
     }
 
@@ -109,11 +105,10 @@ class MainFragment : Fragment() {
         val transaction = manager?.beginTransaction()?.setCustomAnimations(R.animator.map_slide_from_right, R.animator.map_slide_to_left, R.animator.map_slide_from_left, R.animator.map_slide_to_right)
         transaction?.hide(mapViewFragment)
         if (!searchFragment.isAdded) {
-            transaction?.add(R.id.map_ll_map_fragment, searchFragment)?.show(searchFragment)?.commit()
-        } else {
-            transaction?.show(searchFragment)?.commit()
+            transaction?.add(R.id.map_ll_map_fragment, searchFragment)
         }
-        transaction?.addToBackStack("search")
+        transaction?.show(searchFragment)
+        transaction?.addToBackStack("search")?.commit()
     }
 
 

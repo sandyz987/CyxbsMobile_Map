@@ -126,6 +126,9 @@ class PlaceDetailBottomSheetFragment : Fragment() {
             //打开收藏编辑页面
             viewModel.fragmentFavoriteEditIsShowing.value = true
         }
+        map_tv_detail_place_nickname.setOnClickListener {
+            viewModel.fragmentFavoriteEditIsShowing.value = true
+        }
     }
 
 
