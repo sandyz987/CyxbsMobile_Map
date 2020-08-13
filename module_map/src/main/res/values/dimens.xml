@@ -11,4 +11,7 @@
     <dimen name="map_favorite_change_text_size">16sp</dimen>
     <dimen name="map_favorite_recommend_text_size">16sp</dimen>
     <dimen name="map_place_detail_place_name_text_size">23sp</dimen>
+    <dimen name="map_search_history_text_size">15sp</dimen>
+    <dimen name="map_search_clear_text_size">11sp</dimen>
+
 </resources>
