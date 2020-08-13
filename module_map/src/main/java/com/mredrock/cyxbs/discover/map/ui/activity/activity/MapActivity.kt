@@ -17,6 +17,7 @@ import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.ui.activity.fragment.FavoriteEditFragment
 import com.mredrock.cyxbs.discover.map.ui.activity.fragment.MainFragment
 import com.mredrock.cyxbs.discover.map.ui.activity.fragment.inner.MapViewFragment
+import com.mredrock.cyxbs.discover.map.util.KeyboardController
 import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
 import kotlinx.android.synthetic.main.map_activity_map.*
 
@@ -70,6 +71,8 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
                                 .addToBackStack("favorite_edit")
                                 .commit()
                     } else {
+                        //隐藏键盘再返回，防止发生布局变形
+                        KeyboardController.hideInputKeyboard(this, map_fl_main_fragment)
                         fragmentManager.beginTransaction()
                                 .setCustomAnimations(R.animator.map_slide_from_left, R.animator.map_slide_to_right, R.animator.map_slide_from_right, R.animator.map_slide_to_left)
                                 .hide(favoriteEditFragment)
