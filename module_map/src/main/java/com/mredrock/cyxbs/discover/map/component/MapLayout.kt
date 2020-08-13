@@ -3,7 +3,6 @@ package com.mredrock.cyxbs.discover.map.component
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.BitmapFactory
 import android.graphics.PointF
 import android.util.AttributeSet
 import android.view.GestureDetector
@@ -21,7 +20,6 @@ import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.bean.IconBean
 import com.mredrock.cyxbs.discover.map.widget.ProgressDialog
 import org.jetbrains.anko.displayMetrics
-import java.util.logging.Handler
 import kotlin.math.sqrt
 
 /**
@@ -78,7 +76,7 @@ class MapLayout : FrameLayout, View.OnClickListener {
      */
     @SuppressLint("ClickableViewAccessibility")
     private fun initView() {
-
+        ProgressDialog.show(context, "提示", "加载中...", false)
         val rootParams =
                 LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         /** 真实dpi<400的手机会非常卡，需要适配*/
@@ -99,8 +97,7 @@ class MapLayout : FrameLayout, View.OnClickListener {
         /** 适配dpi<400的机型*/
         if (realDpi < 400) {
             subsamplingScaleImageView.setMinimumTileDpi(300)
-            ProgressDialog.show(context, "本机低于400Dpi，放大加载高清地图可能会较慢", "加载中...", false)
-        } else ProgressDialog.show(context, "提示", "加载中...", false)
+        }
 
         subsamplingScaleImageView.setDoubleTapZoomScale(1f)
         subsamplingScaleImageView.setImage(
@@ -128,12 +125,8 @@ class MapLayout : FrameLayout, View.OnClickListener {
                     )
                     addView(icon, layoutParams)
                 }
-                if (realDpi < 400) {
-                    android.os.Handler().postDelayed({
-                        ProgressDialog.hide()
-                    }, 3000
-                    )
-                } else ProgressDialog.hide()
+
+                ProgressDialog.hide()
             }
 
             override fun onTileLoadError(e: Exception?) {
@@ -455,5 +448,5 @@ class MapLayout : FrameLayout, View.OnClickListener {
             }
         }
     }
-    
+
 }
