@@ -60,6 +60,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
                 Observer<Boolean> { t ->
                     if (t == true) {
                         val transaction = fragmentManager.beginTransaction()
+                        transaction.setCustomAnimations(R.animator.map_slide_from_right, R.animator.map_slide_to_left, R.animator.map_slide_from_left, R.animator.map_slide_to_right)
                         transaction.hide(mainFragment)
                         if (!favoriteEditFragment.isAdded) {
                             transaction.add(R.id.map_fl_main_fragment, favoriteEditFragment)
@@ -70,6 +71,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
                                 .commit()
                     } else {
                         fragmentManager.beginTransaction()
+                                .setCustomAnimations(R.animator.map_slide_from_left, R.animator.map_slide_to_right, R.animator.map_slide_from_right, R.animator.map_slide_to_left)
                                 .hide(favoriteEditFragment)
                                 .show(mainFragment)
                                 .commit()
