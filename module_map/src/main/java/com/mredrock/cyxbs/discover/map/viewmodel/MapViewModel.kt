@@ -1,15 +1,13 @@
 package com.mredrock.cyxbs.discover.map.viewmodel
 
+import androidx.databinding.ObservableArrayList
 import androidx.lifecycle.MutableLiveData
 import com.mredrock.cyxbs.common.utils.extensions.doOnErrorWithDefaultErrorHandler
 import com.mredrock.cyxbs.common.utils.extensions.safeSubscribeBy
 import com.mredrock.cyxbs.common.utils.extensions.setSchedulers
 import com.mredrock.cyxbs.common.viewmodel.BaseViewModel
 import com.mredrock.cyxbs.discover.map.R
-import com.mredrock.cyxbs.discover.map.bean.ButtonInfo
-import com.mredrock.cyxbs.discover.map.bean.FavoritePlace
-import com.mredrock.cyxbs.discover.map.bean.MapInfo
-import com.mredrock.cyxbs.discover.map.bean.PlaceDetails
+import com.mredrock.cyxbs.discover.map.bean.*
 import com.mredrock.cyxbs.discover.map.model.TestData
 
 /**
@@ -46,6 +44,9 @@ class MapViewModel : BaseViewModel() {
 
     //搜索框的文字，只用在搜索界面fragment观察本变量即可实现搜索
     val searchText = MutableLiveData<String>("")
+
+    //搜索结果
+    val searchResult = ObservableArrayList<PlaceItem>()
 
     //在唯一的activity的onCreate调用，获取地图数据（地点list），下载地图应该在此处完成（就是文档上第一个接口）
     fun init() {

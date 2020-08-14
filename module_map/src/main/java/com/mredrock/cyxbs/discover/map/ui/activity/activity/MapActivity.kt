@@ -86,4 +86,12 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
 
     }
 
+    override fun onBackPressed() {
+        if (mainFragment.childFragmentManager.backStackEntryCount != 0) {
+            mainFragment.closeSearchFragment()
+            return
+        }
+        super.onBackPressed()
+    }
+
 }

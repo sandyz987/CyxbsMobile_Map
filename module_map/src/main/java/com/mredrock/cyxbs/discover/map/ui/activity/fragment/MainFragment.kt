@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -23,7 +24,7 @@ class MainFragment : Fragment() {
     private lateinit var viewModel: MapViewModel
 
     private val manager: FragmentManager?
-        get() = activity?.supportFragmentManager
+        get() = childFragmentManager
     private val mapViewFragment = MapViewFragment()
     private val searchFragment = SearchFragment()
 
@@ -47,7 +48,6 @@ class MainFragment : Fragment() {
             } else {
                 map_et_search.setText("")
                 closeSearchFragment()
-
             }
             KeyboardController.hideInputKeyboard(requireContext(), it)
         }
@@ -94,7 +94,7 @@ class MainFragment : Fragment() {
         }
     }
 
-    private fun closeSearchFragment() {
+    fun closeSearchFragment() {
         val transaction = manager?.beginTransaction()?.setCustomAnimations(R.animator.map_slide_from_left, R.animator.map_slide_to_right, R.animator.map_slide_from_right, R.animator.map_slide_to_left)
         transaction?.hide(searchFragment)
         transaction?.show(mapViewFragment)?.commit()
@@ -102,7 +102,7 @@ class MainFragment : Fragment() {
     }
 
 
-    private fun openSearchFragment() {
+    fun openSearchFragment() {
         if (manager?.backStackEntryCount ?: 0 != 0) {
             //确保不重复打开搜索框
             return

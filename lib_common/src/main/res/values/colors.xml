@@ -383,5 +383,8 @@
     <color name="map_search_clear_text_color" tools:ignore="ResourceName">#ABBCD8</color>
     <color name="map_search_background_color" tools:ignore="ResourceName">#FFFFFF</color>
 
+
+    <color name="map_search_result_item_text_color" tools:ignore="ResourceName">#234780</color>
+
 </resources>
 

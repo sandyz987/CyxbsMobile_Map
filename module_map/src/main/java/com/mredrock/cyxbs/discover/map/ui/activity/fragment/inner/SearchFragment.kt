@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.transaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.mredrock.cyxbs.common.ui.BaseViewModelFragment
@@ -21,7 +22,7 @@ import kotlinx.android.synthetic.main.map_fragment_search.*
 class SearchFragment : Fragment() {
     private lateinit var viewModel: MapViewModel
     private val manager: FragmentManager?
-        get() = activity?.supportFragmentManager
+        get() = childFragmentManager
 
     private var searchHistoryFragment = SearchHistoryFragment()
     private var searchResultFragment = SearchResultFragment()
@@ -37,7 +38,6 @@ class SearchFragment : Fragment() {
         viewModel.searchText.observe(
                 viewLifecycleOwner,
                 Observer {
-                    Log.e("sandyzhang", "hh")
                     if (it.isEmpty()) {
                         openSearchHistoryFragment()
                     } else {
@@ -45,20 +45,18 @@ class SearchFragment : Fragment() {
                     }
                 }
         )
+        Log.d("sandyzhang", "ob================")
+
 
     }
 
-    override fun onResume() {
-        super.onResume()
-        openSearchHistoryFragment()
-    }
-
-    override fun onStop() {
-        Log.e("sandyzhang", "remove")
+    override fun onSaveInstanceState(outState: Bundle) {
         val transaction = manager?.beginTransaction()
-        transaction?.remove(searchResultFragment)?.remove(searchHistoryFragment)?.commit()
-        super.onStop()
+        searchResultFragment.removeObserver()
+        transaction?.remove(searchHistoryFragment)?.remove(searchResultFragment)?.commit()
+        super.onSaveInstanceState(outState)
     }
+
 
     private fun openSearchHistoryFragment() {
         val transaction = manager?.beginTransaction()
@@ -69,6 +67,7 @@ class SearchFragment : Fragment() {
         if (!searchHistoryFragment.isAdded) {
             transaction?.add(R.id.map_fl_search_fragment, searchHistoryFragment)
         }
+        Log.d("sandyzhang", "show================" + (manager == null))
         transaction?.show(searchHistoryFragment)?.commit()
     }
 
