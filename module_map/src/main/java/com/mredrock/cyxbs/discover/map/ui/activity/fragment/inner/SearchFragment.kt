@@ -40,9 +40,6 @@ class SearchFragment : Fragment() {
                 Observer {
                     if (it.isEmpty()) {
                         openSearchHistoryFragment()
-                        if (searchResultFragment.isAdded) {
-                            searchResultFragment.removeObserver()
-                        }
                     } else {
                         openSearchResultFragment()
                     }
@@ -50,6 +47,11 @@ class SearchFragment : Fragment() {
         )
 
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        openSearchHistoryFragment()
     }
 
     override fun onStop() {

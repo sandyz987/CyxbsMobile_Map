@@ -41,6 +41,7 @@ class SearchResultAdapter(context: Context, private val viewModel: MapViewModel)
 
                     override fun onItemRangeRemoved(sender: ObservableArrayList<PlaceItem>?, positionStart: Int, itemCount: Int) {
                         notifyItemRangeChanged(positionStart, itemCount)
+                        notifyDataSetChanged()
                     }
 
                     override fun onItemRangeMoved(sender: ObservableArrayList<PlaceItem>?, fromPosition: Int, toPosition: Int, itemCount: Int) {

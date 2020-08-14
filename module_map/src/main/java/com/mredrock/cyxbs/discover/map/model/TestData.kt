@@ -221,6 +221,99 @@ const val mapInfoString = "{\n" +
         "                \"tag_top\": 8667,\n" +
         "                \"tag_bottom\": 8764\n" +
         "            },\n" +
+        //
+        "            {\n" +
+        "                \"place_name\": \"重邮腾飞门1\",\n" +
+        "                \"place_id\": 1,\n" +
+        "                \"building_list\": [\n" +
+        "                    {\n" +
+        "                        \"building_left\": 1361,\n" +
+        "                        \"building_right\": 1770,\n" +
+        "                        \"building_top\": 8513,\n" +
+        "                        \"building_bottom\": 8744\n" +
+        "                    }\n" +
+        "                ],\n" +
+        "                \"place_center_x\": 1555,\n" +
+        "                \"place_center_y\": 8647,\n" +
+        "                \"tag_left\": 1781,\n" +
+        "                \"tag_right\": 2015,\n" +
+        "                \"tag_top\": 8667,\n" +
+        "                \"tag_bottom\": 8764\n" +
+        "            },\n" +
+        "            {\n" +
+        "                \"place_name\": \"重邮腾飞门12\",\n" +
+        "                \"place_id\": 1,\n" +
+        "                \"building_list\": [\n" +
+        "                    {\n" +
+        "                        \"building_left\": 1361,\n" +
+        "                        \"building_right\": 1770,\n" +
+        "                        \"building_top\": 8513,\n" +
+        "                        \"building_bottom\": 8744\n" +
+        "                    }\n" +
+        "                ],\n" +
+        "                \"place_center_x\": 1555,\n" +
+        "                \"place_center_y\": 8647,\n" +
+        "                \"tag_left\": 1781,\n" +
+        "                \"tag_right\": 2015,\n" +
+        "                \"tag_top\": 8667,\n" +
+        "                \"tag_bottom\": 8764\n" +
+        "            },\n" +
+        "            {\n" +
+        "                \"place_name\": \"重邮腾飞门123\",\n" +
+        "                \"place_id\": 1,\n" +
+        "                \"building_list\": [\n" +
+        "                    {\n" +
+        "                        \"building_left\": 1361,\n" +
+        "                        \"building_right\": 1770,\n" +
+        "                        \"building_top\": 8513,\n" +
+        "                        \"building_bottom\": 8744\n" +
+        "                    }\n" +
+        "                ],\n" +
+        "                \"place_center_x\": 1555,\n" +
+        "                \"place_center_y\": 8647,\n" +
+        "                \"tag_left\": 1781,\n" +
+        "                \"tag_right\": 2015,\n" +
+        "                \"tag_top\": 8667,\n" +
+        "                \"tag_bottom\": 8764\n" +
+        "            },\n" +
+        "            {\n" +
+        "                \"place_name\": \"重邮腾飞门1234\",\n" +
+        "                \"place_id\": 1,\n" +
+        "                \"building_list\": [\n" +
+        "                    {\n" +
+        "                        \"building_left\": 1361,\n" +
+        "                        \"building_right\": 1770,\n" +
+        "                        \"building_top\": 8513,\n" +
+        "                        \"building_bottom\": 8744\n" +
+        "                    }\n" +
+        "                ],\n" +
+        "                \"place_center_x\": 1555,\n" +
+        "                \"place_center_y\": 8647,\n" +
+        "                \"tag_left\": 1781,\n" +
+        "                \"tag_right\": 2015,\n" +
+        "                \"tag_top\": 8667,\n" +
+        "                \"tag_bottom\": 8764\n" +
+        "            },\n" +
+        "            {\n" +
+        "                \"place_name\": \"重邮腾飞门12345\",\n" +
+        "                \"place_id\": 1,\n" +
+        "                \"building_list\": [\n" +
+        "                    {\n" +
+        "                        \"building_left\": 1361,\n" +
+        "                        \"building_right\": 1770,\n" +
+        "                        \"building_top\": 8513,\n" +
+        "                        \"building_bottom\": 8744\n" +
+        "                    }\n" +
+        "                ],\n" +
+        "                \"place_center_x\": 1555,\n" +
+        "                \"place_center_y\": 8647,\n" +
+        "                \"tag_left\": 1781,\n" +
+        "                \"tag_right\": 2015,\n" +
+        "                \"tag_top\": 8667,\n" +
+        "                \"tag_bottom\": 8764\n" +
+        "            },\n" +
+
+        //
         "            {\n" +
         "                \"place_name\": \"中心食堂\",\n" +
         "                \"place_id\": 2,\n" +
