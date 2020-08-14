@@ -2,13 +2,19 @@ package com.mredrock.cyxbs.discover.map.viewmodel
 
 import androidx.databinding.ObservableArrayList
 import androidx.lifecycle.MutableLiveData
+import com.mredrock.cyxbs.common.network.ApiGenerator
 import com.mredrock.cyxbs.common.utils.extensions.doOnErrorWithDefaultErrorHandler
 import com.mredrock.cyxbs.common.utils.extensions.safeSubscribeBy
 import com.mredrock.cyxbs.common.utils.extensions.setSchedulers
 import com.mredrock.cyxbs.common.viewmodel.BaseViewModel
+import com.mredrock.cyxbs.discover.map.BuildConfig
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.bean.*
 import com.mredrock.cyxbs.discover.map.model.TestData
+import com.mredrock.cyxbs.discover.map.network.MapApiService
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 
 /**
  *@author zhangzhe
@@ -17,6 +23,7 @@ import com.mredrock.cyxbs.discover.map.model.TestData
  */
 
 class MapViewModel : BaseViewModel() {
+    private lateinit var mapApiService: MapApiService
 
     //网络请求得到的数据(地图基本信息接口)，如何使用：在要使用的activity或者fragment观察即可
     val mapInfo = MutableLiveData<MapInfo>()
@@ -51,11 +58,26 @@ class MapViewModel : BaseViewModel() {
     //在唯一的activity的onCreate调用，获取地图数据（地点list），下载地图应该在此处完成（就是文档上第一个接口）
     fun init() {
         //ProgressDialog.show(BaseApp.context,"提示","请稍后",false)//ProgressDialog.hide()
-        //这里应该写的是网络请求，但是先用测试数据
+
+        ApiGenerator.registerNetSettings(2019211135, { builder ->
+            builder.baseUrl("http://118.31.20.31:8080/")
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+        }, { builder ->
+            builder.apply {
+                if (BuildConfig.DEBUG) {
+                    val logging = HttpLoggingInterceptor()
+                    logging.level = HttpLoggingInterceptor.Level.BODY
+                    addInterceptor(logging)
+                }
+            }
+        }, true)
+
+        mapApiService = ApiGenerator.getApiService(2019211135, MapApiService::class.java)
         /**
          * 下载地图可以放在这里，但必须开线程！
          */
-        TestData.getMapInfo()//网络请求替换为：apiService.getMapInfo()
+        mapApiService.getMapInfo()//网络请求替换为：apiService.getMapInfo()
                 .setSchedulers()
                 .doOnErrorWithDefaultErrorHandler {
                     toastEvent.value = R.string.map_network_connect_error
@@ -81,7 +103,7 @@ class MapViewModel : BaseViewModel() {
 
     //当地图标签被点击，执行此网络请求，在对应的fragment观察数据即可
     fun showPlaceDetails(placeId: Int) {
-        TestData.getPlaceDetails(placeId)
+        mapApiService.getPlaceDetails(placeId)
                 .setSchedulers()
                 .doOnErrorWithDefaultErrorHandler {
                     toastEvent.value = R.string.map_network_connect_error
