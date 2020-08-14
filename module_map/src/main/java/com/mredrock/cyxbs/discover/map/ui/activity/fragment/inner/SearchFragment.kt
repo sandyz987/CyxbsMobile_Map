@@ -40,44 +40,42 @@ class SearchFragment : Fragment() {
                 Observer {
                     if (it.isEmpty()) {
                         openSearchHistoryFragment()
+                        if (searchResultFragment.isAdded) {
+                            searchResultFragment.removeObserver()
+                        }
                     } else {
                         openSearchResultFragment()
                     }
                 }
         )
-        Log.d("sandyzhang", "ob================")
 
 
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
+    override fun onStop() {
+        super.onStop()
         val transaction = manager?.beginTransaction()
-        searchResultFragment.removeObserver()
-        transaction?.remove(searchHistoryFragment)?.remove(searchResultFragment)?.commit()
-        super.onSaveInstanceState(outState)
+
+        transaction?.remove(searchHistoryFragment)?.remove(searchResultFragment)?.commitAllowingStateLoss()
     }
 
 
     private fun openSearchHistoryFragment() {
         val transaction = manager?.beginTransaction()
         searchHistoryFragment = SearchHistoryFragment()
-        if (searchResultFragment.isAdded) {
-            transaction?.hide(searchResultFragment)
-        }
         if (!searchHistoryFragment.isAdded) {
             transaction?.add(R.id.map_fl_search_fragment, searchHistoryFragment)
         }
-        Log.d("sandyzhang", "show================" + (manager == null))
         transaction?.show(searchHistoryFragment)?.commit()
     }
 
 
     private fun openSearchResultFragment() {
         val transaction = manager?.beginTransaction()
-        searchResultFragment = SearchResultFragment()
-        if (searchHistoryFragment.isAdded) {
-            transaction?.hide(searchHistoryFragment)
+        if (searchResultFragment.isAdded) {
+            searchResultFragment.removeObserver()
         }
+        searchResultFragment = SearchResultFragment()
         if (!searchResultFragment.isAdded) {
             transaction?.add(R.id.map_fl_search_fragment, searchResultFragment)
         }

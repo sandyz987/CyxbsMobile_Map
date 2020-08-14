@@ -52,7 +52,7 @@ class SearchResultFragment : Fragment() {
                         searchResultArrayList.add(placeItem)
                     }
                 }
-                Log.e("sandyzhang", searchResultArrayList.size.toString() + this.toString())
+                Log.e("sandyzhang", searchResultArrayList.size.toString())
                 //以上是搜索到的结果
                 //如果现存列表没有搜索到的结果，则添加
                 for (placeItemResult: PlaceItem in searchResultArrayList) {
@@ -86,7 +86,7 @@ class SearchResultFragment : Fragment() {
 
             }
         }
-
+        viewModel.searchText.removeObserver(observer)
         viewModel.searchText.observe(
                 viewLifecycleOwner,
                 observer
