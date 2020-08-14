@@ -2,7 +2,6 @@ package com.mredrock.cyxbs.discover.map.ui.activity.fragment.inner
 
 import android.graphics.Color
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,9 +9,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager
+import com.google.android.flexbox.FlexWrap
+import com.google.android.flexbox.FlexboxLayoutManager
 import com.mredrock.cyxbs.common.utils.extensions.dp2px
 import com.mredrock.cyxbs.common.utils.extensions.gone
 import com.mredrock.cyxbs.common.utils.extensions.visible
@@ -59,24 +58,18 @@ class PlaceDetailBottomSheetFragment : Fragment() {
                 ?: 0, context?.dp2px(10f)
                 ?: 0).addPageTransformer(ScaleInTransformer()).adapter = bannerAdapter
 
-        val chipsLayoutManager = ChipsLayoutManager.newBuilder(context)
-                .setChildGravity(Gravity.TOP)
-                .setScrollingEnabled(true)
-                .setMaxViewsInRow(6)
-                .setGravityResolver { Gravity.START }
-                .setRowBreaker { position -> position == 6 || position == 11 || position == 2 }
-                .setOrientation(ChipsLayoutManager.HORIZONTAL)
-                .setRowStrategy(ChipsLayoutManager.STRATEGY_DEFAULT)
-                .withLastRow(true)
-                .build()
-        map_rv_detail_about_list.layoutManager = chipsLayoutManager
+        val flexBoxManager = FlexboxLayoutManager(context)
+        flexBoxManager.flexWrap = FlexWrap.WRAP
+        map_rv_detail_about_list.layoutManager = flexBoxManager
         val tagAdapter = context?.let { DetailTagRvAdapter(it, mutableListOf()) }
         map_rv_detail_about_list.adapter = tagAdapter
 
-        val linearLayoutManager = LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
+        val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         map_rv_detail_place_attribute.layoutManager = linearLayoutManager
         val attributeAdapter = context?.let { DetailAttributeRvAdapter(it, mutableListOf()) }
         map_rv_detail_place_attribute.adapter = attributeAdapter
+
+
         /**
          * 对要显示的内容监听
          */
