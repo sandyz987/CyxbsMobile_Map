@@ -42,10 +42,10 @@ class SearchResultFragment : Fragment() {
         map_rv_search_result.layoutManager = LinearLayoutManager(requireContext())
         observer = Observer { t ->
             if (t == "") {
+                viewModel.searchResult.clear()
                 return@Observer
             }
             if (isSearching) {
-                viewModel.searchResult.clear()
                 return@Observer
             }
             isSearching = true
