@@ -1,19 +1,18 @@
-package com.mredrock.cyxbs.discover.map.ui.activity.fragment
+package com.mredrock.cyxbs.discover.map.ui
 
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.mredrock.cyxbs.discover.map.R
-import com.mredrock.cyxbs.discover.map.ui.activity.fragment.inner.MapViewFragment
-import com.mredrock.cyxbs.discover.map.ui.activity.fragment.inner.SearchFragment
+import com.mredrock.cyxbs.discover.map.ui.inner.MapViewFragment
+import com.mredrock.cyxbs.discover.map.ui.inner.SearchFragment
 import com.mredrock.cyxbs.discover.map.util.KeyboardController
 import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
 import kotlinx.android.synthetic.main.map_fragment_main.*
@@ -46,10 +45,8 @@ class MainFragment : Fragment() {
                 //此处填写退出MapActivity的逻辑
                 activity?.finish()
             } else {
-                map_et_search.setText("")
                 closeSearchFragment()
             }
-            KeyboardController.hideInputKeyboard(requireContext(), it)
         }
         //当搜索框被点击，打开搜索Fragment
         map_et_search.setOnClickListener {
@@ -61,6 +58,12 @@ class MainFragment : Fragment() {
                 openSearchFragment()
             }
         }
+
+        viewModel.closeSearchFragment.observe(viewLifecycleOwner, Observer {
+            if (it) {
+                closeSearchFragment()
+            }
+        })
 
 
         viewModel.isAnimation.observe(viewLifecycleOwner, Observer { isAnimation ->
@@ -99,6 +102,8 @@ class MainFragment : Fragment() {
     }
 
     fun closeSearchFragment() {
+        map_et_search.setText("")
+        KeyboardController.hideInputKeyboard(requireContext(), map_et_search)
         val transaction = manager?.beginTransaction()?.setCustomAnimations(R.animator.map_slide_from_left, R.animator.map_slide_to_right, R.animator.map_slide_from_right, R.animator.map_slide_to_left)
         transaction?.hide(searchFragment)
         transaction?.show(mapViewFragment)?.commit()
@@ -107,6 +112,7 @@ class MainFragment : Fragment() {
 
 
     fun openSearchFragment() {
+        viewModel.closeSearchFragment.value = false
         if (manager?.backStackEntryCount ?: 0 != 0) {
             //确保不重复打开搜索框
             return

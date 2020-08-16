@@ -1,4 +1,4 @@
-package com.mredrock.cyxbs.discover.map.ui.activity.fragment
+package com.mredrock.cyxbs.discover.map.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.mredrock.cyxbs.discover.map.R
-import com.mredrock.cyxbs.discover.map.ui.activity.adapter.AllPictureRvAdapter
+import com.mredrock.cyxbs.discover.map.ui.adapter.AllPictureRvAdapter
 import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
 import kotlinx.android.synthetic.main.map_fragment_all_picture.*
 

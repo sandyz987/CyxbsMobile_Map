@@ -61,6 +61,12 @@ class MapViewModel : BaseViewModel() {
     //搜索结果
     val searchResult = ObservableArrayList<PlaceItem>()
 
+    //显示的地点id
+    val showSomeIconsId = MutableLiveData<MutableList<String>>()
+
+    //用于通知mainFragment关闭搜索框
+    val closeSearchFragment = MutableLiveData<Boolean>(false)
+
     //在唯一的activity的onCreate调用，获取地图数据（地点list），下载地图应该在此处完成（就是文档上第一个接口）
     fun init() {
         //ProgressDialog.show(BaseApp.context,"提示","请稍后",false)//ProgressDialog.hide()
@@ -119,7 +125,6 @@ class MapViewModel : BaseViewModel() {
                 .safeSubscribeBy {
                     showingPlaceId = placeId
                     placeDetails.postValue(it.data)
-                    Toast.makeText(BaseApp.context, it.data.placeName, Toast.LENGTH_SHORT).show()
                     bottomSheetIsShowing.postValue(true)
                 }.lifeCycle()
     }

@@ -1,4 +1,4 @@
-package com.mredrock.cyxbs.discover.map.ui.activity.fragment
+package com.mredrock.cyxbs.discover.map.ui
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

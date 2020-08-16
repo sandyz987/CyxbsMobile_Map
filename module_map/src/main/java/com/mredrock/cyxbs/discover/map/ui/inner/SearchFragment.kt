@@ -1,23 +1,17 @@
-package com.mredrock.cyxbs.discover.map.ui.activity.fragment.inner
+package com.mredrock.cyxbs.discover.map.ui.inner
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.transaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.mredrock.cyxbs.common.ui.BaseViewModelFragment
 import com.mredrock.cyxbs.discover.map.R
-import com.mredrock.cyxbs.discover.map.bean.PlaceDetails
-import com.mredrock.cyxbs.discover.map.model.TestData
-import com.mredrock.cyxbs.discover.map.ui.activity.fragment.inner.search.SearchHistoryFragment
-import com.mredrock.cyxbs.discover.map.ui.activity.fragment.inner.search.SearchResultFragment
+import com.mredrock.cyxbs.discover.map.ui.inner.search.SearchHistoryFragment
+import com.mredrock.cyxbs.discover.map.ui.inner.search.SearchResultFragment
 import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
-import kotlinx.android.synthetic.main.map_fragment_search.*
 
 /**
  * 因为多fragment在transaction的多层嵌套会出现内部fragment被回收的情况，于是每次都手动创建新的fragment并回收原来的fragment

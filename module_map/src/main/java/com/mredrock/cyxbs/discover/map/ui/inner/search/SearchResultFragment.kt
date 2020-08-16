@@ -1,7 +1,6 @@
-package com.mredrock.cyxbs.discover.map.ui.activity.fragment.inner.search
+package com.mredrock.cyxbs.discover.map.ui.inner.search
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,14 +10,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.bean.PlaceItem
-import com.mredrock.cyxbs.discover.map.ui.activity.adapter.SearchResultAdapter
+import com.mredrock.cyxbs.discover.map.ui.adapter.SearchResultAdapter
 import com.mredrock.cyxbs.discover.map.util.ThreadPool
 import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
-import io.reactivex.Observable
-import io.reactivex.ObservableOnSubscribe
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.map_fragment_search_result.*
-import okhttp3.internal.platform.Platform
 import org.jetbrains.anko.support.v4.runOnUiThread
 import java.util.regex.Pattern
 
@@ -40,6 +35,9 @@ class SearchResultFragment : Fragment() {
         val searchResultAdapter = SearchResultAdapter(requireContext(), viewModel)
         map_rv_search_result.adapter = searchResultAdapter
         map_rv_search_result.layoutManager = LinearLayoutManager(requireContext())
+
+
+
         observer = Observer { t ->
             if (t == "") {
                 viewModel.searchResult.clear()

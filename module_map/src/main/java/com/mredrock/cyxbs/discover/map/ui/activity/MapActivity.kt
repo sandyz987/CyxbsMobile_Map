@@ -1,23 +1,17 @@
-package com.mredrock.cyxbs.discover.map.ui.activity.activity
+package com.mredrock.cyxbs.discover.map.ui.activity
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
-import androidx.room.Transaction
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.mredrock.cyxbs.common.config.DISCOVER_MAP
 import com.mredrock.cyxbs.common.service.ServiceManager
 import com.mredrock.cyxbs.common.service.account.IAccountService
-import com.mredrock.cyxbs.common.ui.BaseActivity
 import com.mredrock.cyxbs.common.ui.BaseViewModelActivity
-import com.mredrock.cyxbs.common.utils.extensions.setFullScreen
 import com.mredrock.cyxbs.discover.map.R
-import com.mredrock.cyxbs.discover.map.ui.activity.fragment.AllPictureFragment
-import com.mredrock.cyxbs.discover.map.ui.activity.fragment.FavoriteEditFragment
-import com.mredrock.cyxbs.discover.map.ui.activity.fragment.MainFragment
-import com.mredrock.cyxbs.discover.map.ui.activity.fragment.inner.MapViewFragment
+import com.mredrock.cyxbs.discover.map.ui.AllPictureFragment
+import com.mredrock.cyxbs.discover.map.ui.FavoriteEditFragment
+import com.mredrock.cyxbs.discover.map.ui.MainFragment
 import com.mredrock.cyxbs.discover.map.util.KeyboardController
 import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
 import kotlinx.android.synthetic.main.map_activity_map.*

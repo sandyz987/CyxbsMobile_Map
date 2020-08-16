@@ -402,6 +402,24 @@ class MapLayout : FrameLayout, View.OnClickListener {
     }
 
     /**
+     * 根据id放大并平移到某点
+     */
+    fun focusToPoint(id: String) {
+        iconList.forEach { bean ->
+            val iconBean = bean.tag as IconBean
+            if (iconBean.id.toString() == id) {
+                subsamplingScaleImageView.animateScaleAndCenter(
+                        1f,
+                        PointF(iconBean.sx, iconBean.sy)
+                )?.withDuration(FOCUS_ANIMATION_DURATION)
+                        ?.withInterruptible(true)?.start()
+                return
+            }
+        }
+
+    }
+
+    /**
      * 地图点击回调
      */
     interface OnPlaceClickListener {

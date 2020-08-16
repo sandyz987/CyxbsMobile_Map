@@ -1,4 +1,4 @@
-package com.mredrock.cyxbs.discover.map.ui.activity.adapter
+package com.mredrock.cyxbs.discover.map.ui.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,13 +7,9 @@ import android.view.ViewGroup
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableList
 import androidx.recyclerview.widget.RecyclerView
-import com.mredrock.cyxbs.common.utils.extensions.gone
-import com.mredrock.cyxbs.common.utils.extensions.visible
 import com.mredrock.cyxbs.discover.map.R
-import com.mredrock.cyxbs.discover.map.bean.FavoritePlace
 import com.mredrock.cyxbs.discover.map.bean.PlaceItem
 import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
-import kotlinx.android.synthetic.main.map_recycle_item_favorite_list.view.*
 import kotlinx.android.synthetic.main.map_recycle_item_search_result.view.*
 
 /**
@@ -70,6 +66,10 @@ class SearchResultAdapter(context: Context, private val viewModel: MapViewModel)
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.placeName.text = viewModel.searchResult[position].placeName
+        holder.itemView.setOnClickListener {
+            viewModel.showSomeIconsId.value = mutableListOf(viewModel.searchResult[position].placeId)
+            viewModel.closeSearchFragment.value = true
+        }
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

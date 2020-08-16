@@ -11,5 +11,7 @@
         android:id="@+id/map_fl_search_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.activity.fragment.inner.SearchFragment" />
+        android:clickable="true"
+        android:focusable="true"
+        tools:context=".ui.inner.SearchFragment" />
 </layout>

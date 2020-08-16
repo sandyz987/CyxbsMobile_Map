@@ -1,4 +1,4 @@
-package com.mredrock.cyxbs.discover.map.ui.activity.activity
+package com.mredrock.cyxbs.discover.map.ui.activity
 
 import android.annotation.SuppressLint
 import android.app.ProgressDialog

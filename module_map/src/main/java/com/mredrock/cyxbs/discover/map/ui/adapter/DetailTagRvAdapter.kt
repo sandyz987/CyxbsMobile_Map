@@ -1,4 +1,4 @@
-package com.mredrock.cyxbs.discover.map.ui.activity.adapter
+package com.mredrock.cyxbs.discover.map.ui.adapter
 
 import android.animation.ValueAnimator
 import android.content.Context
@@ -6,25 +6,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.appcompat.widget.AppCompatCheckedTextView
 import androidx.recyclerview.widget.RecyclerView
 import com.mredrock.cyxbs.discover.map.R
-import com.mredrock.cyxbs.discover.map.bean.InfoItem
-import kotlinx.android.synthetic.main.map_recycle_item_detail_attribute.view.*
 import kotlinx.android.synthetic.main.map_recycle_item_detail_tag.view.*
-import kotlinx.android.synthetic.main.map_recycle_item_symbol_places.view.*
 
-class DetailAttributeRvAdapter(val context: Context, private val mList: MutableList<String>) : RecyclerView.Adapter<DetailAttributeRvAdapter.ViewHolder>() {
+class DetailTagRvAdapter(val context: Context, private val mList: MutableList<String>) : RecyclerView.Adapter<DetailTagRvAdapter.ViewHolder>() {
 
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        val tag: TextView = view.map_tv_recycle_item_detail_attribute
+        val tag: TextView = view.map_tv_recycle_item_detail_tag
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.map_recycle_item_detail_attribute, parent, false)
+                .inflate(R.layout.map_recycle_item_detail_tag, parent, false)
         return ViewHolder(view)
     }
 

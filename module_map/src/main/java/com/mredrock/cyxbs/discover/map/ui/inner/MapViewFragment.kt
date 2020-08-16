@@ -1,4 +1,4 @@
-package com.mredrock.cyxbs.discover.map.ui.activity.fragment.inner
+package com.mredrock.cyxbs.discover.map.ui.inner
 
 import android.animation.Animator
 import android.annotation.SuppressLint
@@ -24,9 +24,9 @@ import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.bean.IconBean
 import com.mredrock.cyxbs.discover.map.bean.PlaceItem
 import com.mredrock.cyxbs.discover.map.component.MapLayout
-import com.mredrock.cyxbs.discover.map.ui.activity.activity.VRActivity
-import com.mredrock.cyxbs.discover.map.ui.activity.adapter.FavoriteListAdapter
-import com.mredrock.cyxbs.discover.map.ui.activity.adapter.SymbolRvAdapter
+import com.mredrock.cyxbs.discover.map.ui.activity.VRActivity
+import com.mredrock.cyxbs.discover.map.ui.adapter.FavoriteListAdapter
+import com.mredrock.cyxbs.discover.map.ui.adapter.SymbolRvAdapter
 import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
 import kotlinx.android.synthetic.main.map_fragment_map_view.*
 
@@ -187,6 +187,12 @@ class MapViewFragment : Fragment() {
                     favoriteListAdapter.setList(it)
                 }
         )
+
+        viewModel.showSomeIconsId.observe(viewLifecycleOwner, Observer {
+            map_layout.closeAllIcon()
+            map_layout.showSomeIcons(it)
+            map_layout.focusToPoint(it[0])
+        })
 
 
         map_iv_vr.setOnClickListener {

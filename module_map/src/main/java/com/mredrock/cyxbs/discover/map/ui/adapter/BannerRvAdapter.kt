@@ -1,4 +1,4 @@
-package com.mredrock.cyxbs.discover.map.ui.activity.adapter
+package com.mredrock.cyxbs.discover.map.ui.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -10,22 +10,24 @@ import com.mredrock.cyxbs.common.utils.extensions.setImageFromUrl
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.component.RoundRectImageView
 import kotlinx.android.synthetic.main.map_banner_item_detail.view.*
-import kotlinx.android.synthetic.main.map_recycle_item_all_picture.view.*
 
-class AllPictureRvAdapter(val context: Context, private val mList: MutableList<String>) : RecyclerView.Adapter<AllPictureRvAdapter.ViewHolder>() {
+class BannerRvAdapter(val context: Context, private val mList: MutableList<String>) : RecyclerView.Adapter<BannerRvAdapter.ViewHolder>() {
 
+    lateinit var curSelectorItem: AppCompatCheckedTextView
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val imageView: RoundRectImageView = view.map_iv_recycle_item_all_picture
+        val imageView: RoundRectImageView = view.map_iv_banner_item_detail
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.map_recycle_item_all_picture, parent, false)
+                .inflate(R.layout.map_banner_item_detail, parent, false)
         return ViewHolder(view)
     }
 
     override fun getItemCount(): Int {
+        if (mList.size > 10)
+            return 10
         return mList.size
     }
 

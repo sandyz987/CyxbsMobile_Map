@@ -1,4 +1,4 @@
-package com.mredrock.cyxbs.discover.map.ui.activity.adapter
+package com.mredrock.cyxbs.discover.map.ui.adapter
 
 import android.content.Context
 import android.view.LayoutInflater

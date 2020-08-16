@@ -1,4 +1,4 @@
-package com.mredrock.cyxbs.discover.map.ui.activity.fragment.inner.search
+package com.mredrock.cyxbs.discover.map.ui.inner.search
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

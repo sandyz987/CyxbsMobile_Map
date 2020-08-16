@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:clickable="true"
         android:background="@color/map_favorite_edit_background_color"
-        tools:context=".ui.activity.fragment.FavoriteEditFragment"
+        tools:context=".ui.FavoriteEditFragment"
         android:focusable="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
