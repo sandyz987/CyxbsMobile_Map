@@ -77,6 +77,10 @@ class MainFragment : Fragment() {
             }
         })
 
+        viewModel.mapInfo.observe(viewLifecycleOwner, Observer { t ->
+            map_et_search.hintString = "大家都在搜：" + t.hotWord
+        })
+
         /**
          * 搜索框的内容发生改变，直接把内容传给viewModel
          */

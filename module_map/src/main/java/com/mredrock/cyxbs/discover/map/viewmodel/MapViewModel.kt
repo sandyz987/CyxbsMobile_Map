@@ -93,7 +93,7 @@ class MapViewModel : BaseViewModel() {
                 .safeSubscribeBy {
                     mapInfo.postValue(it.data)
                 }.lifeCycle()
-        TestData.getButtonInfo()
+        mapApiService.getButtonInfo()
                 .setSchedulers()
                 .doOnErrorWithDefaultErrorHandler {
                     toastEvent.value = R.string.map_network_connect_error

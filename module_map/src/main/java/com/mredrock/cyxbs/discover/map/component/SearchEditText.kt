@@ -78,7 +78,7 @@ class SearchEditText : androidx.appcompat.widget.AppCompatEditText {
         paint = Paint()
         paint.textSize = 35f
         paint.isAntiAlias = true
-        hintString = "大家都在搜：风雨操场"
+        hintString = "大家都在搜"
 
     }
 
