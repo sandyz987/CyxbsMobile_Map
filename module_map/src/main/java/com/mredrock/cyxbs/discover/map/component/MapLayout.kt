@@ -11,13 +11,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.model.GlideUrl
 import com.davemorrissey.labs.subscaleview.ImageSource
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
+import com.mredrock.cyxbs.common.utils.LogUtils
+import com.mredrock.cyxbs.common.utils.extensions.defaultSharedPreferences
 import com.mredrock.cyxbs.common.utils.extensions.dp2px
 import com.mredrock.cyxbs.common.utils.extensions.gone
 import com.mredrock.cyxbs.common.utils.extensions.visible
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.bean.IconBean
+import com.mredrock.cyxbs.discover.map.util.SubsamplingScaleImageViewTarget
 import com.mredrock.cyxbs.discover.map.widget.ProgressDialog
 import org.jetbrains.anko.displayMetrics
 import kotlin.math.sqrt
@@ -33,6 +38,9 @@ class MapLayout : FrameLayout, View.OnClickListener {
     companion object {
         const val FOCUS_ANIMATION_DURATION = 800L
     }
+
+    var useUrl = false
+    private var url: String? = null
 
     /** Sub-samplingScaleImageView第三方控件 */
     private val subsamplingScaleImageView = SubsamplingScaleImageView(context)
@@ -100,10 +108,19 @@ class MapLayout : FrameLayout, View.OnClickListener {
         }
 
         subsamplingScaleImageView.setDoubleTapZoomScale(1f)
+
+//        val path = context.defaultSharedPreferences.getString("path", "")
+
+
+
         subsamplingScaleImageView.setImage(
                 imageSource.dimensions(8022, 14267),
                 ImageSource.resource(R.drawable.map)
         )
+
+//        Glide.with(context)
+//                .download(GlideUrl())
+//                .into(SubsamplingScaleImageViewTarget(context, subsamplingScaleImageView))
         addView(subsamplingScaleImageView, rootParams)
 
         subsamplingScaleImageView.setOnImageEventListener(object :
@@ -248,17 +265,7 @@ class MapLayout : FrameLayout, View.OnClickListener {
      */
     fun addSomeIcons(beans: List<IconBean>) {
         beans.forEach { bean ->
-            val icon = ImageView(context)
-            icon.setImageResource(R.drawable.map_ic_local)
-            icon.tag = bean
-            val screenPoint = subsamplingScaleImageView.sourceToViewCoord(bean.sx, bean.sy)
-            if (screenPoint != null) {
-                icon.x = screenPoint.x - context.dp2px(45f) / 2
-                icon.y = screenPoint.y - context.dp2px(48f)
-            }
-            icon.setOnClickListener(this)
-            icon.gone()
-            iconList.add(icon)
+          addIcon(bean)
         }
 
     }
@@ -365,6 +372,7 @@ class MapLayout : FrameLayout, View.OnClickListener {
      * 从资源文件中设置
      */
     fun setImageFromRes(resId: Int) {
+        useUrl = false
         imageSource = ImageSource.resource(resId)
     }
 
@@ -455,4 +463,10 @@ class MapLayout : FrameLayout, View.OnClickListener {
                 ?.withInterruptible(true)?.start()
     }
 
+
+    fun setUrl(url: String) {
+        useUrl = true
+        this.url = url
+
+    }
 }
