@@ -18,9 +18,9 @@ import com.mredrock.cyxbs.common.utils.extensions.visible
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.bean.FavoritePlace
 import com.mredrock.cyxbs.discover.map.databinding.MapFragmentPlaceDetailContainerBinding
+import com.mredrock.cyxbs.discover.map.ui.activity.adapter.BannerRvAdapter
 import com.mredrock.cyxbs.discover.map.ui.activity.adapter.DetailAttributeRvAdapter
 import com.mredrock.cyxbs.discover.map.ui.activity.adapter.DetailTagRvAdapter
-import com.mredrock.cyxbs.discover.map.ui.activity.adpter.BannerRvAdapter
 import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
 import com.to.aboomy.pager2banner.IndicatorView
 import com.to.aboomy.pager2banner.ScaleInTransformer
