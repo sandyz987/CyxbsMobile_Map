@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.map_fragment_all_picture.*
 
 class AllPictureFragment : Fragment() {
     private lateinit var viewModel: MapViewModel
-
+    private lateinit var allPictureAdapter: AllPictureRvAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.map_fragment_all_picture, container, false)
@@ -28,11 +28,20 @@ class AllPictureFragment : Fragment() {
         val staggeredGridLayoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         staggeredGridLayoutManager.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_NONE
         map_rv_all_picture.layoutManager = staggeredGridLayoutManager
-        val allPictureAdapter = context?.let { AllPictureRvAdapter(it, mutableListOf()) }
+        allPictureAdapter = AllPictureRvAdapter(requireContext(), mutableListOf())
         map_rv_all_picture.adapter = allPictureAdapter
 
         map_iv_all_picture_back.setOnClickListener {
             viewModel.fragmentAllPictureIsShowing.value = false
+        }
+
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (viewModel.placeDetails.value?.images != null) {
+            allPictureAdapter.setList(viewModel.placeDetails.value?.images!!)
         }
 
     }

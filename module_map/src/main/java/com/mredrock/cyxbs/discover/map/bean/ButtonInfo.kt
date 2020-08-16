@@ -17,5 +17,5 @@ data class InfoItem(
 
 data class ButtonInfo(
         @SerializedName("button_info")
-        var buttonInfo: List<InfoItem>
+        var buttonInfo: List<InfoItem>?
 )

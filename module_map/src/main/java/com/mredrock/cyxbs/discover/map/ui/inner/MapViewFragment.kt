@@ -151,14 +151,19 @@ class MapViewFragment : Fragment() {
             }
         }
 
-
+        map_iv_compass.setOnClickListener {
+            map_layout.focusToPoint("2")
+        }
         /**
          * 注册监听
          */
         viewModel.buttonInfo.observe(
                 viewLifecycleOwner,
                 Observer {
-                    symbolRvAdapter?.setList(it.buttonInfo)
+                    if (it.buttonInfo != null) {
+                        symbolRvAdapter?.setList(it.buttonInfo!!)
+                    }
+
                 }
         )
 
