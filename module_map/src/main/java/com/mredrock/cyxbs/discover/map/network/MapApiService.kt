@@ -6,10 +6,7 @@ import com.mredrock.cyxbs.discover.map.bean.MapInfo
 import com.mredrock.cyxbs.discover.map.bean.PlaceDetails
 import io.reactivex.Observable
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.Field
-import retrofit2.http.GET
-import retrofit2.http.POST
+import retrofit2.http.*
 
 /**
  *@author zhangzhe
@@ -21,6 +18,7 @@ internal interface MapApiService {
     @GET("basic")
     fun getMapInfo(): Observable<RedrockApiWrapper<MapInfo>>
 
+    @FormUrlEncoded
     @POST("detailsite")
     fun getPlaceDetails(@Field("place_id") placeId: Int): Observable<RedrockApiWrapper<PlaceDetails>>
 

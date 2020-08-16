@@ -77,7 +77,7 @@ class MapViewModel : BaseViewModel() {
         /**
          * 下载地图可以放在这里，但必须开线程！
          */
-        TestData.getMapInfo()//网络请求替换为：apiService.getMapInfo()
+        mapApiService.getMapInfo()//网络请求替换为：apiService.getMapInfo()
                 .setSchedulers()
                 .doOnErrorWithDefaultErrorHandler {
                     toastEvent.value = R.string.map_network_connect_error
