@@ -406,5 +406,7 @@
     <color name="map_all_picture_text_share" tools:ignore="ResourceName">#02CAF0</color>
     <color name="map_all_picture_text_no_more" tools:ignore="ResourceName">#ABBCD8</color>
 
+    <color name="map_divider_color" tools:ignore="ResourceName">#EFF3FD</color>
+
 </resources>
 

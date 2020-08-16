@@ -59,7 +59,7 @@
                 android:paddingStart="15dp"
                 android:paddingEnd="1dp"
                 app:layout_constraintBottom_toBottomOf="@+id/map_ll_map_view_my_favorite"
-                app:layout_constraintEnd_toStartOf="@+id/map_ll_map_view_my_favorite"
+                app:layout_constraintEnd_toStartOf="@+id/map_view_divider"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/map_ll_map_view_my_favorite" />
 
@@ -132,6 +132,16 @@
                 </FrameLayout>
 
             </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+            <View
+                android:id="@+id/map_view_divider"
+                android:layout_width="1dp"
+                android:layout_height="0dp"
+                android:layout_marginEnd="8dp"
+                android:background="@color/map_divider_color"
+                app:layout_constraintBottom_toBottomOf="@+id/map_ll_map_view_my_favorite"
+                app:layout_constraintEnd_toStartOf="@+id/map_ll_map_view_my_favorite"
+                app:layout_constraintTop_toTopOf="@+id/map_ll_map_view_my_favorite" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
