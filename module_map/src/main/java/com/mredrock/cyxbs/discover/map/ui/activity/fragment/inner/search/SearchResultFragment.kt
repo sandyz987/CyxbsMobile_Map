@@ -41,10 +41,15 @@ class SearchResultFragment : Fragment() {
         map_rv_search_result.adapter = searchResultAdapter
         map_rv_search_result.layoutManager = LinearLayoutManager(requireContext())
         observer = Observer { t ->
-            if (t == "" || isSearching) {
+            if (t == "") {
+                viewModel.searchResult.clear()
+                return@Observer
+            }
+            if (isSearching) {
                 return@Observer
             }
             isSearching = true
+            //searchResultAdapter.notifyDataSetChanged()
             ThreadPool.getInstance().execute {
                 //输入每次变化都执行下列搜索
                 val searchResultArrayList = ArrayList<PlaceItem>()
@@ -55,35 +60,51 @@ class SearchResultFragment : Fragment() {
                         searchResultArrayList.add(placeItem)
                     }
                 }
-                Log.e("sandyzhang", searchResultArrayList.size.toString() + if (searchResultArrayList.size >= 1) searchResultArrayList[0].placeName else "")
                 //以上是搜索到的结果
-                //如果现存列表没有搜索到的结果，则添加
-                for (placeItemResult: PlaceItem in searchResultArrayList) {
-                    var flag = false
-                    for (placeItemOrigin: PlaceItem in viewModel.searchResult) {
-                        if (placeItemOrigin === placeItemResult) {
-                            flag = true
+                if (searchResultArrayList.size > 20 || viewModel.searchResult.size > 30) {
+                    //如果数据大于10就不动态效果了
+                    if (map_rv_search_result.isComputingLayout) {
+                        map_rv_search_result.post {
+                            viewModel.searchResult.clear()
+                            viewModel.searchResult.addAll(searchResultArrayList)
                         }
-                    }
-                    if (!flag) {
-                        Thread.sleep(50)
+                    } else {
                         runOnUiThread {
-                            viewModel.searchResult.add(placeItemResult)
+                            viewModel.searchResult.clear()
+                            viewModel.searchResult.addAll(searchResultArrayList)
                         }
                     }
-                }
-                //如果现存列表有多余的结果，则减少
-                for (placeItemOrigin: PlaceItem in viewModel.searchResult.reversed().toList()) {
-                    var flag = false
+                } else {
+                    //动态效果
+                    //如果现存列表有多余的结果，则减少
+                    for (placeItemOrigin: PlaceItem in viewModel.searchResult.reversed().toList()) {
+                        var flag = false
+                        for (placeItemResult: PlaceItem in searchResultArrayList) {
+                            if (placeItemOrigin === placeItemResult) {
+                                flag = true
+                            }
+                        }
+                        if (!flag) {
+                            Thread.sleep(50)
+                            runOnUiThread {
+                                viewModel.searchResult.remove(placeItemOrigin)
+                            }
+                        }
+                    }
+
+                    //如果现存列表没有搜索到的结果，则添加
                     for (placeItemResult: PlaceItem in searchResultArrayList) {
-                        if (placeItemOrigin === placeItemResult) {
-                            flag = true
+                        var flag = false
+                        for (placeItemOrigin: PlaceItem in viewModel.searchResult.toList()) {
+                            if (placeItemOrigin === placeItemResult) {
+                                flag = true
+                            }
                         }
-                    }
-                    if (!flag) {
-                        Thread.sleep(50)
-                        runOnUiThread {
-                            viewModel.searchResult.remove(placeItemOrigin)
+                        if (!flag) {
+                            Thread.sleep(50)
+                            runOnUiThread {
+                                viewModel.searchResult.add(placeItemResult)
+                            }
                         }
                     }
                 }

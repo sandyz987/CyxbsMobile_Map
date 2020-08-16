@@ -101,7 +101,7 @@ class MapLayout : FrameLayout, View.OnClickListener {
 
         subsamplingScaleImageView.setDoubleTapZoomScale(1f)
         subsamplingScaleImageView.setImage(
-                imageSource.dimensions(8022,14267),
+                imageSource.dimensions(8022, 14267),
                 ImageSource.resource(R.drawable.map)
         )
         addView(subsamplingScaleImageView, rootParams)
@@ -429,6 +429,9 @@ class MapLayout : FrameLayout, View.OnClickListener {
             val beanId = bean.id.toString()
             if (id == beanId) {
                 showIcon(it)
+                subsamplingScaleImageView.animateScaleAndCenter(1f, PointF(bean.sx, bean.sy))
+                        ?.withDuration(FOCUS_ANIMATION_DURATION)
+                        ?.withInterruptible(true)?.start()
                 return
             }
         }
@@ -447,6 +450,9 @@ class MapLayout : FrameLayout, View.OnClickListener {
                 }
             }
         }
+        subsamplingScaleImageView.animateScaleAndCenter(0f, subsamplingScaleImageView.center)
+                ?.withDuration(FOCUS_ANIMATION_DURATION)
+                ?.withInterruptible(true)?.start()
     }
 
 }

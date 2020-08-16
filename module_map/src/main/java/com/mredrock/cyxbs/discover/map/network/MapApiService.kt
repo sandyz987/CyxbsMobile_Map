@@ -18,13 +18,13 @@ import retrofit2.http.POST
  */
 
 internal interface MapApiService {
-    @GET("/wxapi/magipoke-stumap/basic")
+    @GET("basic")
     fun getMapInfo(): Observable<RedrockApiWrapper<MapInfo>>
 
-    @POST("/wxapi/magipoke-stumap/detailsite")
+    @POST("detailsite")
     fun getPlaceDetails(@Field("place_id") placeId: Int): Observable<RedrockApiWrapper<PlaceDetails>>
 
-    @GET("/wxapi/magipoke-stumap/button")
+    @GET("button")
     fun getButtonInfo(): Observable<RedrockApiWrapper<ButtonInfo>>
 
 }

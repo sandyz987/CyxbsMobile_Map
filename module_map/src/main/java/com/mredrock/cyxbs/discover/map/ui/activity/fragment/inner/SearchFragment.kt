@@ -19,6 +19,11 @@ import com.mredrock.cyxbs.discover.map.ui.activity.fragment.inner.search.SearchR
 import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
 import kotlinx.android.synthetic.main.map_fragment_search.*
 
+/**
+ * 因为多fragment在transaction的多层嵌套会出现内部fragment被回收的情况，于是每次都手动创建新的fragment并回收原来的fragment
+ * 注意，要手动取消对viewModel的mutablelivedata的注册
+ */
+
 class SearchFragment : Fragment() {
     private lateinit var viewModel: MapViewModel
     private val manager: FragmentManager?
