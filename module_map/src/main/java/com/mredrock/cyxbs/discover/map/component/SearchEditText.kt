@@ -4,6 +4,7 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.Matrix
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.MotionEvent
@@ -23,7 +24,7 @@ class SearchEditText : androidx.appcompat.widget.AppCompatEditText {
         resources.getDrawable(R.drawable.map_ic_search_clear, null).toBitmap()
     }
     private val searchBitmap: Bitmap by lazy {
-        resources.getDrawable(R.drawable.map_ic_search, null).toBitmap()
+        imageScale(resources.getDrawable(R.drawable.map_ic_search, null).toBitmap(), 40, 40)
     }
 
     private var isEmpty = true
@@ -163,5 +164,14 @@ class SearchEditText : androidx.appcompat.widget.AppCompatEditText {
         anim2.start()
     }
 
+    fun imageScale(bitmap: Bitmap, dst_w: Int, dst_h: Int): Bitmap {
+        val srcW = bitmap.width
+        val srcH = bitmap.height
+        val scaleW = dst_w.toFloat() / srcW
+        val scaleH = dst_h.toFloat() / srcH
+        val matrix = Matrix()
+        matrix.postScale(scaleW, scaleH)
+        return Bitmap.createBitmap(bitmap, 0, 0, srcW, srcH, matrix, true)
+    }
 
 }

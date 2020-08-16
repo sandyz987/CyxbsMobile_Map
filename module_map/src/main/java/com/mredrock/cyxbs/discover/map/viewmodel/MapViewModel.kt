@@ -40,6 +40,9 @@ class MapViewModel : BaseViewModel() {
     //是否正在显示收藏页面
     val fragmentFavoriteEditIsShowing = MutableLiveData<Boolean>(false)
 
+    //是否正在显示全部图片界面
+    val fragmentAllPictureIsShowing = MutableLiveData<Boolean>(false)
+
     //详细页面正在显示的地点id
     var showingPlaceId = -1
 
@@ -104,7 +107,7 @@ class MapViewModel : BaseViewModel() {
 
     //当地图标签被点击，执行此网络请求，在对应的fragment观察数据即可
     fun showPlaceDetails(placeId: Int) {
-        mapApiService.getPlaceDetails(placeId)
+        TestData.getPlaceDetails(placeId)
                 .setSchedulers()
                 .doOnErrorWithDefaultErrorHandler {
                     toastEvent.value = R.string.map_network_connect_error

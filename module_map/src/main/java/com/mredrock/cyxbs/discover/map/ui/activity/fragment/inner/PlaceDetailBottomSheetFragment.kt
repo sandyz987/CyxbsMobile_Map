@@ -122,6 +122,9 @@ class PlaceDetailBottomSheetFragment : Fragment() {
         map_tv_detail_place_nickname.setOnClickListener {
             viewModel.fragmentFavoriteEditIsShowing.value = true
         }
+        map_tv_detail_more.setOnClickListener {
+            viewModel.fragmentAllPictureIsShowing.value = true
+        }
     }
 
 

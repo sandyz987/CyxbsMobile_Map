@@ -14,6 +14,7 @@ import com.mredrock.cyxbs.common.ui.BaseActivity
 import com.mredrock.cyxbs.common.ui.BaseViewModelActivity
 import com.mredrock.cyxbs.common.utils.extensions.setFullScreen
 import com.mredrock.cyxbs.discover.map.R
+import com.mredrock.cyxbs.discover.map.ui.activity.fragment.AllPictureFragment
 import com.mredrock.cyxbs.discover.map.ui.activity.fragment.FavoriteEditFragment
 import com.mredrock.cyxbs.discover.map.ui.activity.fragment.MainFragment
 import com.mredrock.cyxbs.discover.map.ui.activity.fragment.inner.MapViewFragment
@@ -35,6 +36,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
     private val fragmentManager = supportFragmentManager
     private val mainFragment = MainFragment()
     private val favoriteEditFragment = FavoriteEditFragment()
+    private val allPictureFragment = AllPictureFragment()
 
     @SuppressLint("SetJavaScriptEnabled", "ObsoleteSdkInt")
     override fun onStart() {
@@ -56,6 +58,8 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         viewModel.init()
         fragmentManager.beginTransaction().add(R.id.map_fl_main_fragment, mainFragment).show(mainFragment).commit()
 
+
+        //控制收藏页面是否显示
         viewModel.fragmentFavoriteEditIsShowing.observe(
                 this@MapActivity,
                 Observer<Boolean> { t ->
@@ -76,6 +80,33 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
                         fragmentManager.beginTransaction()
                                 .setCustomAnimations(R.animator.map_slide_from_left, R.animator.map_slide_to_right, R.animator.map_slide_from_right, R.animator.map_slide_to_left)
                                 .hide(favoriteEditFragment)
+                                .show(mainFragment)
+                                .commit()
+                        fragmentManager.popBackStack()
+
+                    }
+                }
+        )
+
+        //控制全部图片页面是否显示
+        viewModel.fragmentAllPictureIsShowing.observe(
+                this@MapActivity,
+                Observer<Boolean> { t ->
+                    if (t == true) {
+                        val transaction = fragmentManager.beginTransaction()
+                        transaction.setCustomAnimations(R.animator.map_slide_from_right, R.animator.map_slide_to_left, R.animator.map_slide_from_left, R.animator.map_slide_to_right)
+                        transaction.hide(mainFragment)
+                        if (!allPictureFragment.isAdded) {
+                            transaction.add(R.id.map_fl_main_fragment, allPictureFragment)
+                        }
+                        transaction
+                                .show(allPictureFragment)
+                                .addToBackStack("all_picture")
+                                .commit()
+                    } else {
+                        fragmentManager.beginTransaction()
+                                .setCustomAnimations(R.animator.map_slide_from_left, R.animator.map_slide_to_right, R.animator.map_slide_from_right, R.animator.map_slide_to_left)
+                                .hide(allPictureFragment)
                                 .show(mainFragment)
                                 .commit()
                         fragmentManager.popBackStack()
