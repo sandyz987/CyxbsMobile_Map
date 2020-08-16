@@ -14,5 +14,9 @@
     <dimen name="map_search_history_text_size">15sp</dimen>
     <dimen name="map_search_clear_text_size">11sp</dimen>
     <dimen name="map_search_result_item_place_name_text_size">15sp</dimen>
+    <dimen name="map_dialog_tip_title_size">18sp</dimen>
+    <dimen name="map_dialog_tip_text_size">16sp</dimen>
+    <dimen name="map_dialog_tip_deny_size">16sp</dimen>
+    <dimen name="map_dialog_tip_positive_size">16sp</dimen>
 
 </resources>

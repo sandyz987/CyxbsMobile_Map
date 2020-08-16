@@ -75,7 +75,9 @@ class SearchResultFragment : Fragment() {
                         }
                     }
                 } else {
-                    //动态效果
+                    /**
+                     * 动态搜索效果
+                     */
                     //如果现存列表有多余的结果，则减少
                     for (placeItemOrigin: PlaceItem in viewModel.searchResult.reversed().toList()) {
                         var flag = false

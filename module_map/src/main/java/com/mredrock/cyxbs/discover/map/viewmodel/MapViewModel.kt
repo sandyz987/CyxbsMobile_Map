@@ -58,7 +58,9 @@ class MapViewModel : BaseViewModel() {
     //在唯一的activity的onCreate调用，获取地图数据（地点list），下载地图应该在此处完成（就是文档上第一个接口）
     fun init() {
         //ProgressDialog.show(BaseApp.context,"提示","请稍后",false)//ProgressDialog.hide()
-
+        /**
+         * 初始化网络请求
+         */
         ApiGenerator.registerNetSettings(2019211135, { builder ->
             builder.baseUrl("https://cyxbsmobile.redrock.team/wxapi/magipoke-stumap/")
                     .addConverterFactory(GsonConverterFactory.create())
@@ -72,7 +74,6 @@ class MapViewModel : BaseViewModel() {
                 }
             }
         }, true)
-
         mapApiService = ApiGenerator.getApiService(2019211135, MapApiService::class.java)
         /**
          * 下载地图可以放在这里，但必须开线程！

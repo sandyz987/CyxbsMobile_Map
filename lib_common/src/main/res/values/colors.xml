@@ -391,6 +391,16 @@
 
     <color name="map_search_result_item_text_color" tools:ignore="ResourceName">#234780</color>
 
+    <color name="map_dialog_tip_background_color" tools:ignore="ResourceName">#FFFFFF</color>
+    <color name="map_dialog_tip_title_color" tools:ignore="ResourceName">#15305C</color>
+    <color name="map_dialog_tip_text_color" tools:ignore="ResourceName">#132F5B</color>
+    <color name="map_dialog_tip_deny_text_color" tools:ignore="ResourceName">#86AAE3</color>
+    <color name="map_dialog_tip_deny_background_color" tools:ignore="ResourceName">#E7EFFD</color>
+    <color name="map_dialog_tip_positive_text_color" tools:ignore="ResourceName">#FFFFFF</color>
+    <color name="map_dialog_tip_positive_background_color" tools:ignore="ResourceName">#4B44E5
+    </color>
+
+
     <color name="map_all_picture_text" tools:ignore="ResourceName">#16315C</color>
     <color name="map_all_picture_background" tools:ignore="ResourceName">#FFFFFF</color>
     <color name="map_all_picture_text_share" tools:ignore="ResourceName">#02CAF0</color>
