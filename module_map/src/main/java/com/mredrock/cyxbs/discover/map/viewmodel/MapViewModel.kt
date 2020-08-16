@@ -1,7 +1,10 @@
 package com.mredrock.cyxbs.discover.map.viewmodel
 
+import android.util.Log
+import android.widget.Toast
 import androidx.databinding.ObservableArrayList
 import androidx.lifecycle.MutableLiveData
+import com.mredrock.cyxbs.common.BaseApp
 import com.mredrock.cyxbs.common.network.ApiGenerator
 import com.mredrock.cyxbs.common.utils.extensions.doOnErrorWithDefaultErrorHandler
 import com.mredrock.cyxbs.common.utils.extensions.safeSubscribeBy
@@ -88,7 +91,7 @@ class MapViewModel : BaseViewModel() {
                     false
                 }
                 .safeSubscribeBy {
-                    mapInfo.value = it.data
+                    mapInfo.postValue(it.data)
                 }.lifeCycle()
         TestData.getButtonInfo()
                 .setSchedulers()
@@ -97,7 +100,7 @@ class MapViewModel : BaseViewModel() {
                     false
                 }
                 .safeSubscribeBy {
-                    buttonInfo.value = it.data
+                    buttonInfo.postValue(it.data)
                 }.lifeCycle()
 
         //第一次先获得一次收藏列表
@@ -107,7 +110,7 @@ class MapViewModel : BaseViewModel() {
 
     //当地图标签被点击，执行此网络请求，在对应的fragment观察数据即可
     fun showPlaceDetails(placeId: Int) {
-        TestData.getPlaceDetails(placeId)
+        mapApiService.getPlaceDetails(placeId)
                 .setSchedulers()
                 .doOnErrorWithDefaultErrorHandler {
                     toastEvent.value = R.string.map_network_connect_error
@@ -115,8 +118,9 @@ class MapViewModel : BaseViewModel() {
                 }
                 .safeSubscribeBy {
                     showingPlaceId = placeId
-                    placeDetails.value = it.data
-                    bottomSheetIsShowing.value = true
+                    placeDetails.postValue(it.data)
+                    Toast.makeText(BaseApp.context, it.data.placeName, Toast.LENGTH_SHORT).show()
+                    bottomSheetIsShowing.postValue(true)
                 }.lifeCycle()
     }
 
@@ -128,7 +132,7 @@ class MapViewModel : BaseViewModel() {
                     false
                 }
                 .safeSubscribeBy {
-                    favoriteList.value = it.data.toMutableList()
+                    favoriteList.postValue(it.data.toMutableList())
                 }.lifeCycle()
     }
 

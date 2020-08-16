@@ -2,6 +2,7 @@ package com.mredrock.cyxbs.discover.map.ui.activity.fragment.inner
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -79,17 +80,17 @@ class PlaceDetailBottomSheetFragment : Fragment() {
                     //数据绑定
                     mBinding.placeDetails = t
                     //数据传给adapter
-                    if (bannerAdapter != null) {
-                        bannerAdapter.setList(t.images)
+                    if (bannerAdapter != null && t.images != null) {
+                        bannerAdapter.setList(t.images!!)
                         bannerAdapter.notifyDataSetChanged()
                         map_banner_detail_image.adapter = bannerAdapter
                     }
-                    if (tagAdapter != null) {
-                        tagAdapter.setList(t.tags)
+                    if (tagAdapter != null && t.tags != null) {
+                        tagAdapter.setList(t.tags!!)
                         tagAdapter.notifyDataSetChanged()
                     }
-                    if (attributeAdapter != null) {
-                        attributeAdapter.setList(t.placeAttribute)
+                    if (attributeAdapter != null && t.placeAttribute != null) {
+                        attributeAdapter.setList(t.placeAttribute!!)
                         attributeAdapter.notifyDataSetChanged()
                     }
                     //判断是否收藏过该地点，如果收藏了则显示出收藏的nickname

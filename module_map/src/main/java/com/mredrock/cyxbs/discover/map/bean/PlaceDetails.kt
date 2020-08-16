@@ -30,7 +30,7 @@ data class PlaceDetails(
         @SerializedName("place_name")
         var placeName: String,
         @SerializedName("place_attribute")
-        var placeAttribute: List<String>,
-        var tags: List<String>,
-        var images: List<String>
+        var placeAttribute: List<String>?,
+        var tags: List<String>?,
+        var images: List<String>?
 )

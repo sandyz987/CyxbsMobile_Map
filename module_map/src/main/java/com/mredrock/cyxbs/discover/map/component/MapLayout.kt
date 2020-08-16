@@ -22,7 +22,6 @@ import com.mredrock.cyxbs.common.utils.extensions.gone
 import com.mredrock.cyxbs.common.utils.extensions.visible
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.bean.IconBean
-import com.mredrock.cyxbs.discover.map.util.SubsamplingScaleImageViewTarget
 import com.mredrock.cyxbs.discover.map.widget.ProgressDialog
 import org.jetbrains.anko.displayMetrics
 import kotlin.math.sqrt
