@@ -1,12 +1,14 @@
 package com.mredrock.cyxbs.discover.map.network
 
 import com.mredrock.cyxbs.common.bean.RedrockApiWrapper
+import com.mredrock.cyxbs.discover.map.bean.ButtonInfo
 import com.mredrock.cyxbs.discover.map.bean.MapInfo
 import com.mredrock.cyxbs.discover.map.bean.PlaceDetails
 import io.reactivex.Observable
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Field
+import retrofit2.http.GET
 import retrofit2.http.POST
 
 /**
@@ -16,9 +18,13 @@ import retrofit2.http.POST
  */
 
 internal interface MapApiService {
-    @POST("/map/map_info")
+    @GET("/wxapi/magipoke-stumap/basic")
     fun getMapInfo(): Observable<RedrockApiWrapper<MapInfo>>
 
-    @POST("/app/token/place_details")
+    @POST("/wxapi/magipoke-stumap/detailsite")
     fun getPlaceDetails(@Field("place_id") placeId: Int): Observable<RedrockApiWrapper<PlaceDetails>>
+
+    @GET("/wxapi/magipoke-stumap/button")
+    fun getButtonInfo(): Observable<RedrockApiWrapper<ButtonInfo>>
+
 }

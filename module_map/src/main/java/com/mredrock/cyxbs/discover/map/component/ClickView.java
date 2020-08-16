@@ -57,7 +57,6 @@ public class ClickView extends androidx.appcompat.widget.AppCompatImageView {
 
     public void startAnimDown(float touchX, float touchY) {
 //        获取的是自身的相对坐标位置
-        System.out.println("touchX :" + touchX + " touchY :" + touchY);
         if (width / 5 * 2 < touchX && touchX < width / 5 * 3 && height / 5 * 2 < touchY && touchY < height / 5 * 3) {
 //            代表中心位置
             pivot = 0;

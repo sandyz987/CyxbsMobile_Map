@@ -49,7 +49,18 @@ object TestData {
      * @param placeId 返回对应地点的地点详细
      */
     fun getPlaceDetails(placeId: Int): Observable<RedrockApiWrapper<PlaceDetails>> {
-        val s = if (placeId == 1) place1DetailsString else place2DetailsString
+        var s = ""
+        when (placeId) {
+            29 -> {
+                s = place1DetailsString
+            }
+            73 -> {
+                s = place2DetailsString
+            }
+            54 -> {
+                s = place3DetailsString
+            }
+        }
         return Observable.create<RedrockApiWrapper<PlaceDetails>> { em ->
             em.onNext(gson.fromJson(s, object : TypeToken<RedrockApiWrapper<PlaceDetails>>() {}.type))
         }
@@ -91,16 +102,16 @@ const val buttonInfoString =
                 "    }\n" +
                 "}"
 
-//id = 1 的地点信息字符串
+//id = 29 的地点信息字符串
 const val place1DetailsString =
         "{\n" +
                 "    \"status\":200,\n" +
                 "    \"info\":\"success\",\n" +
                 "    \"version\":\"1.0\",\n" +
-                "    \"id\":0,\n" +
+                "    \"id\":29,\n" +
                 "    \"data\":\n" +
                 "    {\n" +
-                "        \"place_name\":\"崇文门\",\n" +
+                "        \"place_name\":\"腾飞门\",\n" +
                 "        \"place_attribute\":\n" +
                 "        [\n" +
                 "            \"校门\",\n" +
@@ -126,13 +137,13 @@ const val place1DetailsString =
                 "    }\n" +
                 "}"
 
-//id = 2 的地点信息字符串
+//id = 73 的地点信息字符串
 const val place2DetailsString =
         "{\n" +
                 "    \"status\":200,\n" +
                 "    \"info\":\"success\",\n" +
                 "    \"version\":\"1.0\",\n" +
-                "    \"id\":0,\n" +
+                "    \"id\":73,\n" +
                 "    \"data\":\n" +
                 "    {\n" +
                 "        \"place_name\":\"中心食堂\",\n" +
@@ -157,6 +168,36 @@ const val place2DetailsString =
                 "        \"images\":\n" +
                 "        [\n" +
                 "            \"https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=982417989,4270285044&fm=26&gp=0.jpg\",\n" +
+                "            \"https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3549813042,1783346451&fm=26&gp=0.jpg\",\n" +
+                "            \"https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=591674105,1532042351&fm=15&gp=0.jpg\"\n" +
+                "        ]\n" +
+                "    }\n" +
+                "}"
+
+const val place3DetailsString =
+        "{\n" +
+                "    \"status\":200,\n" +
+                "    \"info\":\"success\",\n" +
+                "    \"version\":\"1.0\",\n" +
+                "    \"id\":54,\n" +
+                "    \"data\":\n" +
+                "    {\n" +
+                "        \"place_name\":\"第二教学楼/计算机工程与技术学院/软件工程学院\",\n" +
+                "        \"place_attribute\":\n" +
+                "        [\n" +
+                "            \"教学楼\",\n" +
+                "            \"标签\"\n" +
+                "        ],\n" +
+                "        \"is_collected\":true,\n" +
+                "        \"tags\":\n" +
+                "        [\n" +
+                "           \"二教\",\n" +
+                "           \"离宿舍近\",\n" +
+                "            \"开放时间：7:00-20:00\"\n" +
+                "        ],\n" +
+                "        \"images\":\n" +
+                "        [\n" +
+                "            \"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1597558537136&di=a9eb1538ffa41ab3d6eb1b0c2a7784b0&imgtype=0&src=http%3A%2F%2Fres.co188.com%2Fdata%2Fdrawing%2Fimg640%2F6227336063520.jpg%3Fm%3Db\",\n" +
                 "            \"https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3549813042,1783346451&fm=26&gp=0.jpg\",\n" +
                 "            \"https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=591674105,1532042351&fm=15&gp=0.jpg\"\n" +
                 "        ]\n" +
@@ -205,132 +246,147 @@ const val mapInfoString = "{\n" +
         "        \"place_list\": [\n" +
         "            {\n" +
         "                \"place_name\": \"重邮腾飞门\",\n" +
-        "                \"place_id\": 1,\n" +
+        "                \"place_id\": 29,\n" +
         "                \"building_list\": [\n" +
         "                    {\n" +
-        "                        \"building_left\": 1361,\n" +
-        "                        \"building_right\": 1770,\n" +
-        "                        \"building_top\": 8513,\n" +
-        "                        \"building_bottom\": 8744\n" +
+        "                        \"building_left\": 1396,\n" +
+        "                        \"building_right\": 1990,\n" +
+        "                        \"building_top\": 9154,\n" +
+        "                        \"building_bottom\": 9384\n" +
         "                    }\n" +
         "                ],\n" +
-        "                \"place_center_x\": 1555,\n" +
-        "                \"place_center_y\": 8647,\n" +
-        "                \"tag_left\": 1781,\n" +
-        "                \"tag_right\": 2015,\n" +
-        "                \"tag_top\": 8667,\n" +
-        "                \"tag_bottom\": 8764\n" +
+        "                \"place_center_x\": 1734,\n" +
+        "                \"place_center_y\": 9372,\n" +
+        "                \"tag_left\": 1918,\n" +
+        "                \"tag_right\": 2172,\n" +
+        "                \"tag_top\": 9310,\n" +
+        "                \"tag_bottom\": 9428\n" +
         "            },\n" +
         //
         "            {\n" +
         "                \"place_name\": \"重邮腾飞门1\",\n" +
-        "                \"place_id\": 1,\n" +
+        "                \"place_id\": 29,\n" +
         "                \"building_list\": [\n" +
         "                    {\n" +
-        "                        \"building_left\": 1361,\n" +
-        "                        \"building_right\": 1770,\n" +
-        "                        \"building_top\": 8513,\n" +
-        "                        \"building_bottom\": 8744\n" +
+        "                        \"building_left\": 1396,\n" +
+        "                        \"building_right\": 1990,\n" +
+        "                        \"building_top\": 9154,\n" +
+        "                        \"building_bottom\": 9384\n" +
         "                    }\n" +
         "                ],\n" +
-        "                \"place_center_x\": 1555,\n" +
-        "                \"place_center_y\": 8647,\n" +
-        "                \"tag_left\": 1781,\n" +
-        "                \"tag_right\": 2015,\n" +
-        "                \"tag_top\": 8667,\n" +
-        "                \"tag_bottom\": 8764\n" +
+        "                \"place_center_x\": 1734,\n" +
+        "                \"place_center_y\": 9372,\n" +
+        "                \"tag_left\": 1918,\n" +
+        "                \"tag_right\": 2172,\n" +
+        "                \"tag_top\": 9310,\n" +
+        "                \"tag_bottom\": 9428\n" +
         "            },\n" +
         "            {\n" +
         "                \"place_name\": \"重邮腾飞门12\",\n" +
-        "                \"place_id\": 1,\n" +
+        "                \"place_id\": 29,\n" +
         "                \"building_list\": [\n" +
         "                    {\n" +
-        "                        \"building_left\": 1361,\n" +
-        "                        \"building_right\": 1770,\n" +
-        "                        \"building_top\": 8513,\n" +
-        "                        \"building_bottom\": 8744\n" +
+        "                        \"building_left\": 1396,\n" +
+        "                        \"building_right\": 1990,\n" +
+        "                        \"building_top\": 9154,\n" +
+        "                        \"building_bottom\": 9384\n" +
         "                    }\n" +
         "                ],\n" +
-        "                \"place_center_x\": 1555,\n" +
-        "                \"place_center_y\": 8647,\n" +
-        "                \"tag_left\": 1781,\n" +
-        "                \"tag_right\": 2015,\n" +
-        "                \"tag_top\": 8667,\n" +
-        "                \"tag_bottom\": 8764\n" +
+        "                \"place_center_x\": 1734,\n" +
+        "                \"place_center_y\": 9372,\n" +
+        "                \"tag_left\": 1918,\n" +
+        "                \"tag_right\": 2172,\n" +
+        "                \"tag_top\": 9310,\n" +
+        "                \"tag_bottom\": 9428\n" +
         "            },\n" +
         "            {\n" +
         "                \"place_name\": \"重邮腾飞门123\",\n" +
-        "                \"place_id\": 1,\n" +
+        "                \"place_id\": 29,\n" +
         "                \"building_list\": [\n" +
         "                    {\n" +
-        "                        \"building_left\": 1361,\n" +
-        "                        \"building_right\": 1770,\n" +
-        "                        \"building_top\": 8513,\n" +
-        "                        \"building_bottom\": 8744\n" +
+        "                        \"building_left\": 1396,\n" +
+        "                        \"building_right\": 1990,\n" +
+        "                        \"building_top\": 9154,\n" +
+        "                        \"building_bottom\": 9384\n" +
         "                    }\n" +
         "                ],\n" +
-        "                \"place_center_x\": 1555,\n" +
-        "                \"place_center_y\": 8647,\n" +
-        "                \"tag_left\": 1781,\n" +
-        "                \"tag_right\": 2015,\n" +
-        "                \"tag_top\": 8667,\n" +
-        "                \"tag_bottom\": 8764\n" +
+        "                \"place_center_x\": 1734,\n" +
+        "                \"place_center_y\": 9372,\n" +
+        "                \"tag_left\": 1918,\n" +
+        "                \"tag_right\": 2172,\n" +
+        "                \"tag_top\": 9310,\n" +
+        "                \"tag_bottom\": 9428\n" +
         "            },\n" +
         "            {\n" +
-        "                \"place_name\": \"重邮腾飞门1234\",\n" +
-        "                \"place_id\": 1,\n" +
+        "                \"place_id\": 29,\n" +
         "                \"building_list\": [\n" +
         "                    {\n" +
-        "                        \"building_left\": 1361,\n" +
-        "                        \"building_right\": 1770,\n" +
-        "                        \"building_top\": 8513,\n" +
-        "                        \"building_bottom\": 8744\n" +
+        "                        \"building_left\": 1396,\n" +
+        "                        \"building_right\": 1990,\n" +
+        "                        \"building_top\": 9154,\n" +
+        "                        \"building_bottom\": 9384\n" +
         "                    }\n" +
         "                ],\n" +
-        "                \"place_center_x\": 1555,\n" +
-        "                \"place_center_y\": 8647,\n" +
-        "                \"tag_left\": 1781,\n" +
-        "                \"tag_right\": 2015,\n" +
-        "                \"tag_top\": 8667,\n" +
-        "                \"tag_bottom\": 8764\n" +
+        "                \"place_center_x\": 1734,\n" +
+        "                \"place_center_y\": 9372,\n" +
+        "                \"tag_left\": 1918,\n" +
+        "                \"tag_right\": 2172,\n" +
+        "                \"tag_top\": 9310,\n" +
+        "                \"tag_bottom\": 9428\n" +
         "            },\n" +
         "            {\n" +
-        "                \"place_name\": \"重邮腾飞门12345\",\n" +
-        "                \"place_id\": 1,\n" +
+        "                \"place_id\": 29,\n" +
         "                \"building_list\": [\n" +
         "                    {\n" +
-        "                        \"building_left\": 1361,\n" +
-        "                        \"building_right\": 1770,\n" +
-        "                        \"building_top\": 8513,\n" +
-        "                        \"building_bottom\": 8744\n" +
+        "                        \"building_left\": 1396,\n" +
+        "                        \"building_right\": 1990,\n" +
+        "                        \"building_top\": 9154,\n" +
+        "                        \"building_bottom\": 9384\n" +
         "                    }\n" +
         "                ],\n" +
-        "                \"place_center_x\": 1555,\n" +
-        "                \"place_center_y\": 8647,\n" +
-        "                \"tag_left\": 1781,\n" +
-        "                \"tag_right\": 2015,\n" +
-        "                \"tag_top\": 8667,\n" +
-        "                \"tag_bottom\": 8764\n" +
+        "                \"place_center_x\": 1734,\n" +
+        "                \"place_center_y\": 9372,\n" +
+        "                \"tag_left\": 1918,\n" +
+        "                \"tag_right\": 2172,\n" +
+        "                \"tag_top\": 9310,\n" +
+        "                \"tag_bottom\": 9428\n" +
         "            },\n" +
-
+        "            {\n" +
+        "                \"place_name\": \"第二教学楼/计算机工程与技术学院/软件工程学院\",\n" +
+        "                \"place_id\": 54,\n" +
+        "                \"building_list\": [\n" +
+        "                    {\n" +
+        "                        \"building_left\": 2908,\n" +
+        "                        \"building_right\": 3384,\n" +
+        "                        \"building_top\": 8328,\n" +
+        "                        \"building_bottom\": 8554\n" +
+        "                    }\n" +
+        "                ],\n" +
+        "                \"place_center_x\": 2868,\n" +
+        "                \"place_center_y\": 8502,\n" +
+        "                \"tag_left\": 2494,\n" +
+        "                \"tag_right\": 2984,\n" +
+        "                \"tag_top\": 8340,\n" +
+        "                \"tag_bottom\": 8504\n" +
+        "            },\n" +
         //
         "            {\n" +
         "                \"place_name\": \"中心食堂\",\n" +
-        "                \"place_id\": 2,\n" +
+        "                \"place_id\": 73,\n" +
         "                \"building_list\": [\n" +
         "                    {\n" +
-        "                        \"building_left\": 3387,\n" +
-        "                        \"building_right\": 3719,\n" +
-        "                        \"building_top\": 7393,\n" +
-        "                        \"building_bottom\": 7627\n" +
+        "                        \"building_left\": 4002,\n" +
+        "                        \"building_right\": 4292,\n" +
+        "                        \"building_top\": 7840,\n" +
+        "                        \"building_bottom\": 7960\n" +
         "                    }\n" +
         "                ],\n" +
-        "                \"place_center_x\": 3548,\n" +
-        "                \"place_center_y\": 7516,\n" +
-        "                \"tag_left\": 3425,\n" +
-        "                \"tag_right\": 3547,\n" +
-        "                \"tag_top\": 7309,\n" +
-        "                \"tag_bottom\": 7370\n" +
+        "                \"place_center_x\": 4074,\n" +
+        "                \"place_center_y\": 7904,\n" +
+        "                \"tag_left\": 3676,\n" +
+        "                \"tag_right\": 3840,\n" +
+        "                \"tag_top\": 7852,\n" +
+        "                \"tag_bottom\": 7930\n" +
         "            }" +
         "        ],\n" +
         "        \"map_url\": \"./xxxxx/xxxx/xxx.png\",\n" +

@@ -2,12 +2,17 @@ package com.mredrock.cyxbs.discover.map.ui.activity.adapter
 
 import android.animation.ValueAnimator
 import android.content.Context
+import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatCheckedTextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.load.engine.Resource
+import com.mredrock.cyxbs.common.utils.extensions.invisible
+import com.mredrock.cyxbs.common.utils.extensions.visible
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.bean.InfoItem
 import kotlinx.android.synthetic.main.map_recycle_item_symbol_places.view.*
@@ -35,9 +40,9 @@ class SymbolRvAdapter(val context: Context, private val mList: MutableList<InfoI
 
         curSelectorItem = holder.symbol
         if (mList[position].isHot) {
-            holder.hot.visibility = View.VISIBLE
+            holder.hot.visible()
         } else {
-            holder.hot.visibility = View.INVISIBLE
+            holder.hot.invisible()
         }
         holder.symbol.text = mList[position].title
         holder.symbol.setOnClickListener { v ->
@@ -46,6 +51,7 @@ class SymbolRvAdapter(val context: Context, private val mList: MutableList<InfoI
              */
             if (v == curSelectorItem) {
                 if (curSelectorItem.isChecked) {
+                    curSelectorItem.setTextColor(ContextCompat.getColor(context,R.color.map_text_symbol))
                     val animator2 = ValueAnimator.ofFloat(1f, 0.8f, 1.2f, 1f)
                     animator2.duration = 500
                     animator2.addUpdateListener {
@@ -66,6 +72,8 @@ class SymbolRvAdapter(val context: Context, private val mList: MutableList<InfoI
              */
             val lastSelect = curSelectorItem
             curSelectorItem = v as AppCompatCheckedTextView
+            lastSelect.setTextColor(ContextCompat.getColor(context,R.color.map_text_symbol))
+            curSelectorItem.setTextColor(ContextCompat.getColor(context,R.color.map_text_symbol_select))
             val animator = ValueAnimator.ofFloat(1f, 1.2f, 0.8f, 1f)
             animator.duration = 500
             animator.addUpdateListener {
@@ -75,6 +83,7 @@ class SymbolRvAdapter(val context: Context, private val mList: MutableList<InfoI
                 if (currentValue < 1f) {
                     lastSelect.isChecked = false
                     curSelectorItem.isChecked = true
+
                 }
             }
             animator.start()

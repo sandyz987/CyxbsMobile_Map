@@ -356,7 +356,12 @@
     <!--    地图与大家分享文字的颜色-->
     <color name="map_text_detail_upload" tools:ignore="ResourceName">#23477F</color>
     <!--    标签颜色-->
-    <color name="map_text_symbol" tools:ignore="ResourceName">#15305B</color>
+    <color name="map_text_symbol" tools:ignore="ResourceName">#0E2A54</color>
+    <!--    标签选择颜色-->
+    <color name="map_symbol_select" tools:ignore="ResourceName">#E8F0FC</color>
+    <!--    标签文字选择颜色-->
+    <color name="map_text_symbol_select" tools:ignore="ResourceName">#2A4E84</color>
+
     <!--    详情页地点描述颜色-->
     <color name="map_text_detail_attribute" tools:ignore="ResourceName">#778AA9</color>
     <!--    详情页地点标签颜色-->

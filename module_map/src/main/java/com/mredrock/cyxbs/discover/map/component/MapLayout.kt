@@ -38,7 +38,7 @@ class MapLayout : FrameLayout, View.OnClickListener {
     private val subsamplingScaleImageView = SubsamplingScaleImageView(context)
 
     /** 图片来源 */
-    private var imageSource = ImageSource.resource(R.drawable.map_high)
+    private var imageSource = ImageSource.resource(R.drawable.map_ic_high)
 
     /** 标签array list */
     private val iconList = mutableListOf<ImageView>()
@@ -101,7 +101,7 @@ class MapLayout : FrameLayout, View.OnClickListener {
 
         subsamplingScaleImageView.setDoubleTapZoomScale(1f)
         subsamplingScaleImageView.setImage(
-                imageSource.dimensions(7460, 13268),
+                imageSource.dimensions(8022,14267),
                 ImageSource.resource(R.drawable.map)
         )
         addView(subsamplingScaleImageView, rootParams)
@@ -109,7 +109,7 @@ class MapLayout : FrameLayout, View.OnClickListener {
         subsamplingScaleImageView.setOnImageEventListener(object :
                 SubsamplingScaleImageView.OnImageEventListener {
             override fun onImageLoaded() {
-                subsamplingScaleImageView.animateScaleAndCenter(1f, PointF(1560f, 8640f))
+                subsamplingScaleImageView.animateScaleAndCenter(1f, PointF(1734f, 9372f))
                         ?.withDuration(FOCUS_ANIMATION_DURATION)
                         ?.withInterruptible(true)?.start()
             }

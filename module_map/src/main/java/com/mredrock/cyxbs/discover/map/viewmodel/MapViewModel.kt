@@ -2,6 +2,7 @@ package com.mredrock.cyxbs.discover.map.viewmodel
 
 import androidx.databinding.ObservableArrayList
 import androidx.lifecycle.MutableLiveData
+import com.mredrock.cyxbs.common.network.ApiGenerator
 import com.mredrock.cyxbs.common.utils.extensions.doOnErrorWithDefaultErrorHandler
 import com.mredrock.cyxbs.common.utils.extensions.safeSubscribeBy
 import com.mredrock.cyxbs.common.utils.extensions.setSchedulers
@@ -9,6 +10,7 @@ import com.mredrock.cyxbs.common.viewmodel.BaseViewModel
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.bean.*
 import com.mredrock.cyxbs.discover.map.model.TestData
+import com.mredrock.cyxbs.discover.map.network.MapApiService
 
 /**
  *@author zhangzhe
@@ -55,7 +57,7 @@ class MapViewModel : BaseViewModel() {
         /**
          * 下载地图可以放在这里，但必须开线程！
          */
-        TestData.getMapInfo()//网络请求替换为：apiService.getMapInfo()
+      TestData.getMapInfo()//网络请求替换为：apiService.getMapInfo()
                 .setSchedulers()
                 .doOnErrorWithDefaultErrorHandler {
                     toastEvent.value = R.string.map_network_connect_error
