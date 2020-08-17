@@ -79,10 +79,16 @@ class PlaceDetailBottomSheetFragment : Fragment() {
                     //数据绑定
                     mBinding.placeDetails = t
                     //数据传给adapter
-                    if (bannerAdapter != null && t.images != null) {
+                    if (bannerAdapter != null) {
+                        if (t.images != null){
                         bannerAdapter.setList(t.images!!)
                         bannerAdapter.notifyDataSetChanged()
-                        map_banner_detail_image.adapter = bannerAdapter
+                            map_banner_detail_image.adapter = bannerAdapter
+                        } else{
+                            bannerAdapter.setList(listOf())
+                            bannerAdapter.notifyDataSetChanged()
+                            map_banner_detail_image.adapter = bannerAdapter
+                        }
                     }
                     if (tagAdapter != null && t.tags != null) {
                         tagAdapter.setList(t.tags!!)

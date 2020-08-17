@@ -206,7 +206,7 @@ class MapViewFragment : Fragment() {
             })
 
         })
-        
+
         map_layout.setOnShowFinishListener(object : MapLayout.OnShowFinishListener {
             override fun onShowFinish() {
                 /**
