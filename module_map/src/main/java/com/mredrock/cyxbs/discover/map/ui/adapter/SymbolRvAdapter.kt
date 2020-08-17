@@ -13,9 +13,10 @@ import com.mredrock.cyxbs.common.utils.extensions.invisible
 import com.mredrock.cyxbs.common.utils.extensions.visible
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.bean.InfoItem
+import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
 import kotlinx.android.synthetic.main.map_recycle_item_symbol_places.view.*
 
-class SymbolRvAdapter(val context: Context, private val mList: MutableList<InfoItem>) : RecyclerView.Adapter<SymbolRvAdapter.ViewHolder>() {
+class SymbolRvAdapter(val context: Context, val viewModel: MapViewModel, private val mList: MutableList<InfoItem>) : RecyclerView.Adapter<SymbolRvAdapter.ViewHolder>() {
 
     lateinit var curSelectorItem: AppCompatCheckedTextView
 
@@ -61,9 +62,10 @@ class SymbolRvAdapter(val context: Context, private val mList: MutableList<InfoI
                         }
                     }
                     animator2.start()
+                    //清除所有选择
+                    viewModel.showSomeIconsId.postValue(mutableListOf())
                     return@setOnClickListener
                 }
-
             }
             /**
              * 选择动画
@@ -85,6 +87,8 @@ class SymbolRvAdapter(val context: Context, private val mList: MutableList<InfoI
                 }
             }
             animator.start()
+            //显示标签到地图上
+            viewModel.getSearchType(mList[position].code)
         }
     }
 

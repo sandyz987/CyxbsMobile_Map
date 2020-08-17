@@ -13,6 +13,7 @@ import com.mredrock.cyxbs.common.viewmodel.BaseViewModel
 import com.mredrock.cyxbs.discover.map.BuildConfig
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.bean.*
+import com.mredrock.cyxbs.discover.map.model.DataSet
 import com.mredrock.cyxbs.discover.map.model.TestData
 import com.mredrock.cyxbs.discover.map.network.MapApiService
 import okhttp3.logging.HttpLoggingInterceptor
@@ -100,11 +101,17 @@ class MapViewModel : BaseViewModel() {
                 .setSchedulers()
                 .doOnErrorWithDefaultErrorHandler {
                     toastEvent.value = R.string.map_network_connect_error
+                    //使用缓存数据
+                    val mapInfoStore = DataSet.getMapInfo()
+                    if (mapInfoStore != null) {
+                        mapInfo.postValue(mapInfoStore)
+                    }
                     loadFail.postValue(true)
                     false
                 }
                 .safeSubscribeBy {
                     mapInfo.postValue(it.data)
+                    DataSet.saveMapInfo(it.data)
                 }.lifeCycle()
         mapApiService.getButtonInfo()
                 .setSchedulers()
@@ -145,6 +152,18 @@ class MapViewModel : BaseViewModel() {
                 }
                 .safeSubscribeBy {
                     favoriteList.postValue(it.data.toMutableList())
+                }.lifeCycle()
+    }
+
+    fun getSearchType(code: String) {
+        mapApiService.getSearchType(code)
+                .setSchedulers()
+                .doOnErrorWithDefaultErrorHandler {
+                    toastEvent.value = R.string.map_network_connect_error
+                    false
+                }
+                .safeSubscribeBy {
+                    showSomeIconsId.value = it.data
                 }.lifeCycle()
     }
 

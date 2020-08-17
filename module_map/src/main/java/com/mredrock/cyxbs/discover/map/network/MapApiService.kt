@@ -25,4 +25,8 @@ internal interface MapApiService {
     @GET("button")
     fun getButtonInfo(): Observable<RedrockApiWrapper<ButtonInfo>>
 
+    @FormUrlEncoded
+    @POST("searchtype")
+    fun getSearchType(@Field("code") code: String): Observable<RedrockApiWrapper<MutableList<String>>>
+
 }

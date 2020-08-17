@@ -184,7 +184,7 @@ class MapViewFragment : Fragment() {
          */
         val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         map_rv_symbol_places.layoutManager = linearLayoutManager
-        val symbolRvAdapter = context?.let { SymbolRvAdapter(it, mutableListOf()) }
+        val symbolRvAdapter = context?.let { SymbolRvAdapter(it, viewModel, mutableListOf()) }
         map_rv_symbol_places.adapter = symbolRvAdapter
         /**
          * 初始化我的收藏列表adapter

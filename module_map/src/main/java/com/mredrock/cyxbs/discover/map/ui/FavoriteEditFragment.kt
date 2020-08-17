@@ -27,6 +27,7 @@ class FavoriteEditFragment : Fragment() {
             viewModel.fragmentFavoriteEditIsShowing.value = false
         }
         map_et_favorite_nickname.maxStringLength = 8
+        map_tv_favorite_place_name.text = viewModel.placeDetails.value?.placeName
     }
 
 }
