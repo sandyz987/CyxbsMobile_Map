@@ -28,9 +28,8 @@ class FavoriteEditFragment : Fragment() {
         map_tv_favorite_cancel.setOnClickListener {
             viewModel.fragmentFavoriteEditIsShowing.value = false
         }
-        map_et_favorite_nickname.maxStringLength = 12
-        map_et_favorite_nickname.setText(viewModel.placeDetails.value?.placeName)
-        map_tv_favorite_place_name.text = viewModel.placeDetails.value?.placeName
+
+
 
         map_tv_favorite_cancel_favorite.setOnClickListener {
             viewModel.fragmentFavoriteEditIsShowing.value = false
@@ -48,6 +47,14 @@ class FavoriteEditFragment : Fragment() {
             }
         }
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        map_et_favorite_nickname.maxStringLength = 12
+        map_et_favorite_nickname.setText(viewModel.placeDetails.value?.placeName)
+        map_et_favorite_nickname.notifyStringChange()
+        map_tv_favorite_place_name.text = viewModel.placeDetails.value?.placeName
     }
 
 }
