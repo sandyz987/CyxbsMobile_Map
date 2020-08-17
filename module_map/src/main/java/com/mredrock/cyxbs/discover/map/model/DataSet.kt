@@ -103,13 +103,17 @@ object DataSet {
                 } else {
                     null
                 }
-
         if (list != null) {
+            var flag = true
             for (t: FavoritePlace in list) {
                 if (t.placeId == favoritePlace.placeId) {
                     t.placeNickname = favoritePlace.placeNickname
+                    flag = false
                     break
                 }
+            }
+            if (flag) {
+                list.add(favoritePlace)
             }
         } else {
             list = mutableListOf(favoritePlace)
