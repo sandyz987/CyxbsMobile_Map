@@ -45,6 +45,7 @@ class MapLayout : FrameLayout, View.OnClickListener {
 
     var useUrl = false
     private var url: String? = null
+    var isLock = false
 
     /** Sub-samplingScaleImageView第三方控件 */
     private val subsamplingScaleImageView = SubsamplingScaleImageView(context)
@@ -215,6 +216,12 @@ class MapLayout : FrameLayout, View.OnClickListener {
         /**监听点击事件 */
         subsamplingScaleImageView.setOnClickListener {
             var count = 0
+            if (isLock) {
+                GlobalScope.launch(Dispatchers.Main) {
+                    context.toast("取消锁定后对地图进行操作")
+                }
+                return@setOnClickListener
+            }
             iconList.forEach { icon ->
                 val iconBean = icon.tag as IconBean
                 if ((clickPoint.x > iconBean.leftX
@@ -541,6 +548,10 @@ class MapLayout : FrameLayout, View.OnClickListener {
             if (this.url != null)
                 return this.url!!
         }
+    }
+
+    fun setIsLock(lock: Boolean) {
+        this.isLock = lock
     }
 
     /**

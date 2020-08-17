@@ -1,6 +1,7 @@
 package com.mredrock.cyxbs.discover.map.ui.inner
 
 import android.animation.Animator
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
@@ -135,6 +136,39 @@ class MapViewFragment : Fragment() {
                 viewModel.bottomSheetIsShowing.value = false
             }
         })
+
+        /**
+         * 监听锁定按钮
+         */
+        map_iv_lock.setOnClickListener {
+          if (viewModel.isLock.value!!){
+              val animator = ValueAnimator.ofFloat(1f, 0.8f, 1.2f, 1f)
+              animator.duration = 500
+              animator.addUpdateListener {
+                  val currentValue: Float = it.animatedValue as Float
+                  map_iv_lock.scaleX = currentValue
+                  map_iv_lock.scaleY = currentValue
+              }
+              animator.start()
+              map_iv_lock.setImageResource(R.drawable.map_ic_unlock)
+              viewModel.toastEvent.value = R.string.map_unlock
+              viewModel.isLock.value = false
+          } else{
+              val animator = ValueAnimator.ofFloat(1f, 1.2f, 0.8f, 1f)
+              animator.duration = 500
+              animator.addUpdateListener {
+                  val currentValue: Float = it.animatedValue as Float
+                  map_iv_lock.scaleX = currentValue
+                  map_iv_lock.scaleY = currentValue
+              }
+              animator.start()
+              map_iv_lock.setImageResource(R.drawable.map_ic_lock)
+              viewModel.toastEvent.value = R.string.map_lock
+              viewModel.isLock.value = true
+          }
+            map_layout.setIsLock(viewModel.isLock.value!!)
+
+        }
         /**
          * 初始化bottomSheet
          */

@@ -18,4 +18,6 @@
     <string name="map_all_picture_text">所有图片</string>
     <string name="map_all_picture_text_no_more">暂无更多图片</string>
     <string name="map_no_save">本地无地点缓存</string>
+    <string name="map_lock">已锁定</string>
+    <string name="map_unlock">已解除锁定</string>
 </resources>
