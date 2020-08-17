@@ -11,6 +11,5 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.0'
     kapt deps.arouter.compiler
     implementation 'com.davemorrissey.labs:subsampling-scale-image-view-androidx:3.10.0'
-    implementation 'com.to.aboomy:pager2banner:1.0.1'
     implementation 'com.google.android:flexbox:2.0.1'
 }

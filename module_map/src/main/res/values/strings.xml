@@ -2,7 +2,7 @@
 <resources>
     <string name="map_search_edit_hint">搜索一个地点…</string>
     <string name="map_title">掌邮地图</string>
-    <string name="map_place_detail_detail">详细</string>
+    <string name="map_place_detail_detail">详情</string>
     <string name="map_place_detail_more">查看更多</string>
     <string name="map_place_detail_upload">与大家分享你拍摄的此地点</string>
     <string name="map_place_detail_about">关于该地点</string>
