@@ -9,6 +9,7 @@ import com.mredrock.cyxbs.common.utils.extensions.gone
 import com.mredrock.cyxbs.common.utils.extensions.visible
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.bean.FavoritePlace
+import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
 import kotlinx.android.synthetic.main.map_recycle_item_favorite_list.view.*
 
 /**
@@ -17,7 +18,7 @@ import kotlinx.android.synthetic.main.map_recycle_item_favorite_list.view.*
  *@description
  */
 
-class FavoriteListAdapter(context: Context, private var mList: MutableList<FavoritePlace>) :
+class FavoriteListAdapter(context: Context, val viewModel: MapViewModel, private var mList: MutableList<FavoritePlace>) :
         RecyclerView.Adapter<FavoriteListAdapter.ViewHolder>() {
 
     private var mLayoutInflater = LayoutInflater.from(context)
@@ -45,6 +46,11 @@ class FavoriteListAdapter(context: Context, private var mList: MutableList<Favor
             holder.line.gone()
         } else {
             holder.line.visible()
+        }
+        holder.itemView.setOnClickListener {
+            viewModel.showSomeIconsId.value = mutableListOf(mList[position].placeId)
+            viewModel.bottomSheetIsShowing.value = false
+            viewModel.dismissPopUpWindow.value = true
         }
     }
 

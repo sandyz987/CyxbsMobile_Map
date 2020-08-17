@@ -39,7 +39,7 @@ object TestData {
     /**
      * 获得收藏接口，{nickname：最爱去的食堂 id：2}  和  {nickname：漂亮的新校门 id：1}
      */
-    fun getFavorite() = Observable.create<RedrockApiWrapper<List<FavoritePlace>>> {
+    fun getCollect() = Observable.create<RedrockApiWrapper<List<FavoritePlace>>> {
         it.onNext(gson.fromJson(favoriteString, object : TypeToken<RedrockApiWrapper<List<FavoritePlace>>>() {}.type))
     }
 

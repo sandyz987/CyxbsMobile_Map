@@ -37,6 +37,7 @@ class AllPictureRvAdapter(val context: Context, private val mList: MutableList<S
     fun setList(list: List<String>) {
         mList.clear()
         mList.addAll(list)
+        notifyDataSetChanged()
     }
 
 }

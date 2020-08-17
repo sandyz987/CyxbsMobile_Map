@@ -62,7 +62,7 @@ class SymbolRvAdapter(val context: Context, val viewModel: MapViewModel, private
                         }
                     }
                     animator2.start()
-                    //清除所有选择
+                    //清除所有标签
                     viewModel.showSomeIconsId.postValue(mutableListOf())
                     return@setOnClickListener
                 }
@@ -89,6 +89,7 @@ class SymbolRvAdapter(val context: Context, val viewModel: MapViewModel, private
             animator.start()
             //显示标签到地图上
             viewModel.getSearchType(mList[position].code)
+            viewModel.bottomSheetIsShowing.value = false
         }
     }
 

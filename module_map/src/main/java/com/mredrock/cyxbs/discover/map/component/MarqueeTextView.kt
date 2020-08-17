@@ -11,7 +11,7 @@ import androidx.appcompat.widget.AppCompatTextView
  *
  * 描述:一个跑马灯TextView
  */
-internal class MarqueeTextView : AppCompatTextView {
+class MarqueeTextView : AppCompatTextView {
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(
             context,

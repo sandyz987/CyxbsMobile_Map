@@ -18,11 +18,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.gson.Gson
 import com.mredrock.cyxbs.common.utils.extensions.*
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.bean.IconBean
-import com.mredrock.cyxbs.discover.map.bean.MapInfo
 import com.mredrock.cyxbs.discover.map.bean.PlaceItem
 import com.mredrock.cyxbs.discover.map.component.MapLayout
 import com.mredrock.cyxbs.discover.map.ui.activity.VRActivity
@@ -74,29 +72,11 @@ class MapViewFragment : Fragment() {
             }
             map_layout.addSomeIcons(iconList)
             map_layout.setUrl(data.mapUrl)
-            val gson = Gson()
-            val json = gson.toJson(data)
 
-            context?.defaultSharedPreferences?.editor {
-                putString("mapInfo", json)
-            }
 
         })
 
-        viewModel.loadFail.observe(viewLifecycleOwner, Observer {
-            if (it) {
-                map_layout.setUrl("loadFail")
-                val json = context?.defaultSharedPreferences?.getString("mapInfo", null)
-                if (json != null) {
-                    val gson = Gson()
-                    val mapInfo = gson.fromJson(json, MapInfo::class.java)
-                    viewModel.mapInfo.value = mapInfo
-                } else {
-                    viewModel.toastEvent.value = R.string.map_no_save
-                }
 
-            }
-        })
         /**
          * 设置地点点击事件
          */
@@ -104,7 +84,7 @@ class MapViewFragment : Fragment() {
             override fun onIconClick(v: View) {
                 val bean = v.tag as IconBean
                 map_layout.focusToPoint(bean.sx, bean.sy)
-                viewModel.showPlaceDetails(bean.id)
+                viewModel.showPlaceDetails(bean.id.toString())
             }
 
         })
@@ -197,16 +177,21 @@ class MapViewFragment : Fragment() {
 
         val mapFavoriteRecyclerView = popView.findViewById<RecyclerView>(R.id.map_rv_favorite_list)
         mapFavoriteRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-        val favoriteListAdapter = FavoriteListAdapter(requireContext(), mutableListOf())
+        val favoriteListAdapter = FavoriteListAdapter(requireContext(), viewModel, mutableListOf())
         mapFavoriteRecyclerView.adapter = favoriteListAdapter
         //设置点击事件
         map_ll_map_view_my_favorite.setOnClickListener {
+            viewModel.refreshCollectList()
             if (!popupWindow.isShowing) {
                 popupWindow.showAsDropDown(map_ll_map_view_my_favorite, map_ll_map_view_my_favorite.width - (context?.dp2px(140f)
                         ?: 30), context?.dp2px(15f) ?: 30)
                 popupWindow.update()
             }
         }
+
+        viewModel.dismissPopUpWindow.observe(viewLifecycleOwner, Observer {
+            popupWindow.dismiss()
+        })
 
         /**
          * 注册监听
@@ -239,7 +224,7 @@ class MapViewFragment : Fragment() {
                     }
                 }
         )
-        viewModel.favoriteList.observe(
+        viewModel.collectList.observe(
                 viewLifecycleOwner,
                 Observer {
                     //更新favoriteList数据

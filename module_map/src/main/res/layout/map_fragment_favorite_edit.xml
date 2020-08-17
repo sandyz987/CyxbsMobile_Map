@@ -19,17 +19,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/map_rv_favorite_recommend"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/map_tv_favorite_recommend" />
-
             <com.mredrock.cyxbs.discover.map.component.FavoriteEditText
                 android:id="@+id/map_et_favorite_nickname"
                 android:layout_width="0dp"
@@ -62,21 +51,21 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="20dp"
-                android:text="将该收藏改为"
+                android:text="收藏为"
                 android:textColor="@color/map_favorite_change_color"
                 android:textSize="@dimen/map_favorite_change_text_size"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/map_tv_favorite_place_name" />
 
             <TextView
-                android:id="@+id/map_tv_favorite_recommend"
+                android:id="@+id/map_tv_favorite_cancel_favorite"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="20dp"
-                android:text="@string/map_favorite_recommend_text"
-                android:textColor="@color/map_favorite_recommend_color"
-                android:textSize="@dimen/map_favorite_recommend_text_size"
+                android:text="@string/map_favorite_cancel_favorite"
+                android:textColor="@color/map_favorite_cancel_favorite_text_color"
+                android:textSize="@dimen/map_favorite_accept_or_cancel_text_size"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/map_et_favorite_nickname" />
 
@@ -104,28 +93,21 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
+            <com.mredrock.cyxbs.discover.map.component.MarqueeTextView
                 android:id="@+id/map_tv_favorite_place_name"
-                android:layout_width="wrap_content"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="32dp"
+                android:singleLine="true"
+                android:marqueeRepeatLimit="-1"
+                android:ellipsize="marquee"
+                android:focusable="true"
                 android:textColor="@color/map_favorite_place_name_text_color"
                 android:textSize="@dimen/map_favorite_place_name_text_size"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/map_tv_favorite_cancel"
                 tools:text="风雨操场" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/map_rv_favorite_attribute"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                app:layout_constraintBottom_toBottomOf="@+id/map_tv_favorite_place_name"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/map_tv_favorite_place_name"
-                app:layout_constraintTop_toTopOf="@+id/map_tv_favorite_place_name" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>

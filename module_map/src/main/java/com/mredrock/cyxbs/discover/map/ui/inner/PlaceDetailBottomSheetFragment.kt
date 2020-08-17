@@ -112,26 +112,13 @@ class PlaceDetailBottomSheetFragment : Fragment() {
                         }
 
                     }
-                    //判断是否收藏过该地点，如果收藏了则显示出收藏的nickname
-                    viewModel.favoriteList.value?.let {
-                        var isFavor: String? = null
-                        for (favoritePlace: FavoritePlace in it) {
-                            if (viewModel.showingPlaceId == favoritePlace.placeId) {
-                                isFavor = favoritePlace.placeNickname
-                            }
-                        }
-                        if (isFavor != null) {
-                            map_iv_detail_favorite.gone()
-                            map_tv_detail_place_nickname.visible()
-                            map_tv_detail_place_nickname.text = isFavor
-                        } else {
-                            map_iv_detail_favorite.visible()
-                            map_tv_detail_place_nickname.gone()
-                        }
-                    }
+                    setNickName()
 
                 }
         )
+        viewModel.collectList.observe(viewLifecycleOwner, Observer {
+            setNickName()
+        })
         /**
          * 添加点击事件
          */
@@ -144,6 +131,26 @@ class PlaceDetailBottomSheetFragment : Fragment() {
         }
         map_tv_detail_more.setOnClickListener {
             viewModel.fragmentAllPictureIsShowing.value = true
+        }
+    }
+
+    private fun setNickName() {
+        //判断是否收藏过该地点，如果收藏了则显示出收藏的nickname
+        viewModel.collectList.value?.let {
+            var isFavor: String? = null
+            for (favoritePlace: FavoritePlace in it) {
+                if (viewModel.showingPlaceId == favoritePlace.placeId) {
+                    isFavor = favoritePlace.placeNickname
+                }
+            }
+            if (isFavor != null) {
+                map_iv_detail_favorite.gone()
+                map_tv_detail_place_nickname.visible()
+                map_tv_detail_place_nickname.text = isFavor
+            } else {
+                map_iv_detail_favorite.visible()
+                map_tv_detail_place_nickname.gone()
+            }
         }
     }
 

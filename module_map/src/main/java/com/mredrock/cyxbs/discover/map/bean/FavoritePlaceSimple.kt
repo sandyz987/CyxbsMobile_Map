@@ -4,13 +4,11 @@ import com.google.gson.annotations.SerializedName
 
 /**
  *@author zhangzhe
- *@date 2020/8/8
+ *@date 2020/8/18
  *@description
  */
 
-data class FavoritePlace(
-        @SerializedName("place_nickname")
-        var placeNickname: String,
+data class FavoritePlaceSimple(
         @SerializedName("place_id")
-        var placeId: String
+        val placeId: MutableList<String>
 )

@@ -1,10 +1,8 @@
 package com.mredrock.cyxbs.discover.map.viewmodel
 
-import android.util.Log
-import android.widget.Toast
 import androidx.databinding.ObservableArrayList
 import androidx.lifecycle.MutableLiveData
-import com.mredrock.cyxbs.common.BaseApp
+import com.mredrock.cyxbs.common.bean.isSuccessful
 import com.mredrock.cyxbs.common.network.ApiGenerator
 import com.mredrock.cyxbs.common.utils.extensions.doOnErrorWithDefaultErrorHandler
 import com.mredrock.cyxbs.common.utils.extensions.safeSubscribeBy
@@ -14,8 +12,8 @@ import com.mredrock.cyxbs.discover.map.BuildConfig
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.bean.*
 import com.mredrock.cyxbs.discover.map.model.DataSet
-import com.mredrock.cyxbs.discover.map.model.TestData
 import com.mredrock.cyxbs.discover.map.network.MapApiService
+import com.mredrock.cyxbs.discover.map.widget.ProgressDialog
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -36,7 +34,7 @@ class MapViewModel : BaseViewModel() {
     val buttonInfo = MutableLiveData<ButtonInfo>()
 
     //喜欢列表内容
-    val favoriteList = MutableLiveData<MutableList<FavoritePlace>>()
+    val collectList = MutableLiveData<MutableList<FavoritePlace>>()
 
     //地点详细弹出框要显示的内容（由PlaceDetailBottomSheetFragment观察）
     val placeDetails = MutableLiveData<PlaceDetails>()
@@ -48,7 +46,7 @@ class MapViewModel : BaseViewModel() {
     val fragmentAllPictureIsShowing = MutableLiveData<Boolean>(false)
 
     //详细页面正在显示的地点id
-    var showingPlaceId = -1
+    var showingPlaceId = "-1"
 
     //是否显示bottomSheet，用于监听并隐藏
     val bottomSheetIsShowing = MutableLiveData<Boolean>(false)
@@ -74,13 +72,16 @@ class MapViewModel : BaseViewModel() {
     //是否锁定
     val isLock = MutableLiveData(false)
 
-    //在唯一的activity的onCreate调用，获取地图数据（地点list），下载地图应该在此处完成（就是文档上第一个接口）
+    //通知收藏列表关闭
+    val dismissPopUpWindow = MutableLiveData(false)
+
+
     fun init() {
-        //ProgressDialog.show(BaseApp.context,"提示","请稍后",false)//ProgressDialog.hide()
+
         /**
          * 初始化网络请求
          */
-        ApiGenerator.registerNetSettings(2019211135, { builder ->
+        ApiGenerator.registerNetSettings(1234, { builder ->
             builder.baseUrl("https://cyxbsmobile.redrock.team/wxapi/magipoke-stumap/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
@@ -93,7 +94,7 @@ class MapViewModel : BaseViewModel() {
                 }
             }
         }, true)
-        mapApiService = ApiGenerator.getApiService(2019211135, MapApiService::class.java)
+        mapApiService = ApiGenerator.getApiService(1234, MapApiService::class.java)
         /**
          * 下载地图可以放在这里，但必须开线程！
          */
@@ -107,7 +108,7 @@ class MapViewModel : BaseViewModel() {
                         mapInfo.postValue(mapInfoStore)
                     }
                     loadFail.postValue(true)
-                    false
+                    true
                 }
                 .safeSubscribeBy {
                     mapInfo.postValue(it.data)
@@ -117,24 +118,30 @@ class MapViewModel : BaseViewModel() {
                 .setSchedulers()
                 .doOnErrorWithDefaultErrorHandler {
                     toastEvent.value = R.string.map_network_connect_error
-                    false
+                    //使用缓存数据
+                    val buttonInfoStore = DataSet.getButtonInfo()
+                    if (buttonInfoStore != null) {
+                        buttonInfo.postValue(buttonInfoStore)
+                    }
+                    true
                 }
                 .safeSubscribeBy {
                     buttonInfo.postValue(it.data)
+                    DataSet.saveButtonInfo(it.data)
                 }.lifeCycle()
 
-        //第一次先获得一次收藏列表
-        getFavoriteList()
+        refreshCollectList()
 
     }
 
+
     //当地图标签被点击，执行此网络请求，在对应的fragment观察数据即可
-    fun showPlaceDetails(placeId: Int) {
+    fun showPlaceDetails(placeId: String) {
         mapApiService.getPlaceDetails(placeId)
                 .setSchedulers()
                 .doOnErrorWithDefaultErrorHandler {
                     toastEvent.value = R.string.map_network_connect_error
-                    false
+                    true
                 }
                 .safeSubscribeBy {
                     showingPlaceId = placeId
@@ -143,15 +150,30 @@ class MapViewModel : BaseViewModel() {
                 }.lifeCycle()
     }
 
-    fun getFavoriteList() {
-        TestData.getFavorite()
+    fun refreshCollectList() {
+        mapApiService.getCollect()
                 .setSchedulers()
                 .doOnErrorWithDefaultErrorHandler {
-                    toastEvent.value = R.string.map_network_connect_error
-                    false
+                    val list = DataSet.getCollect()
+                    if (list != null) {
+                        collectList.postValue(list)
+                    }
+                    if (collectList.value?.size == 0) {
+                        toastEvent.value = R.string.map_favorite_empty
+                    }
+                    true
                 }
                 .safeSubscribeBy {
-                    favoriteList.postValue(it.data.toMutableList())
+
+                    it.data.placeId.forEach { item ->
+                        DataSet.addCollect(item)
+                    }
+
+                    collectList.value = DataSet.getCollect()
+
+                    if (collectList.value?.size == 0) {
+                        toastEvent.value = R.string.map_favorite_empty
+                    }
                 }.lifeCycle()
     }
 
@@ -160,11 +182,67 @@ class MapViewModel : BaseViewModel() {
                 .setSchedulers()
                 .doOnErrorWithDefaultErrorHandler {
                     toastEvent.value = R.string.map_network_connect_error
-                    false
+                    true
                 }
                 .safeSubscribeBy {
                     showSomeIconsId.value = it.data
                 }.lifeCycle()
+    }
+
+    fun addCollect(placeNickname: String, id: String) {
+        var notExist = true
+        if (collectList.value != null) {
+            for (t: FavoritePlace in collectList.value!!) {
+                if (t.placeId == id) {
+                    notExist = false
+                }
+            }
+        }
+
+        if (notExist) {
+            mapApiService.addCollect(id)
+                    .setSchedulers()
+                    .doOnErrorWithDefaultErrorHandler {
+                        toastEvent.value = R.string.map_network_connect_error
+                        ProgressDialog.hide()
+                        true
+                    }
+                    .safeSubscribeBy {
+                        if (it.isSuccessful) {
+                            DataSet.addCollect(FavoritePlace(placeNickname, id))
+                        } else {
+                            toastEvent.value = R.string.map_network_connect_error
+                        }
+                        ProgressDialog.hide()
+                        refreshCollectList()
+                    }.lifeCycle()
+        } else {
+            DataSet.addCollect(FavoritePlace(placeNickname, id))
+            ProgressDialog.hide()
+            refreshCollectList()
+        }
+
+
+    }
+
+    fun deleteCollect(id: String) {
+        mapApiService.deleteCollect(id.toInt())
+                .setSchedulers()
+                .doOnErrorWithDefaultErrorHandler {
+                    toastEvent.value = R.string.map_network_connect_error
+                    ProgressDialog.hide()
+                    true
+                }
+                .safeSubscribeBy {
+                    if (it.isSuccessful) {
+                        DataSet.deleteCollect(id)
+                    } else {
+                        toastEvent.value = R.string.map_network_connect_error
+                    }
+                    ProgressDialog.hide()
+                    refreshCollectList()
+                }.lifeCycle()
+
     }
 
 

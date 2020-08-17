@@ -7,11 +7,15 @@
     android:background="?selectableItemBackground"
     android:clickable="true">
 
-    <TextView
+    <com.mredrock.cyxbs.discover.map.component.MarqueeTextView
         android:id="@+id/map_tv_favorite_list_item_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:singleLine="true"
+        android:marqueeRepeatLimit="-1"
+        android:ellipsize="marquee"
+        android:focusable="true"
         android:layout_marginBottom="16dp"
         android:textColor="@color/map_text_favorite_item"
         android:textSize="@dimen/map_favorite_list_text_size"

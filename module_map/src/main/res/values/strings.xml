@@ -10,9 +10,8 @@
     <string name="map_network_connect_error">网络请求失败</string>
     <string name="map_favorite_cancel">取消</string>
     <string name="map_favorite_accept">确定</string>
-    <string name="map_favorite_recommend_text">推荐</string>
     <string name="map_favorite_cancel_favorite">不再收藏该地点</string>
-    <string name="map_favorite_et_hint">我的收藏</string>
+    <string name="map_favorite_et_hint">请输入地点收藏备注</string>
     <string name="map_search_history_text">历史记录</string>
     <string name="map_search_clear_text">清除全部</string>
     <string name="map_all_picture_text">所有图片</string>
@@ -20,4 +19,6 @@
     <string name="map_no_save">本地无地点缓存</string>
     <string name="map_lock">已锁定</string>
     <string name="map_unlock">已解除锁定</string>
+    <string name="map_favorite_edit_length_not_enough">地点备注不能为空~</string>
+    <string name="map_favorite_empty">还未收藏地点哦~</string>
 </resources>

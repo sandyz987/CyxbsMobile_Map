@@ -2,6 +2,7 @@ package com.mredrock.cyxbs.discover.map.ui
 
 import android.opengl.ETC1.getHeight
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -78,6 +79,7 @@ class AllPictureFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         if (viewModel.placeDetails.value?.images != null) {
+
             allPictureAdapter.setList(viewModel.placeDetails.value?.images!!)
             allPictureAdapter.notifyDataSetChanged()
             map_rv_all_picture.adapter = allPictureAdapter

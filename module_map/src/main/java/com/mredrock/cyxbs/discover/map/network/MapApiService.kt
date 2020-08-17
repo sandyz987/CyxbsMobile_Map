@@ -1,9 +1,8 @@
 package com.mredrock.cyxbs.discover.map.network
 
+import com.mredrock.cyxbs.common.bean.RedrockApiStatus
 import com.mredrock.cyxbs.common.bean.RedrockApiWrapper
-import com.mredrock.cyxbs.discover.map.bean.ButtonInfo
-import com.mredrock.cyxbs.discover.map.bean.MapInfo
-import com.mredrock.cyxbs.discover.map.bean.PlaceDetails
+import com.mredrock.cyxbs.discover.map.bean.*
 import io.reactivex.Observable
 import retrofit2.Call
 import retrofit2.http.*
@@ -20,7 +19,7 @@ internal interface MapApiService {
 
     @FormUrlEncoded
     @POST("detailsite")
-    fun getPlaceDetails(@Field("place_id") placeId: Int): Observable<RedrockApiWrapper<PlaceDetails>>
+    fun getPlaceDetails(@Field("place_id") placeId: String): Observable<RedrockApiWrapper<PlaceDetails>>
 
     @GET("button")
     fun getButtonInfo(): Observable<RedrockApiWrapper<ButtonInfo>>
@@ -28,5 +27,16 @@ internal interface MapApiService {
     @FormUrlEncoded
     @POST("searchtype")
     fun getSearchType(@Field("code") code: String): Observable<RedrockApiWrapper<MutableList<String>>>
+
+    @GET("rockmap/collect")
+    fun getCollect(): Observable<RedrockApiWrapper<FavoritePlaceSimple>>
+
+    @FormUrlEncoded
+    @PATCH("rockmap/addkeep")
+    fun addCollect(@Field("place_id") placeId: String): Observable<RedrockApiStatus>
+
+    @Multipart
+    @HTTP(method = "DELETE", path = "rockmap/deletekeep", hasBody = true)
+    fun deleteCollect(@Part("place_id") placeId: Int): Observable<RedrockApiStatus>
 
 }

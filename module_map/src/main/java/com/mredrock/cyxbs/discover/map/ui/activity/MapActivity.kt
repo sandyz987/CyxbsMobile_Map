@@ -38,9 +38,9 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         val userState = ServiceManager.getService(IAccountService::class.java).getVerifyService()
         if (!userState.isLogin()) {
             //这里只是模拟一下登录，如果有并发需求，自己设计
-//            Thread {
-//                userState.login(this, "你的学号", "你的后6位")
-//            }.start()
+            Thread {
+                userState.login(this, "2019211135", "226312")
+            }.start()
         }
 
     }
