@@ -17,4 +17,5 @@
     <string name="map_search_clear_text">清除全部</string>
     <string name="map_all_picture_text">所有图片</string>
     <string name="map_all_picture_text_no_more">暂无更多图片</string>
+    <string name="map_no_save">本地无地点缓存</string>
 </resources>

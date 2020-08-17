@@ -67,6 +67,9 @@ class MapViewModel : BaseViewModel() {
     //用于通知mainFragment关闭搜索框
     val closeSearchFragment = MutableLiveData<Boolean>(false)
 
+    //网络请求失败，使用本地缓存
+    val loadFail = MutableLiveData<Boolean>(false)
+
     //在唯一的activity的onCreate调用，获取地图数据（地点list），下载地图应该在此处完成（就是文档上第一个接口）
     fun init() {
         //ProgressDialog.show(BaseApp.context,"提示","请稍后",false)//ProgressDialog.hide()
@@ -94,6 +97,7 @@ class MapViewModel : BaseViewModel() {
                 .setSchedulers()
                 .doOnErrorWithDefaultErrorHandler {
                     toastEvent.value = R.string.map_network_connect_error
+                    loadFail.postValue(true)
                     false
                 }
                 .safeSubscribeBy {

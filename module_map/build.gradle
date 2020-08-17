@@ -1,7 +1,7 @@
 apply from: module_config
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-
+apply plugin: 'kotlin-kapt'
 dependencies {
     implementation project(':lib_common')
     implementation project(':lib_account')
@@ -12,4 +12,6 @@ dependencies {
     kapt deps.arouter.compiler
     implementation 'com.davemorrissey.labs:subsampling-scale-image-view-androidx:3.10.0'
     implementation 'com.google.android:flexbox:2.0.1'
+    kapt 'com.github.bumptech.glide:compiler:4.11.0'
+
 }

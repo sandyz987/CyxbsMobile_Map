@@ -4,6 +4,7 @@ import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.PointF
+import android.net.Uri
 import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
@@ -11,16 +12,24 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
+import com.bumptech.glide.load.model.GlideUrl
 import com.davemorrissey.labs.subscaleview.ImageSource
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
-import com.mredrock.cyxbs.common.utils.extensions.dp2px
-import com.mredrock.cyxbs.common.utils.extensions.gone
-import com.mredrock.cyxbs.common.utils.extensions.visible
+import com.mredrock.cyxbs.common.utils.extensions.*
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.bean.IconBean
+import com.mredrock.cyxbs.discover.map.util.SubsamplingScaleImageViewTarget
+import com.mredrock.cyxbs.discover.map.widget.GlideApp
 import com.mredrock.cyxbs.discover.map.widget.ProgressDialog
+import com.mredrock.cyxbs.discover.map.widget.ProgressInterceptor
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import org.jetbrains.anko.displayMetrics
+import java.io.File
 import kotlin.math.sqrt
+
 
 /**
  * 创建者：林潼
@@ -52,9 +61,9 @@ class MapLayout : FrameLayout, View.OnClickListener {
 
     private var onNoPlaceClickListener: OnNoPlaceClickListener? = null
 
-    private var onCloseFinishListener:OnCloseFinishListener? = null
+    private var onCloseFinishListener: OnCloseFinishListener? = null
 
-    private var onShowFinishListener:OnShowFinishListener? = null
+    private var onShowFinishListener: OnShowFinishListener? = null
 
     /**
      *下面四个为继承FrameLayout的构造器方法
@@ -108,17 +117,46 @@ class MapLayout : FrameLayout, View.OnClickListener {
 
         subsamplingScaleImageView.setDoubleTapZoomScale(1f)
 
-//        val path = context.defaultSharedPreferences.getString("path", "")
+
+        val dialog = android.app.ProgressDialog(context)
+        dialog.setProgressStyle(android.app.ProgressDialog.STYLE_HORIZONTAL)
+        dialog.setMessage("地图下载中,请稍等")
+        dialog.setCancelable(false)
+        dialog.show()
+        GlobalScope.launch {
+            val result = async {
+                getRealUrl()
+            }
+            if (result.await() == "loadFail") {
+                GlobalScope.launch(Dispatchers.Main) {
+                    context.toast("糟糕！网络连接失败了，将使用本地缓存")
+                }
+                val path = context.defaultSharedPreferences.getString("path", null)
+                try {
+                    if (path != null && File(path).exists()) {
+                        GlobalScope.launch(Dispatchers.Main) {
+                            subsamplingScaleImageView.setImage(ImageSource.uri(Uri.fromFile(File(path))))
+                        }
+                    } else {
+                        GlobalScope.launch(Dispatchers.Main) {
+                            subsamplingScaleImageView.setImage(imageSource)
+                        }
+                    }
+                    dialog.dismiss()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            } else {
+                ProgressInterceptor.addListener(result.await()) { progress ->
+                    dialog.progress = progress
+                }
+                GlideApp.with(context)
+                        .download(GlideUrl(result.await()))
+                        .into(SubsamplingScaleImageViewTarget(context, subsamplingScaleImageView, dialog, result.await()))
+            }
+        }
 
 
-        subsamplingScaleImageView.setImage(
-                imageSource.dimensions(8022, 14267),
-                ImageSource.resource(R.drawable.map)
-        )
-
-//        Glide.with(context)
-//                .download(GlideUrl())
-//                .into(SubsamplingScaleImageViewTarget(context, subsamplingScaleImageView))
         addView(subsamplingScaleImageView, rootParams)
 
         subsamplingScaleImageView.setOnImageEventListener(object :
@@ -307,35 +345,35 @@ class MapLayout : FrameLayout, View.OnClickListener {
      *关闭所有的标签
      */
     fun closeAllIcon() {
-        var delayTime:Long = 0
+        var delayTime: Long = 0
         val closeList = mutableListOf<ImageView>()
         iconList.forEach { icon ->
             if (icon.visibility == View.VISIBLE) {
                 closeList.add(icon)
             }
         }
-        closeList.forEach{ icon ->
-                val animator = ValueAnimator.ofFloat(1f, 1.5f, 0f, 0.5f, 0f)
-                animator.duration = 500
-                animator.addUpdateListener {
-                    val currentValue: Float = it.animatedValue as Float
-                    icon.scaleX = currentValue
-                    icon.scaleY = currentValue
-                    if (currentValue == 0f) {
-                        icon.gone()
-                    }
+        closeList.forEach { icon ->
+            val animator = ValueAnimator.ofFloat(1f, 1.5f, 0f, 0.5f, 0f)
+            animator.duration = 500
+            animator.addUpdateListener {
+                val currentValue: Float = it.animatedValue as Float
+                icon.scaleX = currentValue
+                icon.scaleY = currentValue
+                if (currentValue == 0f) {
+                    icon.gone()
                 }
-                animator.startDelay = delayTime
-                animator.start()
-                delayTime += if (closeList.size <= 5) {
-                    100
-                } else {
-                    50
-                }
+            }
+            animator.startDelay = delayTime
+            animator.start()
+            delayTime += if (closeList.size <= 5) {
+                100
+            } else {
+                50
+            }
         }
         android.os.Handler().postDelayed({
             onCloseFinishListener?.onCloseFinish()
-        },delayTime + 500)
+        }, delayTime + 500)
 
     }
 
@@ -466,11 +504,11 @@ class MapLayout : FrameLayout, View.OnClickListener {
                 }
             }
         }
-        var delayTime:Long = 0
-        showList.forEach { icon->
+        var delayTime: Long = 0
+        showList.forEach { icon ->
             android.os.Handler().postDelayed({
                 icon.visible()
-            },delayTime)
+            }, delayTime)
             val animator = ValueAnimator.ofFloat(0f, 1.2f, 0.8f, 1f)
             animator.duration = 500
             animator.addUpdateListener {
@@ -489,7 +527,7 @@ class MapLayout : FrameLayout, View.OnClickListener {
         }
         android.os.Handler().postDelayed({
             onShowFinishListener?.onShowFinish()
-        },delayTime + 500)
+        }, delayTime + 500)
     }
 
 
@@ -498,6 +536,12 @@ class MapLayout : FrameLayout, View.OnClickListener {
         this.url = url
     }
 
+    private fun getRealUrl(): String {
+        while (true) {
+            if (this.url != null)
+                return this.url!!
+        }
+    }
 
     /**
      * 地图点击回调
@@ -546,5 +590,6 @@ class MapLayout : FrameLayout, View.OnClickListener {
     fun setOnShowFinishListener(onShowFinishListener: OnShowFinishListener) {
         this.onShowFinishListener = onShowFinishListener
     }
+
 
 }

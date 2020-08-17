@@ -15,6 +15,9 @@ class BannerViewAdapter(val context: Context, val mList: MutableList<String>) : 
         if (mList.size == 0) {
             return 0
         }
+        if (mList.size > 10) {
+            return 10
+        }
         return mList.size
     }
 
