@@ -80,11 +80,11 @@ class PlaceDetailBottomSheetFragment : Fragment() {
                     mBinding.placeDetails = t
                     //数据传给adapter
                     if (bannerAdapter != null) {
-                        if (t.images != null){
-                        bannerAdapter.setList(t.images!!)
-                        bannerAdapter.notifyDataSetChanged()
+                        if (t.images != null) {
+                            bannerAdapter.setList(t.images!!)
+                            bannerAdapter.notifyDataSetChanged()
                             map_banner_detail_image.adapter = bannerAdapter
-                        } else{
+                        } else {
                             bannerAdapter.setList(listOf())
                             bannerAdapter.notifyDataSetChanged()
                             map_banner_detail_image.adapter = bannerAdapter
@@ -94,9 +94,15 @@ class PlaceDetailBottomSheetFragment : Fragment() {
                         tagAdapter.setList(t.tags!!)
                         tagAdapter.notifyDataSetChanged()
                     }
-                    if (attributeAdapter != null && t.placeAttribute != null) {
-                        attributeAdapter.setList(t.placeAttribute!!)
-                        attributeAdapter.notifyDataSetChanged()
+                    if (attributeAdapter != null) {
+                        if (t.placeAttribute != null) {
+                            attributeAdapter.setList(t.placeAttribute!!)
+                            attributeAdapter.notifyDataSetChanged()
+                        } else {
+                            attributeAdapter.setList(listOf())
+                            attributeAdapter.notifyDataSetChanged()
+                        }
+
                     }
                     //判断是否收藏过该地点，如果收藏了则显示出收藏的nickname
                     viewModel.favoriteList.value?.let {
