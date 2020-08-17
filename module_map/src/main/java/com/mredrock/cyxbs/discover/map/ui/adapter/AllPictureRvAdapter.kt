@@ -28,6 +28,7 @@ class AllPictureRvAdapter(val context: Context, private val mList: MutableList<S
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
         holder.imageView.setImageFromUrl(mList[position])
 
     }
