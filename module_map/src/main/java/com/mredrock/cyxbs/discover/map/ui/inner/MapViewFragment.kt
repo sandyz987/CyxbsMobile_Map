@@ -73,6 +73,7 @@ class MapViewFragment : Fragment() {
             }
             map_layout.addSomeIcons(iconList)
         })
+
         /**
          * 设置地点点击事件
          */
@@ -194,9 +195,24 @@ class MapViewFragment : Fragment() {
         )
 
         viewModel.showSomeIconsId.observe(viewLifecycleOwner, Observer {
-            map_layout.closeAllIcon()
-            map_layout.showSomeIcons(it)
-            map_layout.focusToPoint(it[0])
+               map_layout.closeAllIcon()
+            map_layout.setOnCloseFinishListener(object : MapLayout.OnCloseFinishListener {
+                override fun onCloseFinish() {
+                    /**
+                     * 关闭动画结束
+                     */
+                    map_layout.showSomeIcons(it)
+                }
+            })
+
+        })
+        
+        map_layout.setOnShowFinishListener(object : MapLayout.OnShowFinishListener {
+            override fun onShowFinish() {
+                /**
+                 * 展示动画结束
+                 */
+            }
         })
 
 

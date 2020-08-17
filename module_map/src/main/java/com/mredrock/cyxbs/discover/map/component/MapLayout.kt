@@ -11,12 +11,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.model.GlideUrl
 import com.davemorrissey.labs.subscaleview.ImageSource
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
-import com.mredrock.cyxbs.common.utils.LogUtils
-import com.mredrock.cyxbs.common.utils.extensions.defaultSharedPreferences
 import com.mredrock.cyxbs.common.utils.extensions.dp2px
 import com.mredrock.cyxbs.common.utils.extensions.gone
 import com.mredrock.cyxbs.common.utils.extensions.visible
@@ -55,6 +51,10 @@ class MapLayout : FrameLayout, View.OnClickListener {
     private var onPlaceClickListener: OnPlaceClickListener? = null
 
     private var onNoPlaceClickListener: OnNoPlaceClickListener? = null
+
+    private var onCloseFinishListener:OnCloseFinishListener? = null
+
+    private var onShowFinishListener:OnShowFinishListener? = null
 
     /**
      *下面四个为继承FrameLayout的构造器方法
@@ -109,7 +109,6 @@ class MapLayout : FrameLayout, View.OnClickListener {
         subsamplingScaleImageView.setDoubleTapZoomScale(1f)
 
 //        val path = context.defaultSharedPreferences.getString("path", "")
-
 
 
         subsamplingScaleImageView.setImage(
@@ -264,7 +263,7 @@ class MapLayout : FrameLayout, View.OnClickListener {
      */
     fun addSomeIcons(beans: List<IconBean>) {
         beans.forEach { bean ->
-          addIcon(bean)
+            addIcon(bean)
         }
 
     }
@@ -308,22 +307,35 @@ class MapLayout : FrameLayout, View.OnClickListener {
      *关闭所有的标签
      */
     fun closeAllIcon() {
-        var delayTime = 0
+        var delayTime:Long = 0
+        val closeList = mutableListOf<ImageView>()
         iconList.forEach { icon ->
-            val animator = ValueAnimator.ofFloat(1f, 1.5f, 0f, 0.5f, 0f)
-            animator.duration = 500
-            animator.addUpdateListener {
-                val currentValue: Float = it.animatedValue as Float
-                icon.scaleX = currentValue
-                icon.scaleY = currentValue
-                if (currentValue == 0f) {
-                    icon.gone()
-                }
+            if (icon.visibility == View.VISIBLE) {
+                closeList.add(icon)
             }
-            animator.startDelay = delayTime.toLong()
-            animator.start()
-            delayTime += 200
         }
+        closeList.forEach{ icon ->
+                val animator = ValueAnimator.ofFloat(1f, 1.5f, 0f, 0.5f, 0f)
+                animator.duration = 500
+                animator.addUpdateListener {
+                    val currentValue: Float = it.animatedValue as Float
+                    icon.scaleX = currentValue
+                    icon.scaleY = currentValue
+                    if (currentValue == 0f) {
+                        icon.gone()
+                    }
+                }
+                animator.startDelay = delayTime
+                animator.start()
+                delayTime += if (closeList.size <= 5) {
+                    100
+                } else {
+                    50
+                }
+        }
+        android.os.Handler().postDelayed({
+            onCloseFinishListener?.onCloseFinish()
+        },delayTime + 500)
 
     }
 
@@ -420,32 +432,6 @@ class MapLayout : FrameLayout, View.OnClickListener {
     }
 
     /**
-     * 地图点击回调
-     */
-    interface OnPlaceClickListener {
-        fun onPlaceClick(v: View)
-    }
-
-    /**
-     * 点击非建筑地区回调
-     */
-    interface OnNoPlaceClickListener {
-        fun onNoPlaceClick()
-    }
-
-    fun setMyOnIconClickListener(onIconClickListener: OnIconClickListener) {
-        this.onIconClickListener = onIconClickListener
-    }
-
-    fun setMyOnPlaceClickListener(onPlaceClickListener: OnPlaceClickListener) {
-        this.onPlaceClickListener = onPlaceClickListener
-    }
-
-    fun setMyOnNoPlaceClickListener(onNoPlaceClickListener: OnNoPlaceClickListener) {
-        this.onNoPlaceClickListener = onNoPlaceClickListener
-    }
-
-    /**
      * public的方法，传入icon的id就可以展示此icon
      */
     fun showIcon(id: String) {
@@ -466,24 +452,99 @@ class MapLayout : FrameLayout, View.OnClickListener {
      * 根据多个id展示多个icon
      */
     fun showSomeIcons(ids: List<String>) {
+        subsamplingScaleImageView.animateScaleAndCenter(0f, subsamplingScaleImageView.center)
+                ?.withDuration(FOCUS_ANIMATION_DURATION)
+                ?.withInterruptible(true)?.start()
+        val showList = mutableListOf<ImageView>()
         ids.forEach { id ->
             for (i in 0 until iconList.size) {
                 val iconBean = iconList[i].tag as IconBean
                 if (iconBean.id.toString() == id) {
-                    showIcon(iconList[i])
+//                    showIcon(iconList[i])
+                    showList.add(iconList[i])
                     break
                 }
             }
         }
-        subsamplingScaleImageView.animateScaleAndCenter(0f, subsamplingScaleImageView.center)
-                ?.withDuration(FOCUS_ANIMATION_DURATION)
-                ?.withInterruptible(true)?.start()
+        var delayTime:Long = 0
+        showList.forEach { icon->
+            android.os.Handler().postDelayed({
+                icon.visible()
+            },delayTime)
+            val animator = ValueAnimator.ofFloat(0f, 1.2f, 0.8f, 1f)
+            animator.duration = 500
+            animator.addUpdateListener {
+                val currentValue: Float = it.animatedValue as Float
+                icon.scaleX = currentValue
+                icon.scaleY = currentValue
+            }
+            animator.startDelay = delayTime
+            animator.start()
+
+            delayTime += if (showList.size <= 5) {
+                100
+            } else {
+                50
+            }
+        }
+        android.os.Handler().postDelayed({
+            onShowFinishListener?.onShowFinish()
+        },delayTime + 500)
     }
 
 
     fun setUrl(url: String) {
         useUrl = true
         this.url = url
-
     }
+
+
+    /**
+     * 地图点击回调
+     */
+    interface OnPlaceClickListener {
+        fun onPlaceClick(v: View)
+    }
+
+    /**
+     * 点击非建筑地区回调
+     */
+    interface OnNoPlaceClickListener {
+        fun onNoPlaceClick()
+    }
+
+    /**
+     * 关闭动画结束回调
+     */
+    interface OnCloseFinishListener {
+        fun onCloseFinish()
+    }
+
+    /**
+     * 展示动画结束回调
+     */
+    interface OnShowFinishListener {
+        fun onShowFinish()
+    }
+
+    fun setMyOnIconClickListener(onIconClickListener: OnIconClickListener) {
+        this.onIconClickListener = onIconClickListener
+    }
+
+    fun setMyOnPlaceClickListener(onPlaceClickListener: OnPlaceClickListener) {
+        this.onPlaceClickListener = onPlaceClickListener
+    }
+
+    fun setMyOnNoPlaceClickListener(onNoPlaceClickListener: OnNoPlaceClickListener) {
+        this.onNoPlaceClickListener = onNoPlaceClickListener
+    }
+
+    fun setOnCloseFinishListener(onCloseFinishListener: OnCloseFinishListener) {
+        this.onCloseFinishListener = onCloseFinishListener
+    }
+
+    fun setOnShowFinishListener(onShowFinishListener: OnShowFinishListener) {
+        this.onShowFinishListener = onShowFinishListener
+    }
+
 }
