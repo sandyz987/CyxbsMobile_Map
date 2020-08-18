@@ -118,7 +118,7 @@ class SearchResultFragment : Fragment() {
                 isSearching = false
             })
         }
-
+        viewModel.searchText.observe(viewLifecycleOwner, observer)
 
     }
 
