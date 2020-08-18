@@ -48,8 +48,7 @@ class SearchResultFragment : Fragment() {
             }
             isSearching = true
             //searchResultAdapter.notifyDataSetChanged()
-            ThreadPool.getInstance().execute {
-                //输入每次变化都执行下列搜索
+            ThreadPool.execute(Runnable { //输入每次变化都执行下列搜索
                 val searchResultArrayList = ArrayList<PlaceItem>()
                 val pattern = Pattern.compile(t)
                 for (placeItem: PlaceItem in viewModel.mapInfo.value?.placeList ?: listOf()) {
@@ -73,6 +72,15 @@ class SearchResultFragment : Fragment() {
                         }
                     }
                 } else {
+                    /**
+                     * 动态搜索效果
+                     */
+                    /**
+                     * 动态搜索效果
+                     */
+                    /**
+                     * 动态搜索效果
+                     */
                     /**
                      * 动态搜索效果
                      */
@@ -109,8 +117,7 @@ class SearchResultFragment : Fragment() {
                     }
                 }
                 isSearching = false
-
-            }
+            })
         }
         viewModel.searchText.removeObserver(observer)
         viewModel.searchText.observe(
