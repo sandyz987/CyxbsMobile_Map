@@ -56,6 +56,7 @@ class SearchResultFragment : Fragment() {
                     pattern = Pattern.compile(t)
                 } catch (e: Exception) {
                     //正则表达式有错误，不搜索
+                    isSearching = false
                     return@Runnable
                 }
                 for (placeItem: PlaceItem in viewModel.mapInfo.value?.placeList ?: listOf()) {
@@ -117,17 +118,9 @@ class SearchResultFragment : Fragment() {
                 isSearching = false
             })
         }
-        viewModel.searchText.removeObserver(observer)
-        viewModel.searchText.observe(
-                viewLifecycleOwner,
-                observer
-        )
 
 
     }
 
-    fun removeObserver() {
-        viewModel.searchText.removeObserver(observer)
-    }
 
 }
