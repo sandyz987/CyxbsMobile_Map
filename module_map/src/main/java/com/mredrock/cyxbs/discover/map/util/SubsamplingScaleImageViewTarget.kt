@@ -11,6 +11,7 @@ import com.mredrock.cyxbs.common.utils.extensions.defaultSharedPreferences
 import com.mredrock.cyxbs.common.utils.extensions.editor
 import com.mredrock.cyxbs.common.utils.extensions.toast
 import com.mredrock.cyxbs.discover.map.R
+import com.mredrock.cyxbs.discover.map.model.DataSet
 import com.mredrock.cyxbs.discover.map.widget.GlideProgressDialog
 import com.mredrock.cyxbs.discover.map.widget.ProgressInterceptor
 import java.io.File
@@ -21,9 +22,7 @@ class SubsamplingScaleImageViewTarget(val context: Context, view: SubsamplingSca
         view.setImage(ImageSource.uri(Uri.fromFile(resource)))
         GlideProgressDialog.hide()
         ProgressInterceptor.removeListener(url)
-        context.defaultSharedPreferences.editor {
-            putString("path", resource.absolutePath)
-        }
+        DataSet.savePath(resource.absolutePath)
     }
 
     override fun onLoadFailed(errorDrawable: Drawable?) {

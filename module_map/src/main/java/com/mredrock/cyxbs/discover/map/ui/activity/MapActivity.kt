@@ -8,7 +8,9 @@ import com.mredrock.cyxbs.common.config.DISCOVER_MAP
 import com.mredrock.cyxbs.common.service.ServiceManager
 import com.mredrock.cyxbs.common.service.account.IAccountService
 import com.mredrock.cyxbs.common.ui.BaseViewModelActivity
+import com.mredrock.cyxbs.common.utils.extensions.defaultSharedPreferences
 import com.mredrock.cyxbs.discover.map.R
+import com.mredrock.cyxbs.discover.map.model.DataSet
 import com.mredrock.cyxbs.discover.map.ui.fragment.AllPictureFragment
 import com.mredrock.cyxbs.discover.map.ui.fragment.FavoriteEditFragment
 import com.mredrock.cyxbs.discover.map.ui.fragment.MainFragment
@@ -17,6 +19,8 @@ import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
 import com.mredrock.cyxbs.discover.map.widget.GlideProgressDialog
 import com.mredrock.cyxbs.discover.map.widget.ProgressDialog
 import kotlinx.android.synthetic.main.map_activity_map.*
+import java.io.File
+import java.lang.Exception
 
 /**
  * 单activity模式，所有fragment在此activity下，能拿到同一个viewModel实例
@@ -51,7 +55,19 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.map_activity_map)
         ProgressDialog.show(this, "提示", "加载中...", false)
-        GlideProgressDialog.show(this, "地图下载中，请稍等", false)
+        val path = DataSet.getPath()
+        /**
+         * 如果有保存路径且地图存在，则不展示dialog
+         */
+        try {
+            if (!(path != null && File(path).exists())) {
+                GlideProgressDialog.show(this, "下载地图中,请稍等", false)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+
         //初始化viewModel
         viewModel.init()
         fragmentManager.beginTransaction().add(R.id.map_fl_main_fragment, mainFragment).show(mainFragment).commit()

@@ -49,6 +49,26 @@ object DataSet {
         }
     }
 
+    fun savePath(path: String) {
+        sharedPreferences.editor {
+            putString("Path", path)
+        }
+    }
+
+    fun getPath(): String? {
+        return sharedPreferences.getString("path", null)
+    }
+
+    fun savePictureVersion(version: Long) {
+        sharedPreferences.editor {
+            putLong("PictureVersion", version)
+        }
+    }
+
+    fun getPictureVersion(): Long {
+        return sharedPreferences.getLong("PictureVersion", 0)
+    }
+
     fun getButtonInfo(): ButtonInfo? {
         val s = sharedPreferences.getString("ButtonInfoStore", "")
         return if (s != "") {

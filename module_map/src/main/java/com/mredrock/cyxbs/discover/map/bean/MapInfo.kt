@@ -21,5 +21,7 @@ data class MapInfo(
         @SerializedName("map_height")
         var mapHeight: String,
         @SerializedName("map_background_color")
-        var mapBackgroundColor: String
+        var mapBackgroundColor: String,
+        @SerializedName("picture_version")
+        var pictureVersion: Long
 )

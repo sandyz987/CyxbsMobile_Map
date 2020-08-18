@@ -4,6 +4,7 @@ import android.animation.Animator
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,16 +19,20 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.mredrock.cyxbs.common.utils.extensions.*
+import com.mredrock.cyxbs.common.utils.extensions.dp2px
+import com.mredrock.cyxbs.common.utils.extensions.invisible
+import com.mredrock.cyxbs.common.utils.extensions.visible
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.bean.IconBean
 import com.mredrock.cyxbs.discover.map.bean.PlaceItem
 import com.mredrock.cyxbs.discover.map.component.MapLayout
+import com.mredrock.cyxbs.discover.map.model.DataSet
 import com.mredrock.cyxbs.discover.map.ui.activity.VRActivity
 import com.mredrock.cyxbs.discover.map.ui.adapter.FavoriteListAdapter
 import com.mredrock.cyxbs.discover.map.ui.adapter.SymbolRvAdapter
 import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
 import kotlinx.android.synthetic.main.map_fragment_map_view.*
+import java.io.File
 
 
 class MapViewFragment : Fragment() {
@@ -44,12 +49,14 @@ class MapViewFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(requireActivity()).get(MapViewModel::class.java)
+        val version = DataSet.getPictureVersion()
         /**
          * 初始化地图view
          */
         viewModel.mapInfo.observe(viewLifecycleOwner, Observer { data ->
             placeData.clear()
             placeData.addAll(data.placeList)
+            map_layout.setBackgroundColor(Color.parseColor(data.mapBackgroundColor))
             val list = data.placeList
             val iconList = mutableListOf<IconBean>()
             list.forEach { bean ->
@@ -71,8 +78,16 @@ class MapViewFragment : Fragment() {
 
             }
             map_layout.addSomeIcons(iconList)
+            /**
+             * 根据时间戳判断是否清除缓存重新加载
+             */
+            if (data.pictureVersion != version) {
+                val path = DataSet.getPath()
+                if (path != null)
+                    deleteFile(path)
+                DataSet.savePictureVersion(data.pictureVersion)
+            }
             map_layout.setUrl(data.mapUrl)
-
 
         })
 
@@ -325,5 +340,17 @@ class MapViewFragment : Fragment() {
         map_root_map_view.animate().alpha(1f).duration = 1000
         viewModel.isAnimation.value = false
         super.onResume()
+    }
+
+    /**
+     * 删除单个文件
+     * @param   filePath    被删除文件的文件名
+     * @return 文件删除成功返回true，否则返回false
+     */
+    fun deleteFile(filePath: String): Boolean {
+        val file = File(filePath)
+        return if (file.isFile && file.exists()) {
+            file.delete()
+        } else false
     }
 }
