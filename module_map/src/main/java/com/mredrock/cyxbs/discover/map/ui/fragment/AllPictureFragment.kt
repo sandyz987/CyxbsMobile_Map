@@ -21,7 +21,7 @@ class AllPictureFragment : Fragment() {
     private lateinit var allPictureAdapter: AllPictureRvAdapter
     private val imageData = mutableListOf<String>()
     private val manager: FragmentManager?
-        get() = childFragmentManager
+        get() = activity?.supportFragmentManager
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.map_fragment_all_picture, container, false)
@@ -35,16 +35,17 @@ class AllPictureFragment : Fragment() {
         staggeredGridLayoutManager.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_NONE
         map_rv_all_picture.layoutManager = staggeredGridLayoutManager
         allPictureAdapter = AllPictureRvAdapter(requireContext(), mutableListOf())
-        val transaction = manager?.beginTransaction()?.setCustomAnimations(
-                R.animator.map_slide_from_right,
-                R.animator.map_slide_to_left,
-                R.animator.map_slide_from_left,
-                R.animator.map_slide_to_right)
+
         allPictureAdapter.setOnItemClickListener(object : AllPictureRvAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
                 val showPictureFragment = ShowPictureFragment(imageData[position])
+                val transaction = manager?.beginTransaction()?.setCustomAnimations(
+                        R.animator.map_slide_from_right,
+                        R.animator.map_slide_to_left,
+                        R.animator.map_slide_from_left,
+                        R.animator.map_slide_to_right)
                 transaction?.add(R.id.map_root_all_picture, showPictureFragment)
-                   transaction?.show(showPictureFragment)
+                transaction?.show(showPictureFragment)
                 transaction?.addToBackStack("showPicture")?.commit()
             }
 
