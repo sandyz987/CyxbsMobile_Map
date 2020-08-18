@@ -68,6 +68,7 @@ class SearchResultAdapter(context: Context, private val viewModel: MapViewModel)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.placeName.text = viewModel.searchResult[position].placeName
         holder.itemView.setOnClickListener {
+            DataSet.deleteSearchHistory(viewModel.searchResult[position].placeName)
             DataSet.addSearchHistory(viewModel.searchResult[position].placeName)
             viewModel.notifySearchHistoryChange()
             viewModel.showSomeIconsId.value = mutableListOf(viewModel.searchResult[position].placeId)
