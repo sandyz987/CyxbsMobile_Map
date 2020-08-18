@@ -4,6 +4,7 @@ import com.mredrock.cyxbs.common.bean.RedrockApiStatus
 import com.mredrock.cyxbs.common.bean.RedrockApiWrapper
 import com.mredrock.cyxbs.discover.map.bean.*
 import io.reactivex.Observable
+import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -38,5 +39,10 @@ internal interface MapApiService {
     @Multipart
     @HTTP(method = "DELETE", path = "rockmap/deletekeep", hasBody = true)
     fun deleteCollect(@Part("place_id") placeId: Int): Observable<RedrockApiStatus>
+
+    @Multipart
+    @POST("rockmap/upload")
+    fun uploadPicture(@Part photo: MultipartBody.Part, @PartMap params: Map<String, Int>): Observable<RedrockApiStatus>
+
 
 }

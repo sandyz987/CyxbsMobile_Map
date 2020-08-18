@@ -1,8 +1,11 @@
 package com.mredrock.cyxbs.discover.map.viewmodel
 
+import android.widget.Toast
 import androidx.databinding.ObservableArrayList
 import androidx.lifecycle.MutableLiveData
+import com.mredrock.cyxbs.common.BaseApp
 import com.mredrock.cyxbs.common.bean.isSuccessful
+import com.mredrock.cyxbs.common.component.CyxbsToast
 import com.mredrock.cyxbs.common.network.ApiGenerator
 import com.mredrock.cyxbs.common.utils.extensions.doOnErrorWithDefaultErrorHandler
 import com.mredrock.cyxbs.common.utils.extensions.safeSubscribeBy
@@ -14,9 +17,14 @@ import com.mredrock.cyxbs.discover.map.bean.*
 import com.mredrock.cyxbs.discover.map.model.DataSet
 import com.mredrock.cyxbs.discover.map.network.MapApiService
 import com.mredrock.cyxbs.discover.map.widget.ProgressDialog
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.File
+
 
 /**
  *@author zhangzhe
@@ -258,5 +266,35 @@ class MapViewModel : BaseViewModel() {
         searchHistory = DataSet.getSearchHistory() ?: mutableListOf()
     }
 
+    fun uploadPicture(imgPath: String?) {
+        if (imgPath == null) {
+            return
+        }
+        val file = File(imgPath)
+        val requestFile: RequestBody = RequestBody.create("image/jpeg".toMediaTypeOrNull(), file)
+        val fileNameByTimeStamp: String = System.currentTimeMillis().toString() + ".jpg"
+        val body: MultipartBody.Part = MultipartBody.Part.createFormData("upload_picture", fileNameByTimeStamp, requestFile)
+        val params: MutableMap<String, Int> = HashMap()
+        params["place_id"] = showingPlaceId.toInt()
 
+        mapApiService.uploadPicture(body, params)
+                .setSchedulers()
+                .doOnErrorWithDefaultErrorHandler {
+                    ProgressDialog.hide()
+                    CyxbsToast.makeText(BaseApp.context, "上传失败~", Toast.LENGTH_LONG).show()
+                    true
+                }
+                .safeSubscribeBy {
+                    ProgressDialog.hide()
+                    if (it.isSuccessful) {
+                        CyxbsToast.makeText(BaseApp.context, "上传成功~ 审核通过后就可以看到啦", Toast.LENGTH_LONG).show()
+                    } else {
+                        CyxbsToast.makeText(BaseApp.context, "上传失败~", Toast.LENGTH_LONG).show()
+
+                    }
+                }.lifeCycle()
+
+    }
 }
+
+
