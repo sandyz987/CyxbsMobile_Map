@@ -53,33 +53,24 @@ class SearchFragment : Fragment() {
         openSearchHistoryFragment()
     }
 
-    override fun onStop() {
-        super.onStop()
-        val transaction = manager?.beginTransaction()
-
-        transaction?.remove(searchHistoryFragment)?.remove(searchResultFragment)?.commitAllowingStateLoss()
-    }
 
 
     private fun openSearchHistoryFragment() {
         val transaction = manager?.beginTransaction()
-        searchHistoryFragment = SearchHistoryFragment()
         if (!searchHistoryFragment.isAdded) {
             transaction?.add(R.id.map_fl_search_fragment, searchHistoryFragment)
         }
+        transaction?.hide(searchResultFragment)
         transaction?.show(searchHistoryFragment)?.commit()
     }
 
 
     private fun openSearchResultFragment() {
         val transaction = manager?.beginTransaction()
-        if (searchResultFragment.isAdded) {
-            searchResultFragment.removeObserver()
-        }
-        searchResultFragment = SearchResultFragment()
         if (!searchResultFragment.isAdded) {
             transaction?.add(R.id.map_fl_search_fragment, searchResultFragment)
         }
+        transaction?.hide(searchHistoryFragment)
         transaction?.show(searchResultFragment)?.commit()
     }
 

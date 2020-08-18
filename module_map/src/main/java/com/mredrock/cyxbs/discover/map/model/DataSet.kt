@@ -37,7 +37,6 @@ object DataSet {
         return if (s1 == "") {
             null
         } else {
-            Log.e("sandyzhang", s1)
             gson.fromJson(s1, MapInfo::class.java)
         }
     }
