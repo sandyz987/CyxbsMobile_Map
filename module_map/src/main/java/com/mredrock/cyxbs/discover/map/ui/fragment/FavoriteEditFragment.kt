@@ -33,7 +33,7 @@ class FavoriteEditFragment : Fragment() {
 
 
         map_tv_favorite_cancel_favorite.setOnClickListener {
-            MapDialog.show(requireContext(), "取消收藏", "是否将该地点从“我的收藏”中移出？", object : OnSelectListener {
+            MapDialog.show(requireContext(), "取消收藏", resources.getString(R.string.map_favorite_delete), object : OnSelectListener {
                 override fun onDeny() {
                 }
 

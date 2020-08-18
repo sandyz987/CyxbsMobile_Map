@@ -1,9 +1,17 @@
 package com.mredrock.cyxbs.discover.map.ui.fragment.inner
 
+import android.Manifest
+import android.app.Activity
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.database.Cursor
+import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -11,6 +19,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
+import com.mredrock.cyxbs.common.BaseApp
+import com.mredrock.cyxbs.common.component.CyxbsToast
+import com.mredrock.cyxbs.common.utils.extensions.doPermissionAction
 import com.mredrock.cyxbs.common.utils.extensions.gone
 import com.mredrock.cyxbs.common.utils.extensions.visible
 import com.mredrock.cyxbs.discover.map.R
@@ -21,6 +32,9 @@ import com.mredrock.cyxbs.discover.map.ui.adapter.DetailAttributeRvAdapter
 import com.mredrock.cyxbs.discover.map.ui.adapter.DetailTagRvAdapter
 import com.mredrock.cyxbs.discover.map.util.BannerPageTransformer
 import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
+import com.mredrock.cyxbs.discover.map.widget.MapDialog
+import com.mredrock.cyxbs.discover.map.widget.OnSelectListener
+import com.mredrock.cyxbs.discover.map.widget.ProgressDialog
 import kotlinx.android.synthetic.main.map_fragment_place_detail_container.*
 
 
@@ -119,7 +133,22 @@ class PlaceDetailBottomSheetFragment : Fragment() {
         map_tv_detail_more.setOnClickListener {
             viewModel.fragmentAllPictureIsShowing.value = true
         }
+
+        map_tv_detail_share.setOnClickListener {
+            doPermissionAction(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA) {
+                reason = "访问相册需要权限"
+                doAfterGranted {
+                    uploadPicture()
+                }
+                doAfterRefused {
+                    uploadPicture()
+                }
+            }
+
+
+        }
     }
+
 
     private fun setNickName() {
         //判断是否收藏过该地点，如果收藏了则显示出收藏的nickname
@@ -141,5 +170,60 @@ class PlaceDetailBottomSheetFragment : Fragment() {
         }
     }
 
+
+    /**
+     * 上传图片
+     */
+    fun uploadPicture() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (BaseApp.context.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+                    BaseApp.context.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+                    BaseApp.context.checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
+            ) {
+                CyxbsToast.makeText(BaseApp.context, BaseApp.context.resources.getString(R.string.map_no_permission_store), Toast.LENGTH_LONG).show()
+                return
+            }
+        }
+        MapDialog.show(requireContext(), "共享图片", BaseApp.context.resources.getString(R.string.map_share_picture), object : OnSelectListener {
+            override fun onDeny() {
+            }
+
+            override fun onPositive() {
+                selectPic()
+            }
+        })
+    }
+
+    override fun onActivityResult(
+            requestCode: Int,
+            resultCode: Int,
+            data: Intent?
+    ) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 11 && resultCode == Activity.RESULT_OK) {
+            val selectedImage = data!!.data
+            val filePathColumn =
+                    arrayOf(MediaStore.Images.Media.DATA)
+            val cursor: Cursor? =
+                    selectedImage?.let { requireContext().contentResolver.query(it, filePathColumn, null, null, null) }
+            cursor?.moveToFirst()
+            val columnIndex = cursor?.getColumnIndex(filePathColumn[0])
+            val imgPath = columnIndex?.let { cursor.getString(it) }
+            cursor?.close()
+            /**
+             * 上传图片
+             */
+            ProgressDialog.show(requireContext(), "正在上传图片", "请稍后", false)
+            viewModel.uploadPicture(imgPath)
+        }
+    }
+
+    private fun selectPic() {
+        val galleryIntent = Intent(
+                Intent.ACTION_PICK,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        )
+        startActivityForResult(galleryIntent, 11)
+    }
 
 }

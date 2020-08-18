@@ -38,7 +38,7 @@ class SearchHistoryFragment : Fragment() {
 
 
         map_tv_search_clear.setOnClickListener {
-            MapDialog.show(requireContext(), "提示", "真的要清空搜索记录吗？", object : OnSelectListener {
+            MapDialog.show(requireContext(), "提示", resources.getString(R.string.map_search_history_clear_tip), object : OnSelectListener {
                 override fun onDeny() {
                 }
 
