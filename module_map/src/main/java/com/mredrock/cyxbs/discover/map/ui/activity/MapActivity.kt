@@ -51,7 +51,6 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.map_activity_map)
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         ProgressDialog.show(this, "提示", "加载中...", false)
         GlideProgressDialog.show(this,"地图下载中，请稍等",false)
         //初始化viewModel

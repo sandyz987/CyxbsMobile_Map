@@ -27,8 +27,7 @@ import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.ui.adapter.AllPictureRvAdapter
 import com.mredrock.cyxbs.discover.map.util.SubsamplingScaleImageViewShowPictureTarget
 import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
-import com.mredrock.cyxbs.discover.map.widget.GlideApp
-import com.mredrock.cyxbs.discover.map.widget.ProgressInterceptor
+import com.mredrock.cyxbs.discover.map.widget.*
 import kotlinx.android.synthetic.main.map_fragment_all_picture.*
 import kotlinx.android.synthetic.main.map_fragment_show_picture.*
 import org.jetbrains.anko.longToast
@@ -61,16 +60,25 @@ class ShowPictureFragment(val url: String) : Fragment() {
                     .into(SubsamplingScaleImageViewShowPictureTarget(it, map_iv_show_picture, dialog, url))
         }
         map_iv_show_picture.setOnLongClickListener {
-            (context as AppCompatActivity).doPermissionAction(Manifest.permission.WRITE_EXTERNAL_STORAGE) {
-                doAfterGranted {
-                    Glide.with(BaseApp.context).asBitmap().load(url).into(object : SimpleTarget<Bitmap>() {
-                        override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                            saveImage(resource)
+            MapDialog.show(requireContext(), "保存图片", "是否保存图片到本地？", object : OnSelectListener {
+                override fun onDeny() {
+                }
+
+                override fun onPositive() {
+
+                    (context as AppCompatActivity).doPermissionAction(Manifest.permission.WRITE_EXTERNAL_STORAGE) {
+                        doAfterGranted {
+                            Glide.with(BaseApp.context).asBitmap().load(url).into(object : SimpleTarget<Bitmap>() {
+                                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                                    saveImage(resource)
+                                }
+                            }
+                            )
                         }
                     }
-                    )
                 }
-            }
+            })
+
             true
         }
     }
