@@ -15,7 +15,6 @@ import android.widget.ImageView
 import com.bumptech.glide.load.model.GlideUrl
 import com.davemorrissey.labs.subscaleview.ImageSource
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
-import com.mredrock.cyxbs.common.BaseApp
 import com.mredrock.cyxbs.common.utils.extensions.*
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.bean.IconBean
@@ -147,11 +146,11 @@ class MapLayout : FrameLayout, View.OnClickListener {
                 }
             } else {
                 ProgressInterceptor.addListener(result.await()) { progress ->
-                   GlideProgressDialog.setProcess(progress)
+                    GlideProgressDialog.setProcess(progress)
                 }
                 GlideApp.with(context)
                         .download(GlideUrl(result.await()))
-                        .into(SubsamplingScaleImageViewTarget(context, subsamplingScaleImageView,  result.await()))
+                        .into(SubsamplingScaleImageViewTarget(context, subsamplingScaleImageView, result.await()))
             }
         }
 
@@ -542,13 +541,13 @@ class MapLayout : FrameLayout, View.OnClickListener {
 
     fun setIsLock(lock: Boolean) {
         this.isLock = lock
-        if (lock){
+        if (lock) {
             val center = subsamplingScaleImageView.center
             val scale = subsamplingScaleImageView.scale
             subsamplingScaleImageView.isPanEnabled = false
             subsamplingScaleImageView.isZoomEnabled = false
             subsamplingScaleImageView.setScaleAndCenter(scale, center)
-        } else{
+        } else {
             subsamplingScaleImageView.isPanEnabled = true
             subsamplingScaleImageView.isZoomEnabled = true
         }

@@ -8,14 +8,11 @@ import com.bumptech.glide.request.target.CustomViewTarget
 import com.bumptech.glide.request.transition.Transition
 import com.davemorrissey.labs.subscaleview.ImageSource
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
-import com.mredrock.cyxbs.common.utils.extensions.defaultSharedPreferences
-import com.mredrock.cyxbs.common.utils.extensions.editor
 import com.mredrock.cyxbs.common.utils.extensions.toast
-import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.widget.ProgressInterceptor
 import java.io.File
 
-class SubsamplingScaleImageViewShowPictureTarget(val context: Context, view: SubsamplingScaleImageView, val dialog:ProgressDialog, val url:String)
+class SubsamplingScaleImageViewShowPictureTarget(val context: Context, view: SubsamplingScaleImageView, val dialog: ProgressDialog, val url: String)
     : CustomViewTarget<SubsamplingScaleImageView, File>(view) {
     override fun onResourceReady(resource: File, transition: Transition<in File>?) {
         view.setImage(ImageSource.uri(Uri.fromFile(resource)))

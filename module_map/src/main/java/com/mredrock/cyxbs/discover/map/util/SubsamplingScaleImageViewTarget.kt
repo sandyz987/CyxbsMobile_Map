@@ -1,6 +1,5 @@
 package com.mredrock.cyxbs.discover.map.util
 
-import android.app.ProgressDialog
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -16,14 +15,14 @@ import com.mredrock.cyxbs.discover.map.widget.GlideProgressDialog
 import com.mredrock.cyxbs.discover.map.widget.ProgressInterceptor
 import java.io.File
 
-class SubsamplingScaleImageViewTarget(val context: Context, view: SubsamplingScaleImageView,val url:String)
+class SubsamplingScaleImageViewTarget(val context: Context, view: SubsamplingScaleImageView, val url: String)
     : CustomViewTarget<SubsamplingScaleImageView, File>(view) {
     override fun onResourceReady(resource: File, transition: Transition<in File>?) {
         view.setImage(ImageSource.uri(Uri.fromFile(resource)))
         GlideProgressDialog.hide()
         ProgressInterceptor.removeListener(url)
         context.defaultSharedPreferences.editor {
-            putString("path",resource.absolutePath)
+            putString("path", resource.absolutePath)
         }
     }
 
