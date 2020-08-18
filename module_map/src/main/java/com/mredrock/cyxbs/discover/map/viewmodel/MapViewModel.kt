@@ -264,6 +264,7 @@ class MapViewModel : BaseViewModel() {
 
     fun notifySearchHistoryChange() {
         searchHistory = DataSet.getSearchHistory() ?: mutableListOf()
+        searchHistory.reverse()
     }
 
     fun uploadPicture(imgPath: String?) {

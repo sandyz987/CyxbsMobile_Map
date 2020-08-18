@@ -6,9 +6,12 @@ import java.util.concurrent.Future
 import java.util.concurrent.ThreadPoolExecutor
 
 /**
- * 线程池工具类
+ *@author zhangzhe
+ *@date 2020/8/18
+ *@description
  */
-class ThreadPool private constructor() {
+
+object ThreadPool {
     private val threadPoolExecutor: ThreadPoolExecutor = Executors.newFixedThreadPool(50) as ThreadPoolExecutor
 
     /**
@@ -29,21 +32,6 @@ class ThreadPool private constructor() {
     </T> */
     fun <T> submit(callable: Callable<T>): Future<T> {
         return threadPoolExecutor.submit(callable)
-    }
-
-    companion object {
-        private var threadPool: ThreadPool? = null
-        val instance: ThreadPool?
-            get() {
-                if (threadPool == null) {
-                    synchronized(ThreadPool::class.java) {
-                        if (threadPool == null) {
-                            threadPool = ThreadPool()
-                        }
-                    }
-                }
-                return threadPool
-            }
     }
 
 }

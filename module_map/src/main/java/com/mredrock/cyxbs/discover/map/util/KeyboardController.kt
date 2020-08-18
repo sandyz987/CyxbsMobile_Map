@@ -5,10 +5,11 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 
 /**
- * @author zhangzhe
- * @date 2020/8/8
- * @description 控制软键盘的显示和隐藏
+ *@author zhangzhe
+ *@date 2020/8/18
+ *@description
  */
+
 object KeyboardController {
     /**
      * 隐藏键盘

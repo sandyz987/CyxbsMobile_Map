@@ -49,7 +49,6 @@ class MapViewFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(requireActivity()).get(MapViewModel::class.java)
-        val version = DataSet.getPictureVersion()
         /**
          * 初始化地图view
          */
@@ -81,6 +80,7 @@ class MapViewFragment : Fragment() {
             /**
              * 根据时间戳判断是否清除缓存重新加载
              */
+            val version = DataSet.getPictureVersion()
             if (data.pictureVersion != version) {
                 val path = DataSet.getPath()
                 if (path != null)
