@@ -89,6 +89,11 @@ class MainFragment : Fragment() {
         map_et_search.doOnTextChanged { text, start, count, after ->
             viewModel.searchText.value = text.toString()
         }
+
+        viewModel.searchTextHistory.observe(viewLifecycleOwner, Observer {
+            map_et_search.setText(it)
+        })
+
     }
 
     private fun initMapViewFragment() {

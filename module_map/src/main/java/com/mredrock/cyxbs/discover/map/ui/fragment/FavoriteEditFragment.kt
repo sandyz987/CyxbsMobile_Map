@@ -10,6 +10,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.databinding.MapFragmentFavoriteEditBinding
 import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
+import com.mredrock.cyxbs.discover.map.widget.MapDialog
+import com.mredrock.cyxbs.discover.map.widget.OnSelectListener
 import com.mredrock.cyxbs.discover.map.widget.ProgressDialog
 import kotlinx.android.synthetic.main.map_fragment_favorite_edit.*
 
@@ -31,9 +33,17 @@ class FavoriteEditFragment : Fragment() {
 
 
         map_tv_favorite_cancel_favorite.setOnClickListener {
-            viewModel.fragmentFavoriteEditIsShowing.value = false
-            viewModel.deleteCollect(viewModel.showingPlaceId)
-            ProgressDialog.show(requireActivity(), "请稍后", "正在取消收藏", false)
+            MapDialog.show(requireContext(), "取消收藏", "是否将该地点从“我的收藏”中移出？", object : OnSelectListener {
+                override fun onDeny() {
+                }
+
+                override fun onPositive() {
+                    viewModel.fragmentFavoriteEditIsShowing.value = false
+                    viewModel.deleteCollect(viewModel.showingPlaceId)
+                    ProgressDialog.show(requireActivity(), "请稍后", "正在取消收藏", false)
+
+                }
+            })
         }
         map_tv_favorite_accept.setOnClickListener {
             if (map_et_favorite_nickname.length() != 0) {
@@ -51,7 +61,19 @@ class FavoriteEditFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         map_et_favorite_nickname.maxStringLength = 12
-        map_et_favorite_nickname.setText(viewModel.placeDetails.value?.placeName)
+        if (viewModel.collectList.value != null) {
+            var s = viewModel.placeDetails.value?.placeName
+            for (t in viewModel.collectList.value!!) {
+                if (t.placeId == viewModel.showingPlaceId) {
+                    s = t.placeNickname
+                    break
+                }
+            }
+            map_et_favorite_nickname.setText(s)
+        } else {
+            map_et_favorite_nickname.setText(viewModel.placeDetails.value?.placeName)
+        }
+
         map_et_favorite_nickname.notifyStringChange()
         map_tv_favorite_place_name.text = viewModel.placeDetails.value?.placeName
     }

@@ -155,5 +155,56 @@ object DataSet {
         }
     }
 
+    fun getSearchHistory(): MutableList<String>? {
+        val s = sharedPreferences.getString("SearchHistory", "")
+        return if (s != "") {
+            gson.fromJson(s, object : TypeToken<MutableList<String>>() {}.type)
+        } else {
+            null
+        }
+    }
+
+    fun addSearchHistory(s: String) {
+        var searchHistory = getSearchHistory()
+        if (searchHistory == null) {
+            searchHistory = mutableListOf(s)
+        } else {
+            var flag = false
+            for (t: String in searchHistory.toList()) {
+                if (t == s) {
+                    flag = true
+                }
+            }
+            if (!flag) {
+                searchHistory.add(s)
+            }
+        }
+        sharedPreferences.editor {
+            putString("SearchHistory", gson.toJson(searchHistory))
+        }
+    }
+
+    fun deleteSearchHistory(s: String) {
+        var searchHistory = getSearchHistory()
+        if (searchHistory == null) {
+            searchHistory = mutableListOf()
+        }
+        for (t: String in searchHistory.toList()) {
+            if (t == s) {
+                searchHistory.remove(t)
+            }
+        }
+        sharedPreferences.editor {
+            putString("SearchHistory", gson.toJson(searchHistory))
+        }
+    }
+
+    fun clearSearchHistory() {
+        val searchHistory: MutableList<String> = mutableListOf()
+        sharedPreferences.editor {
+            putString("SearchHistory", gson.toJson(searchHistory))
+        }
+    }
+
 
 }
