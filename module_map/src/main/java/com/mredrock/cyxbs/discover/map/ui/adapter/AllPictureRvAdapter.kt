@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.map_recycle_item_all_picture.view.*
 
 class AllPictureRvAdapter(val context: Context, private val mList: MutableList<String>) : RecyclerView.Adapter<AllPictureRvAdapter.ViewHolder>() {
 
+    private var onItemClickListener: OnItemClickListener? = null
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val imageView: RoundRectImageView = view.map_iv_recycle_item_all_picture
@@ -30,6 +31,9 @@ class AllPictureRvAdapter(val context: Context, private val mList: MutableList<S
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         holder.imageView.setImageFromUrl(mList[position])
+        holder.imageView.setOnClickListener {
+            onItemClickListener?.onItemClick(position)
+        }
 
     }
 
@@ -40,4 +44,11 @@ class AllPictureRvAdapter(val context: Context, private val mList: MutableList<S
         notifyDataSetChanged()
     }
 
+    interface OnItemClickListener {
+        fun onItemClick(position: Int)
+    }
+
+    fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
+        this.onItemClickListener = onItemClickListener
+    }
 }

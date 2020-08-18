@@ -40,22 +40,22 @@ class MapViewModel : BaseViewModel() {
     val placeDetails = MutableLiveData<PlaceDetails>()
 
     //是否正在显示收藏页面
-    val fragmentFavoriteEditIsShowing = MutableLiveData<Boolean>(false)
+    val fragmentFavoriteEditIsShowing = MutableLiveData(false)
 
     //是否正在显示全部图片界面
-    val fragmentAllPictureIsShowing = MutableLiveData<Boolean>(false)
+    val fragmentAllPictureIsShowing = MutableLiveData(false)
 
     //详细页面正在显示的地点id
     var showingPlaceId = "-1"
 
     //是否显示bottomSheet，用于监听并隐藏
-    val bottomSheetIsShowing = MutableLiveData<Boolean>(false)
+    val bottomSheetIsShowing = MutableLiveData(false)
 
     //是否在动画中
     val isAnimation = MutableLiveData(false)
 
     //搜索框的文字，只用在搜索界面fragment观察本变量即可实现搜索
-    val searchText = MutableLiveData<String>("")
+    val searchText = MutableLiveData("")
 
     //搜索结果
     val searchResult = ObservableArrayList<PlaceItem>()
@@ -64,10 +64,10 @@ class MapViewModel : BaseViewModel() {
     val showSomeIconsId = MutableLiveData<MutableList<String>>()
 
     //用于通知mainFragment关闭搜索框
-    val closeSearchFragment = MutableLiveData<Boolean>(false)
+    val closeSearchFragment = MutableLiveData(false)
 
     //网络请求失败，使用本地缓存
-    val loadFail = MutableLiveData<Boolean>(false)
+    val loadFail = MutableLiveData(false)
 
     //是否锁定
     val isLock = MutableLiveData(false)

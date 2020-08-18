@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/map_search_background_color"
-    tools:context=".ui.inner.search.SearchHistoryFragment">
+    tools:context=".ui.fragment.inner.search.SearchHistoryFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

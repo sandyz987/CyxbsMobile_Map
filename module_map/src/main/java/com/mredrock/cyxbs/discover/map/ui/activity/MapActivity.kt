@@ -9,9 +9,9 @@ import com.mredrock.cyxbs.common.service.ServiceManager
 import com.mredrock.cyxbs.common.service.account.IAccountService
 import com.mredrock.cyxbs.common.ui.BaseViewModelActivity
 import com.mredrock.cyxbs.discover.map.R
-import com.mredrock.cyxbs.discover.map.ui.AllPictureFragment
-import com.mredrock.cyxbs.discover.map.ui.FavoriteEditFragment
-import com.mredrock.cyxbs.discover.map.ui.MainFragment
+import com.mredrock.cyxbs.discover.map.ui.fragment.AllPictureFragment
+import com.mredrock.cyxbs.discover.map.ui.fragment.FavoriteEditFragment
+import com.mredrock.cyxbs.discover.map.ui.fragment.MainFragment
 import com.mredrock.cyxbs.discover.map.util.KeyboardController
 import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
 import kotlinx.android.synthetic.main.map_activity_map.*

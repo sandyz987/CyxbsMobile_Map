@@ -43,7 +43,6 @@ class MapLayout : FrameLayout, View.OnClickListener {
         const val FOCUS_ANIMATION_DURATION = 800L
     }
 
-    var useUrl = false
     private var url: String? = null
     var isLock = false
 
@@ -428,16 +427,9 @@ class MapLayout : FrameLayout, View.OnClickListener {
      * 从资源文件中设置
      */
     fun setImageFromRes(resId: Int) {
-        useUrl = false
         imageSource = ImageSource.resource(resId)
     }
 
-    /**
-     * 设置预览图
-     */
-    fun setImagePreviewFromRes(resId: Int, dimenX: Int, dimenY: Int) {
-
-    }
 
     /**
      * 放大并平移到某点
@@ -539,7 +531,6 @@ class MapLayout : FrameLayout, View.OnClickListener {
 
 
     fun setUrl(url: String) {
-        useUrl = true
         this.url = url
     }
 

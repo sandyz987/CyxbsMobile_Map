@@ -1,4 +1,4 @@
-package com.mredrock.cyxbs.discover.map.ui.inner
+package com.mredrock.cyxbs.discover.map.ui.fragment.inner
 
 import android.animation.Animator
 import android.animation.ValueAnimator

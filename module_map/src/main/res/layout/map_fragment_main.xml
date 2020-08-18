@@ -10,7 +10,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.MainFragment">
+        tools:context=".ui.fragment.MainFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/map_cl"

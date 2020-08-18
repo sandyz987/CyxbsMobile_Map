@@ -1,4 +1,4 @@
-package com.mredrock.cyxbs.discover.map.ui.inner
+package com.mredrock.cyxbs.discover.map.ui.fragment.inner
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -42,19 +42,6 @@ class PlaceDetailBottomSheetFragment : Fragment() {
         /**
          * 初始化adapter和layoutManager
          */
-//        val indicator = IndicatorView(context)
-//                .setIndicatorColor(Color.DKGRAY)
-//                .setIndicatorSelectorColor(Color.WHITE)
-//                .setIndicatorRatio(1f) //ratio，默认值是1 ，也就是说默认是圆点，根据这个值，值越大，拉伸越长，就成了矩形，小于1，就变扁了呗
-//                .setIndicatorRadius(2f) // radius 点的大小
-//                .setIndicatorSelectedRatio(3f)
-//                .setIndicatorSelectedRadius(2f)
-//                .setIndicatorStyle(IndicatorView.IndicatorStyle.INDICATOR_BIG_CIRCLE)
-//        val bannerAdapter = context?.let { BannerRvAdapter(it, mutableListOf()) }
-//        map_banner_detail_image.setIndicator(indicator).setPageMargin(context?.dp2px(20f)
-//                ?: 0, context?.dp2px(10f)
-//                ?: 0).addPageTransformer(ScaleInTransformer()).adapter = bannerAdapter
-
 
         val bannerViewAdapter = context?.let { BannerViewAdapter(it, mutableListOf()) }
         map_banner_detail_image.adapter = bannerViewAdapter
@@ -144,11 +131,11 @@ class PlaceDetailBottomSheetFragment : Fragment() {
                 }
             }
             if (isFavor != null) {
-                map_iv_detail_favorite.gone()
+                map_iv_detail_favorite.setImageResource(R.drawable.map_ic_like)
                 map_tv_detail_place_nickname.visible()
                 map_tv_detail_place_nickname.text = isFavor
             } else {
-                map_iv_detail_favorite.visible()
+                map_iv_detail_favorite.setImageResource(R.drawable.map_ic_no_like)
                 map_tv_detail_place_nickname.gone()
             }
         }

@@ -1,4 +1,4 @@
-package com.mredrock.cyxbs.discover.map.ui
+package com.mredrock.cyxbs.discover.map.ui.fragment
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -11,8 +11,8 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.mredrock.cyxbs.discover.map.R
-import com.mredrock.cyxbs.discover.map.ui.inner.MapViewFragment
-import com.mredrock.cyxbs.discover.map.ui.inner.SearchFragment
+import com.mredrock.cyxbs.discover.map.ui.fragment.inner.MapViewFragment
+import com.mredrock.cyxbs.discover.map.ui.fragment.inner.SearchFragment
 import com.mredrock.cyxbs.discover.map.util.KeyboardController
 import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
 import kotlinx.android.synthetic.main.map_fragment_main.*
@@ -118,7 +118,11 @@ class MainFragment : Fragment() {
             //确保不重复打开搜索框
             return
         }
-        val transaction = manager?.beginTransaction()?.setCustomAnimations(R.animator.map_slide_from_right, R.animator.map_slide_to_left, R.animator.map_slide_from_left, R.animator.map_slide_to_right)
+        val transaction = manager?.beginTransaction()?.setCustomAnimations(
+                R.animator.map_slide_from_right,
+                R.animator.map_slide_to_left,
+                R.animator.map_slide_from_left,
+                R.animator.map_slide_to_right)
         transaction?.hide(mapViewFragment)
         if (!searchFragment.isAdded) {
             transaction?.add(R.id.map_ll_map_fragment, searchFragment)

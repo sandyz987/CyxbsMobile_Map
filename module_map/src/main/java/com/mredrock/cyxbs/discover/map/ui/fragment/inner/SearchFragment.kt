@@ -1,4 +1,4 @@
-package com.mredrock.cyxbs.discover.map.ui.inner
+package com.mredrock.cyxbs.discover.map.ui.fragment.inner
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,8 +9,8 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.mredrock.cyxbs.discover.map.R
-import com.mredrock.cyxbs.discover.map.ui.inner.search.SearchHistoryFragment
-import com.mredrock.cyxbs.discover.map.ui.inner.search.SearchResultFragment
+import com.mredrock.cyxbs.discover.map.ui.fragment.inner.search.SearchHistoryFragment
+import com.mredrock.cyxbs.discover.map.ui.fragment.inner.search.SearchResultFragment
 import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
 
 /**

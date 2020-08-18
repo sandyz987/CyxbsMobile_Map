@@ -1,12 +1,11 @@
-package com.mredrock.cyxbs.discover.map.ui
+package com.mredrock.cyxbs.discover.map.ui.fragment
 
-import android.opengl.ETC1.getHeight
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE
@@ -20,6 +19,9 @@ import kotlinx.android.synthetic.main.map_fragment_all_picture.*
 class AllPictureFragment : Fragment() {
     private lateinit var viewModel: MapViewModel
     private lateinit var allPictureAdapter: AllPictureRvAdapter
+    private val imageData = mutableListOf<String>()
+    private val manager: FragmentManager?
+        get() = childFragmentManager
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.map_fragment_all_picture, container, false)
@@ -33,11 +35,27 @@ class AllPictureFragment : Fragment() {
         staggeredGridLayoutManager.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_NONE
         map_rv_all_picture.layoutManager = staggeredGridLayoutManager
         allPictureAdapter = AllPictureRvAdapter(requireContext(), mutableListOf())
+        val transaction = manager?.beginTransaction()?.setCustomAnimations(
+                R.animator.map_slide_from_right,
+                R.animator.map_slide_to_left,
+                R.animator.map_slide_from_left,
+                R.animator.map_slide_to_right)
+        allPictureAdapter.setOnItemClickListener(object : AllPictureRvAdapter.OnItemClickListener {
+            override fun onItemClick(position: Int) {
+                val showPictureFragment = ShowPictureFragment(imageData[position])
+                transaction?.add(R.id.map_root_all_picture, showPictureFragment)
+                   transaction?.show(showPictureFragment)
+                transaction?.addToBackStack("showPicture")?.commit()
+            }
+
+        })
+
         map_rv_all_picture.adapter = allPictureAdapter
 
         map_iv_all_picture_back.setOnClickListener {
             viewModel.fragmentAllPictureIsShowing.value = false
         }
+
 
         map_rv_all_picture.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
@@ -60,13 +78,13 @@ class AllPictureFragment : Fragment() {
                          * 是否小于recyclerView的高度
                          * 如果小于或等于 说明滚动到了底部
                          */
-                        if (layout.findViewByPosition(positions[i])!!.bottom <= recyclerView.height) {
+                        if (layout.findViewByPosition(positions[i])?.bottom ?: 0 <= recyclerView.height) {
                             /**
                              * 此处实现业务逻辑
                              */
-                           map_tv_all_picture.animate().alpha(1f).duration = 500
+                            map_tv_all_picture.animate().alpha(1f).duration = 500
                             return
-                        } else{
+                        } else {
                             map_tv_all_picture.animate().alpha(0f).duration = 500
                         }
                     }
@@ -74,16 +92,17 @@ class AllPictureFragment : Fragment() {
                 super.onScrollStateChanged(recyclerView, state)
             }
         })
+
+
     }
 
     override fun onResume() {
         super.onResume()
         if (viewModel.placeDetails.value?.images != null) {
-
+            imageData.clear()
+            imageData.addAll(viewModel.placeDetails.value?.images!!)
             allPictureAdapter.setList(viewModel.placeDetails.value?.images!!)
             allPictureAdapter.notifyDataSetChanged()
-            map_rv_all_picture.adapter = allPictureAdapter
         }
-
     }
 }

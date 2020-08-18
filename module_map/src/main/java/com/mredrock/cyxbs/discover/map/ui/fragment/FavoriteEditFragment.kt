@@ -1,4 +1,4 @@
-package com.mredrock.cyxbs.discover.map.ui
+package com.mredrock.cyxbs.discover.map.ui.fragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
-import com.mredrock.cyxbs.common.BaseApp
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.databinding.MapFragmentFavoriteEditBinding
 import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
