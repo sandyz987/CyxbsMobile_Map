@@ -48,7 +48,7 @@ class ExceptionActivity : AppCompatActivity() {
             setSpan(TypefaceSpan("monospace"), 0, length, Spanned.SPAN_INCLUSIVE_INCLUSIVE)
         }
 
-        alert(sb, "哦豁，掌上重邮崩溃了！") {
+        alert(sb, "非常抱歉，掌上重邮遇到了错误！") {
             negativeButton("复制异常信息退出") {
                 val message = "StackInfo:\n$stackInfo\ndeviceInfo:\n$deviceInfo"
                 val cm = this@ExceptionActivity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
