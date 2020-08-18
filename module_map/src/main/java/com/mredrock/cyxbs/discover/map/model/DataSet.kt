@@ -133,7 +133,7 @@ object DataSet {
                 }
         if (list != null) {
             for (f: FavoritePlace in list) {
-                if (f.placeId == s) {
+                if (f.placeId == id) {
                     list.remove(f)
                     break
                 }
