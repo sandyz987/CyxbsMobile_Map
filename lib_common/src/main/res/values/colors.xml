@@ -412,6 +412,7 @@
     <color name="map_divider_color" tools:ignore="ResourceName">#EFF3FD</color>
     <color name="map_main_background" tools:ignore="ResourceName">#FFFFFF</color>
     <color name="map_detail_background" tools:ignore="ResourceName">#FFFFFF</color>
+    <color name="map_dialog_transparent" tools:ignore="ResourceName">#00000000</color>
 
 </resources>
 

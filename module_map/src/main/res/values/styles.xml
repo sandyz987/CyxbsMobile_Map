@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="map_max_height_recycler_view">
-        <attr name="map_max_height" format="dimension" />
-    </declare-styleable>
+
+
+    <style name="map_transparent_dialog" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowBackground">@color/map_dialog_transparent</item>
+    </style>
 </resources>
+

@@ -19,7 +19,7 @@ interface OnSelectListener {
 
 object MapDialog {
     fun show(context: Context, title: String, content: String, listener: OnSelectListener) {
-        val builder: AlertDialog.Builder = AlertDialog.Builder(context)
+        val builder: AlertDialog.Builder = AlertDialog.Builder(context, R.style.map_transparent_dialog)
         val view = context.layoutInflater.inflate(R.layout.map_dialog_tip, null, false)
         builder.setView(view)
         builder.setCancelable(true)
