@@ -60,6 +60,12 @@ class MapViewModel : BaseViewModel() {
     //搜索结果
     val searchResult = ObservableArrayList<PlaceItem>()
 
+    //搜索记录
+    var searchHistory = mutableListOf<String>()
+
+    //当历史记录点击，通知输入框更新
+    val searchTextHistory = MutableLiveData<String>("")
+
     //显示的地点id
     val showSomeIconsId = MutableLiveData<MutableList<String>>()
 
@@ -246,6 +252,10 @@ class MapViewModel : BaseViewModel() {
                     refreshCollectList()
                 }.lifeCycle()
 
+    }
+
+    fun notifySearchHistoryChange() {
+        searchHistory = DataSet.getSearchHistory() ?: mutableListOf()
     }
 
 

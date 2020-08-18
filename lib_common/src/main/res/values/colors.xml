@@ -390,6 +390,7 @@
 
 
     <color name="map_search_result_item_text_color" tools:ignore="ResourceName">#234780</color>
+    <color name="map_search_history_item_text_color" tools:ignore="ResourceName">#23477F</color>
 
     <color name="map_dialog_tip_background_color" tools:ignore="ResourceName">#FFFFFF</color>
     <color name="map_dialog_tip_title_color" tools:ignore="ResourceName">#15305C</color>

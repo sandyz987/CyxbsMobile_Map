@@ -9,6 +9,7 @@ import androidx.databinding.ObservableList
 import androidx.recyclerview.widget.RecyclerView
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.bean.PlaceItem
+import com.mredrock.cyxbs.discover.map.model.DataSet
 import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
 import kotlinx.android.synthetic.main.map_recycle_item_search_result.view.*
 
@@ -67,6 +68,8 @@ class SearchResultAdapter(context: Context, private val viewModel: MapViewModel)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.placeName.text = viewModel.searchResult[position].placeName
         holder.itemView.setOnClickListener {
+            DataSet.addSearchHistory(viewModel.searchResult[position].placeName)
+            viewModel.notifySearchHistoryChange()
             viewModel.showSomeIconsId.value = mutableListOf(viewModel.searchResult[position].placeId)
             viewModel.closeSearchFragment.value = true
         }
