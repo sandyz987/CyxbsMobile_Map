@@ -48,7 +48,7 @@ class SearchResultFragment : Fragment() {
             }
             isSearching = true
             //searchResultAdapter.notifyDataSetChanged()
-            ThreadPool.getInstance().execute {
+            val runnable = Runnable {
                 //输入每次变化都执行下列搜索
                 val searchResultArrayList = ArrayList<PlaceItem>()
                 val pattern = Pattern.compile(t)
@@ -111,6 +111,7 @@ class SearchResultFragment : Fragment() {
                 isSearching = false
 
             }
+            ThreadPool.instance?.execute(runnable)
         }
         viewModel.searchText.removeObserver(observer)
         viewModel.searchText.observe(

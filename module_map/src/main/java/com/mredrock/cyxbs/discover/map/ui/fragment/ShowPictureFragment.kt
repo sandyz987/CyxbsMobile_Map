@@ -8,27 +8,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
-import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.mredrock.cyxbs.common.BaseApp
 import com.mredrock.cyxbs.common.utils.extensions.doPermissionAction
-import com.mredrock.cyxbs.common.utils.extensions.toast
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.ui.adapter.AllPictureRvAdapter
 import com.mredrock.cyxbs.discover.map.util.SubsamplingScaleImageViewShowPictureTarget
-import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
 import com.mredrock.cyxbs.discover.map.widget.*
-import kotlinx.android.synthetic.main.map_fragment_all_picture.*
 import kotlinx.android.synthetic.main.map_fragment_show_picture.*
 import org.jetbrains.anko.longToast
 import java.io.File
@@ -51,9 +42,11 @@ class ShowPictureFragment(val url: String) : Fragment() {
         dialog.setMessage("图片加载中")
         dialog.setCancelable(false)
         dialog.show()
-        ProgressInterceptor.addListener(url) { progress ->
-            dialog.progress = progress
-        }
+        ProgressInterceptor.addListener(url, object : ProgressListener {
+            override fun onProgress(progress: Int) {
+                dialog.progress = progress
+            }
+        })
         context?.let {
             GlideApp.with(it)
                     .download(GlideUrl(url))

@@ -19,10 +19,7 @@ import com.mredrock.cyxbs.common.utils.extensions.*
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.bean.IconBean
 import com.mredrock.cyxbs.discover.map.util.SubsamplingScaleImageViewTarget
-import com.mredrock.cyxbs.discover.map.widget.GlideApp
-import com.mredrock.cyxbs.discover.map.widget.GlideProgressDialog
-import com.mredrock.cyxbs.discover.map.widget.ProgressDialog
-import com.mredrock.cyxbs.discover.map.widget.ProgressInterceptor
+import com.mredrock.cyxbs.discover.map.widget.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
@@ -145,9 +142,12 @@ class MapLayout : FrameLayout, View.OnClickListener {
                     e.printStackTrace()
                 }
             } else {
-                ProgressInterceptor.addListener(result.await()) { progress ->
-                    GlideProgressDialog.setProcess(progress)
-                }
+                ProgressInterceptor.addListener(result.await(), object : ProgressListener {
+                    override fun onProgress(progress: Int) {
+                        GlideProgressDialog.setProcess(progress)
+                    }
+
+                })
                 GlideApp.with(context)
                         .download(GlideUrl(result.await()))
                         .into(SubsamplingScaleImageViewTarget(context, subsamplingScaleImageView, result.await()))
