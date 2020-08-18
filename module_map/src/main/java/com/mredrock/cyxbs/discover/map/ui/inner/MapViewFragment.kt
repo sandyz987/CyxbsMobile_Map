@@ -117,37 +117,69 @@ class MapViewFragment : Fragment() {
             }
         })
 
+        viewModel.isClickSymbol.observe(viewLifecycleOwner, Observer {
+            if (it && viewModel.isLock.value!!) {
+                val animator = ValueAnimator.ofFloat(1f, 0.8f, 1.2f, 1f)
+                animator.duration = 500
+                animator.addUpdateListener {
+                    val currentValue: Float = it.animatedValue as Float
+                    map_iv_lock.scaleX = currentValue
+                    map_iv_lock.scaleY = currentValue
+                }
+                animator.start()
+                map_iv_lock.setImageResource(R.drawable.map_ic_unlock)
+                viewModel.toastEvent.value = R.string.map_unlock
+                viewModel.isLock.value = false
+                map_layout.setIsLock(false)
+            }
+        })
+
         /**
          * 监听锁定按钮
          */
         map_iv_lock.setOnClickListener {
-          if (viewModel.isLock.value!!){
-              val animator = ValueAnimator.ofFloat(1f, 0.8f, 1.2f, 1f)
-              animator.duration = 500
-              animator.addUpdateListener {
-                  val currentValue: Float = it.animatedValue as Float
-                  map_iv_lock.scaleX = currentValue
-                  map_iv_lock.scaleY = currentValue
-              }
-              animator.start()
-              map_iv_lock.setImageResource(R.drawable.map_ic_unlock)
-              viewModel.toastEvent.value = R.string.map_unlock
-              viewModel.isLock.value = false
-          } else{
-              val animator = ValueAnimator.ofFloat(1f, 1.2f, 0.8f, 1f)
-              animator.duration = 500
-              animator.addUpdateListener {
-                  val currentValue: Float = it.animatedValue as Float
-                  map_iv_lock.scaleX = currentValue
-                  map_iv_lock.scaleY = currentValue
-              }
-              animator.start()
-              map_iv_lock.setImageResource(R.drawable.map_ic_lock)
-              viewModel.toastEvent.value = R.string.map_lock
-              viewModel.isLock.value = true
-          }
-            map_layout.setIsLock(viewModel.isLock.value!!)
+            if (viewModel.isLock.value!!) {
+                val animator = ValueAnimator.ofFloat(0f, 10f, -10f, 0f, 10f, -10f, 0f)
+                animator.duration = 500
+                animator.addUpdateListener {
+                    val currentValue: Float = it.animatedValue as Float
+                    map_iv_lock.translationX = currentValue
+                }
+                animator.start()
+                viewModel.toastEvent.value = R.string.map_cancel_lock
+            } else {
+                val animator = ValueAnimator.ofFloat(1f, 1.2f, 0.8f, 1f)
+                animator.duration = 500
+                animator.addUpdateListener {
+                    val currentValue: Float = it.animatedValue as Float
+                    map_iv_lock.scaleX = currentValue
+                    map_iv_lock.scaleY = currentValue
+                }
+                animator.start()
+                map_iv_lock.setImageResource(R.drawable.map_ic_lock)
+                viewModel.toastEvent.value = R.string.map_lock
+                viewModel.isLock.value = true
+                map_layout.setIsLock(true)
+            }
 
+        }
+
+        map_iv_lock.setOnLongClickListener {
+            if (viewModel.isLock.value!!) {
+                val animator = ValueAnimator.ofFloat(1f, 0.8f, 1.2f, 1f)
+                animator.duration = 500
+                animator.addUpdateListener {
+                    val currentValue: Float = it.animatedValue as Float
+                    map_iv_lock.scaleX = currentValue
+                    map_iv_lock.scaleY = currentValue
+                }
+                animator.start()
+                map_iv_lock.setImageResource(R.drawable.map_ic_unlock)
+                viewModel.toastEvent.value = R.string.map_unlock
+                viewModel.isLock.value = false
+                map_layout.setIsLock(false)
+            }
+            true
         }
         /**
          * 初始化bottomSheet
@@ -166,6 +198,7 @@ class MapViewFragment : Fragment() {
         map_rv_symbol_places.layoutManager = linearLayoutManager
         val symbolRvAdapter = context?.let { SymbolRvAdapter(it, viewModel, mutableListOf()) }
         map_rv_symbol_places.adapter = symbolRvAdapter
+
         /**
          * 初始化我的收藏列表adapter
          * （弹窗）
@@ -181,6 +214,7 @@ class MapViewFragment : Fragment() {
         mapFavoriteRecyclerView.adapter = favoriteListAdapter
         //设置点击事件
         map_ll_map_view_my_favorite.setOnClickListener {
+            viewModel.isClickSymbol.value = true
             viewModel.refreshCollectList()
             if (!popupWindow.isShowing) {
                 popupWindow.showAsDropDown(map_ll_map_view_my_favorite, map_ll_map_view_my_favorite.width - (context?.dp2px(140f)
@@ -190,6 +224,7 @@ class MapViewFragment : Fragment() {
         }
 
         viewModel.dismissPopUpWindow.observe(viewLifecycleOwner, Observer {
+            viewModel.isClickSymbol.value = false
             popupWindow.dismiss()
         })
 

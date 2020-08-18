@@ -72,6 +72,9 @@ class MapViewModel : BaseViewModel() {
     //是否锁定
     val isLock = MutableLiveData(false)
 
+    //是否点击了标签或收藏
+    val isClickSymbol = MutableLiveData(false)
+
     //通知收藏列表关闭
     val dismissPopUpWindow = MutableLiveData(false)
 

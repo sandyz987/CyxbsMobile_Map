@@ -552,6 +552,16 @@ class MapLayout : FrameLayout, View.OnClickListener {
 
     fun setIsLock(lock: Boolean) {
         this.isLock = lock
+        if (lock){
+            val center = subsamplingScaleImageView.center
+            val scale = subsamplingScaleImageView.scale
+            subsamplingScaleImageView.isPanEnabled = false
+            subsamplingScaleImageView.isZoomEnabled = false
+            subsamplingScaleImageView.setScaleAndCenter(scale, center)
+        } else{
+            subsamplingScaleImageView.isPanEnabled = true
+            subsamplingScaleImageView.isZoomEnabled = true
+        }
     }
 
     /**

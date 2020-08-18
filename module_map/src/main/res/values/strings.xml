@@ -19,6 +19,7 @@
     <string name="map_no_save">本地无地点缓存</string>
     <string name="map_lock">已锁定</string>
     <string name="map_unlock">已解除锁定</string>
+    <string name="map_cancel_lock">请长按解锁</string>
     <string name="map_favorite_edit_length_not_enough">地点备注不能为空~</string>
     <string name="map_favorite_empty">还未收藏地点哦~</string>
 </resources>

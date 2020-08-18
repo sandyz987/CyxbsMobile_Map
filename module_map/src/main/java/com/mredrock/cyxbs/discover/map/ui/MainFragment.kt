@@ -40,7 +40,6 @@ class MainFragment : Fragment() {
         viewModel = ViewModelProvider(requireActivity()).get(MapViewModel::class.java)
         initMapViewFragment()
         map_iv_back.setOnClickListener {
-            //Toast.makeText(requireContext(),manager?.backStackEntryCount.toString(),Toast.LENGTH_SHORT).show()
             if (manager?.backStackEntryCount ?: 0 == 0) {
                 //此处填写退出MapActivity的逻辑
                 activity?.finish()
@@ -102,6 +101,7 @@ class MainFragment : Fragment() {
     }
 
     fun closeSearchFragment() {
+        viewModel.isClickSymbol.value = false
         map_et_search.setText("")
         KeyboardController.hideInputKeyboard(requireContext(), map_et_search)
         val transaction = manager?.beginTransaction()?.setCustomAnimations(R.animator.map_slide_from_left, R.animator.map_slide_to_right, R.animator.map_slide_from_right, R.animator.map_slide_to_left)
@@ -112,6 +112,7 @@ class MainFragment : Fragment() {
 
 
     fun openSearchFragment() {
+        viewModel.isClickSymbol.value = true
         viewModel.closeSearchFragment.value = false
         if (manager?.backStackEntryCount ?: 0 != 0) {
             //确保不重复打开搜索框
