@@ -15,11 +15,13 @@ import android.widget.ImageView
 import com.bumptech.glide.load.model.GlideUrl
 import com.davemorrissey.labs.subscaleview.ImageSource
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
+import com.mredrock.cyxbs.common.BaseApp
 import com.mredrock.cyxbs.common.utils.extensions.*
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.bean.IconBean
 import com.mredrock.cyxbs.discover.map.util.SubsamplingScaleImageViewTarget
 import com.mredrock.cyxbs.discover.map.widget.GlideApp
+import com.mredrock.cyxbs.discover.map.widget.GlideProgressDialog
 import com.mredrock.cyxbs.discover.map.widget.ProgressDialog
 import com.mredrock.cyxbs.discover.map.widget.ProgressInterceptor
 import kotlinx.coroutines.Dispatchers
@@ -92,7 +94,7 @@ class MapLayout : FrameLayout, View.OnClickListener {
      */
     @SuppressLint("ClickableViewAccessibility")
     private fun initView() {
-        ProgressDialog.show(context, "提示", "加载中...", false)
+
         val rootParams =
                 LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         /** 真实dpi<400的手机会非常卡，需要适配*/
@@ -118,11 +120,8 @@ class MapLayout : FrameLayout, View.OnClickListener {
         subsamplingScaleImageView.setDoubleTapZoomScale(1f)
 
 
-        val dialog = android.app.ProgressDialog(context)
-        dialog.setProgressStyle(android.app.ProgressDialog.STYLE_HORIZONTAL)
-        dialog.setMessage("地图下载中,请稍等")
-        dialog.setCancelable(false)
-        dialog.show()
+
+
         GlobalScope.launch {
             val result = async {
                 getRealUrl()
@@ -142,17 +141,17 @@ class MapLayout : FrameLayout, View.OnClickListener {
                             subsamplingScaleImageView.setImage(imageSource)
                         }
                     }
-                    dialog.dismiss()
+                    GlideProgressDialog.hide()
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
             } else {
                 ProgressInterceptor.addListener(result.await()) { progress ->
-                    dialog.progress = progress
+                   GlideProgressDialog.setProcess(progress)
                 }
                 GlideApp.with(context)
                         .download(GlideUrl(result.await()))
-                        .into(SubsamplingScaleImageViewTarget(context, subsamplingScaleImageView, dialog, result.await()))
+                        .into(SubsamplingScaleImageViewTarget(context, subsamplingScaleImageView,  result.await()))
             }
         }
 

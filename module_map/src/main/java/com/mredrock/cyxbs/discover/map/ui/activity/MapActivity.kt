@@ -2,6 +2,7 @@ package com.mredrock.cyxbs.discover.map.ui.activity
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.Observer
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.mredrock.cyxbs.common.config.DISCOVER_MAP
@@ -14,6 +15,8 @@ import com.mredrock.cyxbs.discover.map.ui.fragment.FavoriteEditFragment
 import com.mredrock.cyxbs.discover.map.ui.fragment.MainFragment
 import com.mredrock.cyxbs.discover.map.util.KeyboardController
 import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
+import com.mredrock.cyxbs.discover.map.widget.GlideProgressDialog
+import com.mredrock.cyxbs.discover.map.widget.ProgressDialog
 import kotlinx.android.synthetic.main.map_activity_map.*
 
 /**
@@ -48,6 +51,9 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.map_activity_map)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        ProgressDialog.show(this, "提示", "加载中...", false)
+        GlideProgressDialog.show(this,"地图下载中，请稍等",false)
         //初始化viewModel
         viewModel.init()
         fragmentManager.beginTransaction().add(R.id.map_fl_main_fragment, mainFragment).show(mainFragment).commit()
@@ -119,4 +125,9 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         super.onBackPressed()
     }
 
+    override fun onDestroy() {
+        ProgressDialog.hide()
+        GlideProgressDialog.hide()
+        super.onDestroy()
+    }
 }

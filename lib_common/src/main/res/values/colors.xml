@@ -342,7 +342,9 @@
 
     <!--   以下为掌邮地图使用的颜色-->
     <!--   搜索地点的搜索框文字颜色-->
-    <color name="map_search_text_color" tools:ignore="ResourceName">#15315B</color>
+    <color name="map_search_text_color" tools:ignore="ResourceName">#16305C</color>
+    <!--   搜索地点的hint文字颜色-->
+    <color name="map_search_text_color_hint" tools:ignore="ResourceName">#94969E</color>
     <!--   搜索地点的搜索框背景颜色-->
     <color name="map_search_edit_text_background" tools:ignore="ResourceName">#E6E7EC</color>
 
@@ -354,7 +356,7 @@
     <!--    地图更多的颜色-->
     <color name="map_text_detail_more_color" tools:ignore="ResourceName">#ABBBD7</color>
     <!--    地图与大家分享文字的颜色-->
-    <color name="map_text_detail_upload" tools:ignore="ResourceName">#23477F</color>
+    <color name="map_text_detail_share" tools:ignore="ResourceName">#23477F</color>
     <!--    标签颜色-->
     <color name="map_text_symbol" tools:ignore="ResourceName">#0E2A54</color>
     <!--    标签选择颜色-->
@@ -407,6 +409,8 @@
     <color name="map_all_picture_text_no_more" tools:ignore="ResourceName">#ABBCD8</color>
 
     <color name="map_divider_color" tools:ignore="ResourceName">#EFF3FD</color>
+    <color name="map_main_background" tools:ignore="ResourceName">#FFFFFF</color>
+    <color name="map_detail_background" tools:ignore="ResourceName">#FFFFFF</color>
 
 </resources>
 

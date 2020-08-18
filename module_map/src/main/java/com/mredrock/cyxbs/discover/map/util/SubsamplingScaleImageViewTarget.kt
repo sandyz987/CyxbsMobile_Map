@@ -12,14 +12,15 @@ import com.mredrock.cyxbs.common.utils.extensions.defaultSharedPreferences
 import com.mredrock.cyxbs.common.utils.extensions.editor
 import com.mredrock.cyxbs.common.utils.extensions.toast
 import com.mredrock.cyxbs.discover.map.R
+import com.mredrock.cyxbs.discover.map.widget.GlideProgressDialog
 import com.mredrock.cyxbs.discover.map.widget.ProgressInterceptor
 import java.io.File
 
-class SubsamplingScaleImageViewTarget(val context: Context, view: SubsamplingScaleImageView,val dialog:ProgressDialog,val url:String)
+class SubsamplingScaleImageViewTarget(val context: Context, view: SubsamplingScaleImageView,val url:String)
     : CustomViewTarget<SubsamplingScaleImageView, File>(view) {
     override fun onResourceReady(resource: File, transition: Transition<in File>?) {
         view.setImage(ImageSource.uri(Uri.fromFile(resource)))
-        dialog.dismiss()
+        GlideProgressDialog.hide()
         ProgressInterceptor.removeListener(url)
         context.defaultSharedPreferences.editor {
             putString("path",resource.absolutePath)
@@ -29,7 +30,7 @@ class SubsamplingScaleImageViewTarget(val context: Context, view: SubsamplingSca
     override fun onLoadFailed(errorDrawable: Drawable?) {
         // Ignore
         view.setImage(ImageSource.resource(R.drawable.map_ic_high))
-        dialog.dismiss()
+        GlideProgressDialog.hide()
         context.toast("地图加载失败，使用本地缓存")
     }
 

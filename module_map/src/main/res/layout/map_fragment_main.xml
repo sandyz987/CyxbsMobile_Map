@@ -18,7 +18,7 @@
             android:layout_height="match_parent"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:background="@color/whiteBackground">
+            android:background="@color/map_main_background">
 
             <com.mredrock.cyxbs.discover.map.component.SearchEditText
                 android:id="@+id/map_et_search"
@@ -38,8 +38,8 @@
                 android:paddingTop="8dp"
                 android:paddingEnd="14dp"
                 android:paddingBottom="8dp"
-                android:textColor="@color/transactionCompletionEditViewColor"
-                android:textColorHint="@color/transactionCompletionEditViewColor"
+                android:textColor="@color/map_search_text_color"
+                android:textColorHint="@color/map_search_text_color_hint"
                 android:textSize="@dimen/map_search_edit_text_size"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/map_iv_back"
