@@ -15,14 +15,17 @@ import android.widget.ImageView
 import com.bumptech.glide.load.model.GlideUrl
 import com.davemorrissey.labs.subscaleview.ImageSource
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
-import com.mredrock.cyxbs.common.utils.extensions.*
+import com.mredrock.cyxbs.common.utils.extensions.dp2px
+import com.mredrock.cyxbs.common.utils.extensions.gone
+import com.mredrock.cyxbs.common.utils.extensions.toast
+import com.mredrock.cyxbs.common.utils.extensions.visible
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.bean.IconBean
+import com.mredrock.cyxbs.discover.map.model.DataSet
 import com.mredrock.cyxbs.discover.map.util.SubsamplingScaleImageViewTarget
 import com.mredrock.cyxbs.discover.map.widget.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.displayMetrics
 import java.io.File
@@ -63,6 +66,8 @@ class MapLayout : FrameLayout, View.OnClickListener {
 
     private var onShowFinishListener: OnShowFinishListener? = null
 
+    private var onUrlGetListener: OnUrlGetListener? = null
+
     /**
      *下面四个为继承FrameLayout的构造器方法
      */
@@ -71,14 +76,10 @@ class MapLayout : FrameLayout, View.OnClickListener {
     }
 
     constructor(context: Context?, attrs: AttributeSet?) :
-            this(context, attrs, 0) {
-
-    }
+            this(context, attrs, 0)
 
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) :
-            this(context, attrs, defStyleAttr, 0) {
-
-    }
+            this(context, attrs, defStyleAttr, 0)
 
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) :
             super(context!!, attrs, defStyleAttr, defStyleRes) {
@@ -118,42 +119,44 @@ class MapLayout : FrameLayout, View.OnClickListener {
 
 
 
-        GlobalScope.launch {
-            val result = async {
-                getRealUrl()
-            }
-            if (result.await() == "loadFail") {
-                GlobalScope.launch(Dispatchers.Main) {
-                    context.toast("糟糕！网络连接失败了，将使用本地缓存")
-                }
-                val path = context.defaultSharedPreferences.getString("path", null)
-                try {
-                    if (path != null && File(path).exists()) {
-                        GlobalScope.launch(Dispatchers.Main) {
-                            subsamplingScaleImageView.setImage(ImageSource.uri(Uri.fromFile(File(path))))
-                        }
-                    } else {
-                        GlobalScope.launch(Dispatchers.Main) {
-                            subsamplingScaleImageView.setImage(imageSource)
-                        }
+        setOnUrlGetListener(object : OnUrlGetListener {
+            override fun onUrlGet() {
+                if (url == "loadFail") {
+                    GlobalScope.launch(Dispatchers.Main) {
+                        context.toast("使用本地缓存")
                     }
-                    GlideProgressDialog.hide()
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-            } else {
-                ProgressInterceptor.addListener(result.await(), object : ProgressListener {
-                    override fun onProgress(progress: Int) {
-                        GlideProgressDialog.setProcess(progress)
+                    val path = DataSet.getPath()
+                    try {
+                        if (path != null && File(path).exists()) {
+                            GlobalScope.launch(Dispatchers.Main) {
+                                subsamplingScaleImageView.setImage(ImageSource.uri(Uri.fromFile(File(path))))
+                            }
+                        } else {
+                            GlobalScope.launch(Dispatchers.Main) {
+                                subsamplingScaleImageView.setImage(imageSource)
+                            }
+                        }
+                        GlideProgressDialog.hide()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
                     }
+                } else {
+                    url?.let {
+                        ProgressInterceptor.addListener(it, object : ProgressListener {
+                            override fun onProgress(progress: Int) {
+                                GlideProgressDialog.setProcess(progress)
+                            }
 
-                })
-                GlideApp.with(context)
-                        .download(GlideUrl(result.await()))
-                        .into(SubsamplingScaleImageViewTarget(context, subsamplingScaleImageView, result.await()))
+                        })
+                    }
+                    GlideApp.with(context)
+                            .download(GlideUrl(url))
+                            .into(SubsamplingScaleImageViewTarget(context, subsamplingScaleImageView, url
+                                    ?: ""))
+                }
             }
-        }
 
+        })
 
         addView(subsamplingScaleImageView, rootParams)
 
@@ -421,13 +424,6 @@ class MapLayout : FrameLayout, View.OnClickListener {
         }
     }
 
-    /**
-     * 从资源文件中设置
-     */
-    fun setImageFromRes(resId: Int) {
-        imageSource = ImageSource.resource(resId)
-    }
-
 
     /**
      * 放大并平移到某点
@@ -530,13 +526,7 @@ class MapLayout : FrameLayout, View.OnClickListener {
 
     fun setUrl(url: String) {
         this.url = url
-    }
-
-    private fun getRealUrl(): String {
-        while (true) {
-            if (this.url != null)
-                return this.url!!
-        }
+        onUrlGetListener?.onUrlGet()
     }
 
     fun setIsLock(lock: Boolean) {
@@ -581,6 +571,13 @@ class MapLayout : FrameLayout, View.OnClickListener {
         fun onShowFinish()
     }
 
+    /**
+     * 获取url回调
+     */
+    interface OnUrlGetListener {
+        fun onUrlGet()
+    }
+
     fun setMyOnIconClickListener(onIconClickListener: OnIconClickListener) {
         this.onIconClickListener = onIconClickListener
     }
@@ -601,5 +598,8 @@ class MapLayout : FrameLayout, View.OnClickListener {
         this.onShowFinishListener = onShowFinishListener
     }
 
+    private fun setOnUrlGetListener(onUrlGetListener: OnUrlGetListener) {
+        this.onUrlGetListener = onUrlGetListener
+    }
 
 }

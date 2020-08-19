@@ -1,12 +1,8 @@
 package com.mredrock.cyxbs.discover.map.model
 
-import android.graphics.Bitmap
-import android.util.Log
-import android.widget.Toast
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.mredrock.cyxbs.common.BaseApp
-import com.mredrock.cyxbs.common.bean.RedrockApiWrapper
 import com.mredrock.cyxbs.common.utils.extensions.editor
 import com.mredrock.cyxbs.common.utils.extensions.sharedPreferences
 import com.mredrock.cyxbs.discover.map.bean.ButtonInfo
@@ -55,7 +51,7 @@ object DataSet {
     }
 
     fun getPath(): String? {
-        return sharedPreferences.getString("path", null)
+        return sharedPreferences.getString("Path", null)
     }
 
     fun savePictureVersion(version: Long) {

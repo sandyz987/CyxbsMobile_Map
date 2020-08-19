@@ -60,12 +60,13 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
          * 如果有保存路径且地图存在，则不展示dialog
          */
         try {
-            if (path != null) {
+            if (path == null){
+                GlideProgressDialog.show(this, "下载地图中,请稍等", false)
+            }else{
                 if (!fileIsExists(path)) {
                     GlideProgressDialog.show(this, "下载地图中,请稍等", false)
                 }
             }
-
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -148,7 +149,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
     }
 
     //判断文件是否存在
-    fun fileIsExists(strFile: String?): Boolean {
+    private fun fileIsExists(strFile: String?): Boolean {
         try {
             if (!File(strFile).exists()) {
                 return false

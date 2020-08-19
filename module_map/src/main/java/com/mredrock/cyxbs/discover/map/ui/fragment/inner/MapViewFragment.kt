@@ -92,6 +92,11 @@ class MapViewFragment : Fragment() {
         })
 
 
+        viewModel.loadFail.observe(viewLifecycleOwner, Observer {
+            if (it)
+                map_layout.setUrl("loadFail")
+        })
+
         /**
          * 设置地点点击事件
          */
