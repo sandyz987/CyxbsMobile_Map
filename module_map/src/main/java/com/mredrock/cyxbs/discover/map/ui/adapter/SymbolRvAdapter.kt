@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.map_recycle_item_symbol_places.view.*
 
 class SymbolRvAdapter(val context: Context, val viewModel: MapViewModel, private val mList: MutableList<InfoItem>) : RecyclerView.Adapter<SymbolRvAdapter.ViewHolder>() {
 
-    lateinit var curSelectorItem: AppCompatCheckedTextView
+    var curSelectorItem: AppCompatCheckedTextView? = null
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val hot: ImageView = view.map_iv_recycle_item_hot
@@ -37,7 +37,7 @@ class SymbolRvAdapter(val context: Context, val viewModel: MapViewModel, private
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        curSelectorItem = holder.symbol
+        //curSelectorItem = holder.symbol
         if (mList[position].isHot) {
             holder.hot.visible()
         } else {
@@ -49,16 +49,16 @@ class SymbolRvAdapter(val context: Context, val viewModel: MapViewModel, private
              * 二次点击取消选择
              */
             if (v == curSelectorItem) {
-                if (curSelectorItem.isChecked) {
-                    curSelectorItem.setTextColor(ContextCompat.getColor(context,R.color.map_text_symbol))
+                if (curSelectorItem?.isChecked == true) {
+                    curSelectorItem?.setTextColor(ContextCompat.getColor(context, R.color.map_text_symbol))
                     val animator2 = ValueAnimator.ofFloat(1f, 0.8f, 1.2f, 1f)
                     animator2.duration = 500
                     animator2.addUpdateListener {
                         val currentValue: Float = it.animatedValue as Float
-                        curSelectorItem.scaleX = currentValue
-                        curSelectorItem.scaleY = currentValue
+                        curSelectorItem?.scaleX = currentValue
+                        curSelectorItem?.scaleY = currentValue
                         if (currentValue > 1f) {
-                            curSelectorItem.isChecked = false
+                            curSelectorItem?.isChecked = false
                         }
                     }
                     animator2.start()
@@ -73,17 +73,17 @@ class SymbolRvAdapter(val context: Context, val viewModel: MapViewModel, private
              */
             val lastSelect = curSelectorItem
             curSelectorItem = v as AppCompatCheckedTextView
-            lastSelect.setTextColor(ContextCompat.getColor(context,R.color.map_text_symbol))
-            curSelectorItem.setTextColor(ContextCompat.getColor(context,R.color.map_text_symbol_select))
+            lastSelect?.setTextColor(ContextCompat.getColor(context, R.color.map_text_symbol))
+            curSelectorItem?.setTextColor(ContextCompat.getColor(context, R.color.map_text_symbol_select))
             val animator = ValueAnimator.ofFloat(1f, 1.2f, 0.8f, 1f)
             animator.duration = 500
             animator.addUpdateListener {
                 val currentValue: Float = it.animatedValue as Float
-                curSelectorItem.scaleX = currentValue
-                curSelectorItem.scaleY = currentValue
+                curSelectorItem?.scaleX = currentValue
+                curSelectorItem?.scaleY = currentValue
                 if (currentValue < 1f) {
-                    lastSelect.isChecked = false
-                    curSelectorItem.isChecked = true
+                    lastSelect?.isChecked = false
+                    curSelectorItem?.isChecked = true
 
                 }
             }
