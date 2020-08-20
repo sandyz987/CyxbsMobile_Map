@@ -127,8 +127,13 @@ class MapViewFragment : Fragment() {
          * 监听显示某一个地点
          */
         viewModel.showIconById.observe(viewLifecycleOwner, Observer {
-            map_layout.showIcon(it)
-            map_layout.focusToPoint(it)
+            map_layout.closeAllIcon()
+            map_layout.setOnCloseFinishListener(object : MapLayout.OnCloseFinishListener {
+                override fun onCloseFinish() {
+                    map_layout.showSomeIcons(listOf(it))
+                    map_layout.focusToPoint(it)
+                }
+            })
         })
 
         /**
@@ -259,6 +264,7 @@ class MapViewFragment : Fragment() {
             if (!it) {
                 viewModel.isClickSymbol.value = false
                 popupWindow.dismiss()
+                viewModel.showPopUpWindow.value = true
             }
         })
 
