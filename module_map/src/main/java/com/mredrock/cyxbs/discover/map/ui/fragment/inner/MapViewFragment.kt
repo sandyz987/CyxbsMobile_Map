@@ -142,9 +142,7 @@ class MapViewFragment : Fragment() {
         map_layout.setMyOnNoPlaceClickListener(object : MapLayout.OnNoPlaceClickListener {
             override fun onNoPlaceClick() {
                 //通知隐藏底部栏
-                if (viewModel.placeDetails.value?.placeName == "") {
-                    viewModel.bottomSheetStatus.value = BottomSheetBehavior.STATE_HIDDEN
-                } else {
+                if (viewModel.bottomSheetStatus.value == BottomSheetBehavior.STATE_EXPANDED) {
                     viewModel.bottomSheetStatus.value = BottomSheetBehavior.STATE_COLLAPSED
                 }
             }
@@ -285,7 +283,11 @@ class MapViewFragment : Fragment() {
         viewModel.bottomSheetStatus.observe(
                 viewLifecycleOwner,
                 Observer {
-                    when (it) {
+                    var i = it
+                    if (viewModel.placeDetails.value?.placeName == "") {
+                        i = BottomSheetBehavior.STATE_HIDDEN
+                    }
+                    when (i) {
                         BottomSheetBehavior.STATE_COLLAPSED -> {
                             //半隐藏底部栏
                             map_bottom_sheet_content.visible()
