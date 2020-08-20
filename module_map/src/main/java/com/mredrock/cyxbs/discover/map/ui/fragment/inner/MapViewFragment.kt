@@ -243,6 +243,7 @@ class MapViewFragment : Fragment() {
         map_ll_map_view_my_favorite.setOnClickListener {
             viewModel.showPopUpWindow.value = true
             viewModel.isClickSymbol.value = true
+            viewModel.bottomSheetStatus.postValue(BottomSheetBehavior.STATE_COLLAPSED)
             viewModel.refreshCollectList()
             if (!popupWindow.isShowing) {
                 popupWindow.showAsDropDown(map_ll_map_view_my_favorite, map_ll_map_view_my_favorite.width - (context?.dp2px(140f)
