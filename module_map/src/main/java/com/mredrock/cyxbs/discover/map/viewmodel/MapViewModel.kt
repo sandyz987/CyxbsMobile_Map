@@ -48,7 +48,7 @@ class MapViewModel : BaseViewModel() {
     //喜欢列表内容
     val collectList = MutableLiveData<MutableList<FavoritePlace>>()
 
-    //地点详细弹出框要显示的内容
+    //当前展示的地点信息
     val placeDetails = MutableLiveData<PlaceDetails>()
 
     //是否正在显示收藏页面
@@ -99,7 +99,8 @@ class MapViewModel : BaseViewModel() {
     //通知收藏列表关闭
     val showPopUpWindow = MutableLiveData<Boolean>()
 
-
+    //通知标签栏取消选择
+    val unCheck = MutableLiveData<Boolean>()
     fun init() {
 
         /**
@@ -171,7 +172,9 @@ class MapViewModel : BaseViewModel() {
                     if (t != null) {
                         showingPlaceId = placeId
                         placeDetails.postValue(t)
-                        bottomSheetStatus.postValue(BottomSheetBehavior.STATE_COLLAPSED)
+                        if (bottomSheetStatus.value == BottomSheetBehavior.STATE_HIDDEN) {
+                            bottomSheetStatus.postValue(BottomSheetBehavior.STATE_COLLAPSED)
+                        }
                     } else {
                         bottomSheetStatus.postValue(BottomSheetBehavior.STATE_HIDDEN)
                     }
@@ -208,6 +211,19 @@ class MapViewModel : BaseViewModel() {
 
                     it.data.placeIdList.forEach { item ->
                         DataSet.addCollect(item)
+                    }
+
+                    DataSet.getCollect()?.forEach { t ->
+                        var existInServer = false
+                        for (i in it.data.placeIdList) {
+                            if (t.placeId == i) {
+                                existInServer = true
+                                break
+                            }
+                        }
+                        if (!existInServer) {
+                            DataSet.deleteCollect(t.placeId)
+                        }
                     }
 
                     collectList.value = DataSet.getCollect()

@@ -120,7 +120,12 @@ class MapLayout : FrameLayout, View.OnClickListener {
 
 
 
-
+        /**
+         * 监听是否获得url
+         * url = "loadFail"，加载失败，使用本地地图缓存
+         * url = "noUpdate",取消更新地图，使用本地地图缓存
+         * 其他则直接下载地图到/data/data/com.mredrock.cyxbs.discover.map/cache/image_manager_disk_cache目录下
+         */
         setOnUrlGetListener(object : OnUrlGetListener {
             override fun onUrlGet() {
                 when (url) {
@@ -185,8 +190,14 @@ class MapLayout : FrameLayout, View.OnClickListener {
 
         addView(subsamplingScaleImageView, rootParams)
 
+        /**
+         * 地图加载监听
+         */
         subsamplingScaleImageView.setOnImageEventListener(object :
                 SubsamplingScaleImageView.OnImageEventListener {
+            /**
+             * 地图加载完毕
+             */
             override fun onImageLoaded() {
 
                 subsamplingScaleImageView.animateScaleAndCenter(1f, PointF(1734f, 9372f))
@@ -196,7 +207,8 @@ class MapLayout : FrameLayout, View.OnClickListener {
             }
 
             /**
-             * 务必在此方法后再addView
+             * 地图准备就绪，下一步执行绘制
+             * 务必在此方法后再addView(icon,layoutParams)
              */
             override fun onReady() {
                 iconList.forEach { icon ->

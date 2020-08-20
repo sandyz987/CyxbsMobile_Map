@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatCheckedTextView
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.mredrock.cyxbs.common.utils.extensions.invisible
@@ -17,8 +19,7 @@ import com.mredrock.cyxbs.discover.map.bean.InfoItem
 import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
 import kotlinx.android.synthetic.main.map_recycle_item_symbol_places.view.*
 
-class SymbolRvAdapter(val context: Context, val viewModel: MapViewModel, private val mList: MutableList<InfoItem>) : RecyclerView.Adapter<SymbolRvAdapter.ViewHolder>() {
-
+class SymbolRvAdapter(val context: Context, val viewModel: MapViewModel, private val mList: MutableList<InfoItem>,val lifecycleOwner: LifecycleOwner) : RecyclerView.Adapter<SymbolRvAdapter.ViewHolder>() {
     var curSelectorItem: AppCompatCheckedTextView? = null
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -46,6 +47,7 @@ class SymbolRvAdapter(val context: Context, val viewModel: MapViewModel, private
         }
         holder.symbol.text = mList[position].title
         holder.symbol.setOnClickListener { v ->
+            viewModel.unCheck.value = false
             /**
              * 二次点击取消选择
              */
@@ -94,13 +96,19 @@ class SymbolRvAdapter(val context: Context, val viewModel: MapViewModel, private
             viewModel.bottomSheetStatus.value = BottomSheetBehavior.STATE_HIDDEN
             viewModel.isClickSymbol.value = true
         }
+
+        viewModel.unCheck.observe(lifecycleOwner, Observer {
+            if (viewModel.unCheck.value == true) {
+                curSelectorItem?.isChecked = false
+                viewModel.unCheck.value = false
+            }
+        })
     }
 
     fun setList(list: List<InfoItem>) {
         mList.clear()
         mList.addAll(list)
         notifyDataSetChanged()
-
     }
 
 }

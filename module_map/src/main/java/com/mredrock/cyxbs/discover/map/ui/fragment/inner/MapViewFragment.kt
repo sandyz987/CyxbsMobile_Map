@@ -63,6 +63,9 @@ class MapViewFragment : Fragment() {
             map_layout.setBackgroundColor(Color.parseColor(data.mapBackgroundColor))
             val list = data.placeList
             val iconList = mutableListOf<IconBean>()
+            /**
+             * 添加所有展示的icon
+             */
             list.forEach { bean ->
                 val buildingList = bean.buildingList
                 buildingList.forEach { building ->
@@ -87,6 +90,10 @@ class MapViewFragment : Fragment() {
              */
             val version = DataSet.getPictureVersion()
             val path = DataSet.getPath()
+            /**
+             * 如果时间戳更新，地图存在，则弹出更新弹窗
+             * 地图不存在则直接下载地图
+             */
             if (data.pictureVersion != version && path != null && fileIsExists(path)) {
                 UpdateMapDialog.show(requireContext(), "地图更新",
                         "有最新的地图信息可用，推荐更新获取校内最新的地点信息",
@@ -108,7 +115,9 @@ class MapViewFragment : Fragment() {
 
         })
 
-
+        /**
+         * 加载失败时使用本地地图缓存
+         */
         viewModel.loadFail.observe(viewLifecycleOwner, Observer {
             if (it)
                 map_layout.setUrl("loadFail")
@@ -123,6 +132,7 @@ class MapViewFragment : Fragment() {
                 map_layout.focusToPoint(bean.sx, bean.sy)
                 viewModel.getPlaceDetails(bean.id.toString())
                 viewModel.bottomSheetStatus.postValue(BottomSheetBehavior.STATE_EXPANDED)
+                viewModel.unCheck.value = true
             }
 
         })
@@ -133,6 +143,7 @@ class MapViewFragment : Fragment() {
             override fun onPlaceClick(v: View) {
                 val bean = v.tag as IconBean
                 viewModel.getPlaceDetails(bean.id.toString())
+                viewModel.unCheck.value = true
             }
 
         })
@@ -141,7 +152,13 @@ class MapViewFragment : Fragment() {
          * 监听显示某一个地点
          */
         viewModel.showIconById.observe(viewLifecycleOwner, Observer {
-            map_layout.focusToPoint(it)
+            map_layout.closeAllIcon()
+            map_layout.setOnCloseFinishListener(object : MapLayout.OnCloseFinishListener {
+                override fun onCloseFinish() {
+                    map_layout.showSomeIcons(listOf(it))
+                    map_layout.focusToPoint(it)
+                }
+            })
         })
 
         /**
@@ -155,9 +172,13 @@ class MapViewFragment : Fragment() {
                 } else {
                     viewModel.bottomSheetStatus.value = BottomSheetBehavior.STATE_COLLAPSED
                 }
+                viewModel.unCheck.value = true
             }
         })
 
+        /**
+         * 当点击搜索，标签或收藏时自动解除锁定
+         */
         viewModel.isClickSymbol.observe(viewLifecycleOwner, Observer {
             if (it && viewModel.isLock.value == true) {
                 val animator = ValueAnimator.ofFloat(1f, 0.8f, 1.2f, 1f)
@@ -226,7 +247,7 @@ class MapViewFragment : Fragment() {
          */
         val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         map_rv_symbol_places.layoutManager = linearLayoutManager
-        val symbolRvAdapter = context?.let { SymbolRvAdapter(it, viewModel, mutableListOf()) }
+        val symbolRvAdapter = context?.let { SymbolRvAdapter(it, viewModel, mutableListOf(),viewLifecycleOwner) }
         map_rv_symbol_places.adapter = symbolRvAdapter
 
         /**
@@ -261,6 +282,7 @@ class MapViewFragment : Fragment() {
             if (!it) {
                 viewModel.isClickSymbol.value = false
                 popupWindow.dismiss()
+                viewModel.showPopUpWindow.value = true
             }
         })
 
@@ -335,7 +357,9 @@ class MapViewFragment : Fragment() {
             }
         })
 
-
+        /**
+         * VR按钮点击事件
+         */
         map_iv_vr.setOnClickListener {
             val xc: Int = (map_root_map_view.left + map_root_map_view.right) / 2
             val yc: Int = (map_root_map_view.top + map_root_map_view.bottom) / 2
@@ -386,7 +410,9 @@ class MapViewFragment : Fragment() {
         } else false
     }
 
-    //判断文件是否存在
+    /**
+     * 判断文件是否存在
+     */
     private fun fileIsExists(strFile: String?): Boolean {
         try {
             if (!File(strFile).exists()) {
