@@ -61,10 +61,10 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
          */
         try {
             if (path == null){
-                GlideProgressDialog.show(this, "下载地图中,请稍等", false)
+                GlideProgressDialog.show(this, "下载地图", "仅需初次载入时下载地图哦",false)
             }else{
                 if (!fileIsExists(path)) {
-                    GlideProgressDialog.show(this, "下载地图中,请稍等", false)
+                    GlideProgressDialog.show(this, "下载地图", "仅需初次载入时下载地图哦",false)
                 }
             }
         } catch (e: Exception) {

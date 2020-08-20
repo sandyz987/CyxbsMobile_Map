@@ -413,6 +413,9 @@
     <color name="map_main_background" tools:ignore="ResourceName">#FFFFFF</color>
     <color name="map_detail_background" tools:ignore="ResourceName">#FFFFFF</color>
     <color name="map_dialog_transparent" tools:ignore="ResourceName">#00000000</color>
+    <color name="map_download_progressbar_background" tools:ignore="ResourceName">#E7EFFD</color>
+    <color name="map_download_progressbar" tools:ignore="ResourceName">#4B44E5</color>
+    <color name="map_download_text" tools:ignore="ResourceName"> #132F5B</color>
 
 </resources>
 

@@ -159,14 +159,18 @@ class MapViewFragment : Fragment() {
          */
         map_iv_lock.setOnClickListener {
             if (viewModel.isLock.value!!) {
-                val animator = ValueAnimator.ofFloat(0f, 10f, -10f, 0f, 10f, -10f, 0f)
+                val animator = ValueAnimator.ofFloat(1f, 0.8f, 1.2f, 1f)
                 animator.duration = 500
                 animator.addUpdateListener {
                     val currentValue: Float = it.animatedValue as Float
-                    map_iv_lock.translationX = currentValue
+                    map_iv_lock.scaleX = currentValue
+                    map_iv_lock.scaleY = currentValue
                 }
                 animator.start()
-                viewModel.toastEvent.value = R.string.map_cancel_lock
+                map_iv_lock.setImageResource(R.drawable.map_ic_unlock)
+                viewModel.toastEvent.value = R.string.map_unlock
+                viewModel.isLock.value = false
+                map_layout.setIsLock(false)
             } else {
                 val animator = ValueAnimator.ofFloat(1f, 1.2f, 0.8f, 1f)
                 animator.duration = 500
@@ -184,23 +188,6 @@ class MapViewFragment : Fragment() {
 
         }
 
-        map_iv_lock.setOnLongClickListener {
-            if (viewModel.isLock.value!!) {
-                val animator = ValueAnimator.ofFloat(1f, 0.8f, 1.2f, 1f)
-                animator.duration = 500
-                animator.addUpdateListener {
-                    val currentValue: Float = it.animatedValue as Float
-                    map_iv_lock.scaleX = currentValue
-                    map_iv_lock.scaleY = currentValue
-                }
-                animator.start()
-                map_iv_lock.setImageResource(R.drawable.map_ic_unlock)
-                viewModel.toastEvent.value = R.string.map_unlock
-                viewModel.isLock.value = false
-                map_layout.setIsLock(false)
-            }
-            true
-        }
         /**
          * 初始化bottomSheet
          */

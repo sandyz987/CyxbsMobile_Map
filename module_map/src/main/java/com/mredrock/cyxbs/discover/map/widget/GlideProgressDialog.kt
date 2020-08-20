@@ -6,12 +6,12 @@ import android.content.Context
 //转圈圈的弹窗
 
 object GlideProgressDialog {
-    private var dialog: ProgressDialog? = null
+    private var dialog: CustomProgressDialog? = null
 
-    fun show(context: Context, message: String, cancelable: Boolean) {
-        dialog = ProgressDialog(context)
-        dialog?.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL)
+    fun show(context: Context, title: String, message: String, cancelable: Boolean) {
+        dialog = CustomProgressDialog.createDialog(context)
         dialog?.setMessage(message)
+        dialog?.setTitle(title)
         dialog?.setCancelable(cancelable)
         dialog?.show()
     }
@@ -24,11 +24,11 @@ object GlideProgressDialog {
 
     fun setProcess(process: Int) {
         if (dialog != null) {
-            dialog?.progress = process
+            dialog?.setProgress(process)
         }
     }
 
-    fun dismiss(){
+    fun dismiss() {
         dialog?.dismiss()
     }
 }
