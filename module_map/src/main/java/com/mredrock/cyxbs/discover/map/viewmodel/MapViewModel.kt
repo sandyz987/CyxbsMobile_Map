@@ -212,6 +212,19 @@ class MapViewModel : BaseViewModel() {
                         DataSet.addCollect(item)
                     }
 
+                    DataSet.getCollect()?.forEach { t ->
+                        var existInServer = false
+                        for (i in it.data.placeIdList) {
+                            if (t.placeId == i) {
+                                existInServer = true
+                                break
+                            }
+                        }
+                        if (!existInServer) {
+                            DataSet.deleteCollect(t.placeId)
+                        }
+                    }
+
                     collectList.value = DataSet.getCollect()
 
                     if (collectList.value?.size == 0) {
