@@ -127,6 +127,7 @@ class MapViewFragment : Fragment() {
          * 监听显示某一个地点
          */
         viewModel.showIconById.observe(viewLifecycleOwner, Observer {
+            map_layout.showIcon(it)
             map_layout.focusToPoint(it)
         })
 

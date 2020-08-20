@@ -48,7 +48,7 @@ class MapViewModel : BaseViewModel() {
     //喜欢列表内容
     val collectList = MutableLiveData<MutableList<FavoritePlace>>()
 
-    //地点详细弹出框要显示的内容
+    //当前展示的地点信息
     val placeDetails = MutableLiveData<PlaceDetails>()
 
     //是否正在显示收藏页面
@@ -171,7 +171,9 @@ class MapViewModel : BaseViewModel() {
                     if (t != null) {
                         showingPlaceId = placeId
                         placeDetails.postValue(t)
-                        bottomSheetStatus.postValue(BottomSheetBehavior.STATE_COLLAPSED)
+                        if (bottomSheetStatus.value == BottomSheetBehavior.STATE_HIDDEN) {
+                            bottomSheetStatus.postValue(BottomSheetBehavior.STATE_COLLAPSED)
+                        }
                     } else {
                         bottomSheetStatus.postValue(BottomSheetBehavior.STATE_HIDDEN)
                     }
