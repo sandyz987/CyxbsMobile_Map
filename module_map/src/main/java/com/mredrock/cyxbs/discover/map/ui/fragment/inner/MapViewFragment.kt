@@ -104,7 +104,7 @@ class MapViewFragment : Fragment() {
             override fun onIconClick(v: View) {
                 val bean = v.tag as IconBean
                 map_layout.focusToPoint(bean.sx, bean.sy)
-                viewModel.showPlaceDetails(bean.id.toString())
+                viewModel.bottomSheetIsShowing.postValue(true)
             }
 
         })
@@ -122,7 +122,7 @@ class MapViewFragment : Fragment() {
         map_layout.setMyOnPlaceClickListener(object : MapLayout.OnPlaceClickListener {
             override fun onPlaceClick(v: View) {
                 val bean = v.tag as IconBean
-                //viewModel.showPlaceDetails(bean.id)
+                viewModel.showPlaceDetails(bean.id.toString())
             }
 
         })
@@ -275,6 +275,7 @@ class MapViewFragment : Fragment() {
                         bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
                     } else {
                         //半隐藏底部栏
+                        map_bottom_sheet_content.visible()
                         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
                     }
                 }

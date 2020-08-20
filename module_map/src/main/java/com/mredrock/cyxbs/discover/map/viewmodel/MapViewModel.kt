@@ -57,7 +57,7 @@ class MapViewModel : BaseViewModel() {
     var showingPlaceId = "-1"
 
     //是否显示bottomSheet，用于监听并隐藏
-    val bottomSheetIsShowing = MutableLiveData(false)
+    val bottomSheetIsShowing = MutableLiveData<Boolean>()
 
     //是否在动画中
     val isAnimation = MutableLiveData(false)
@@ -165,7 +165,7 @@ class MapViewModel : BaseViewModel() {
                 .safeSubscribeBy {
                     showingPlaceId = placeId
                     placeDetails.postValue(it.data)
-                    bottomSheetIsShowing.postValue(true)
+                    bottomSheetIsShowing.postValue(false)
                 }.lifeCycle()
     }
 
