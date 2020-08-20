@@ -53,7 +53,8 @@ class AllPictureFragment : Fragment() {
 
         allPictureAdapter.setOnItemClickListener(object : AllPictureRvAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
-                val showPictureFragment = ShowPictureFragment(imageData[position])
+                viewModel.showPictureUrl.value = imageData[position]
+                val showPictureFragment = ShowPictureFragment()
                 val transaction = manager?.beginTransaction()?.setCustomAnimations(
                         R.animator.map_slide_from_right,
                         R.animator.map_slide_to_left,

@@ -92,6 +92,8 @@ class MapViewModel : BaseViewModel() {
     //通知收藏列表关闭
     val dismissPopUpWindow = MutableLiveData(false)
 
+    //查看大图的url
+    val showPictureUrl = MutableLiveData<String>()
 
     fun init() {
 
