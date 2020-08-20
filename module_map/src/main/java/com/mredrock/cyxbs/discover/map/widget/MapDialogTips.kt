@@ -12,15 +12,14 @@ import org.jetbrains.anko.layoutInflater
  *@description
  */
 
-interface OnSelectListener {
-    fun onDeny()
+interface OnSelectListenerTips {
     fun onPositive()
 }
 
-object MapDialog {
-    fun show(context: Context, title: String, content: String, listener: OnSelectListener) {
+object MapDialogTips {
+    fun show(context: Context, title: String, content: String, listener: OnSelectListenerTips) {
         val builder: AlertDialog.Builder = AlertDialog.Builder(context, R.style.map_transparent_dialog)
-        val view = context.layoutInflater.inflate(R.layout.map_dialog_choose, null, false)
+        val view = context.layoutInflater.inflate(R.layout.map_dialog_tips, null, false)
         builder.setView(view)
         builder.setCancelable(true)
         view.map_tv_tip_title.text = title
@@ -29,10 +28,6 @@ object MapDialog {
         val dialog = builder.create()
         dialog.show()
 
-        view.map_tv_tip_deny.setOnClickListener {
-            listener.onDeny()
-            dialog.dismiss()
-        }
         view.map_tv_tip_positive.setOnClickListener {
             listener.onPositive()
             dialog.dismiss()
