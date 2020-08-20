@@ -80,7 +80,7 @@ class MainFragment : Fragment() {
         })
 
         viewModel.mapInfo.observe(viewLifecycleOwner, Observer { t ->
-            map_et_search.hintString = "大家都在搜：" + t.hotWord
+            map_et_search.hintString = "大家都在搜：" + if (t.hotWord == "") "风雨操场" else t.hotWord
         })
 
         /**
