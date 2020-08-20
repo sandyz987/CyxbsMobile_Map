@@ -4,16 +4,11 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.ObservableArrayList
-import androidx.databinding.ObservableList
 import androidx.recyclerview.widget.RecyclerView
 import com.mredrock.cyxbs.discover.map.R
-import com.mredrock.cyxbs.discover.map.bean.PlaceItem
 import com.mredrock.cyxbs.discover.map.model.DataSet
 import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
-import kotlinx.android.synthetic.main.map_fragment_search_history.view.*
 import kotlinx.android.synthetic.main.map_recycle_item_search_history.view.*
-import kotlinx.android.synthetic.main.map_recycle_item_search_result.view.*
 
 /**
  *@author zhangzhe
@@ -39,7 +34,7 @@ class SearchHistoryAdapter(context: Context, private val viewModel: MapViewModel
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.placeName.text = viewModel.searchHistory[position]
         holder.itemView.setOnClickListener {
-            viewModel.searchTextHistory.value = viewModel.searchHistory[position]
+            viewModel.searchHistoryString.value = viewModel.searchHistory[position]
         }
         holder.delete.setOnClickListener {
             DataSet.deleteSearchHistory(viewModel.searchHistory[position])

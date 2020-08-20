@@ -10,5 +10,5 @@ import com.google.gson.annotations.SerializedName
 
 data class FavoritePlaceSimple(
         @SerializedName("place_id")
-        val placeId: MutableList<String>
+        val placeIdList: MutableList<String>
 )

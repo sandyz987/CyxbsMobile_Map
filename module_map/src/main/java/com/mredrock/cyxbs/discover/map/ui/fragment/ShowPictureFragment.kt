@@ -30,6 +30,7 @@ import java.io.FileOutputStream
 
 class ShowPictureFragment : Fragment() {
     private lateinit var viewModel: MapViewModel
+    private var pictureUrl: String? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.map_fragment_show_picture, container, false)
@@ -38,7 +39,10 @@ class ShowPictureFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(requireActivity()).get(MapViewModel::class.java)
-        viewModel.showPictureUrl.observe(viewLifecycleOwner, Observer { url ->
+
+        pictureUrl = arguments?.getString("pictureUrl", "")
+
+        pictureUrl?.let { url ->
             val dialog = android.app.ProgressDialog(context)
             dialog.setProgressStyle(android.app.ProgressDialog.STYLE_HORIZONTAL)
             dialog.setMessage("图片加载中")
@@ -76,7 +80,7 @@ class ShowPictureFragment : Fragment() {
 
                 true
             }
-        })
+        }
 
     }
 

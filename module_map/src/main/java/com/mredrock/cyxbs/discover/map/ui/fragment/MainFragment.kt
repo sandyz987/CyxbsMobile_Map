@@ -65,7 +65,7 @@ class MainFragment : Fragment() {
         })
 
 
-        viewModel.isAnimation.observe(viewLifecycleOwner, Observer { isAnimation ->
+        viewModel.mapViewIsInAnimation.observe(viewLifecycleOwner, Observer { isAnimation ->
             if (isAnimation) {
                 map_et_search.animate().alpha(0f).duration = 500
                 map_et_search.isEnabled = false
@@ -90,7 +90,7 @@ class MainFragment : Fragment() {
             viewModel.searchText.value = text.toString()
         }
 
-        viewModel.searchTextHistory.observe(viewLifecycleOwner, Observer {
+        viewModel.searchHistoryString.observe(viewLifecycleOwner, Observer {
             map_et_search.setText(it)
         })
 

@@ -5,9 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import com.mredrock.cyxbs.common.BaseApp
 import com.mredrock.cyxbs.discover.map.R
+import com.mredrock.cyxbs.discover.map.component.MapToast
 import com.mredrock.cyxbs.discover.map.databinding.MapFragmentFavoriteEditBinding
 import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
 import com.mredrock.cyxbs.discover.map.widget.MapDialog
@@ -52,7 +55,7 @@ class FavoriteEditFragment : Fragment() {
 
                 viewModel.addCollect(map_et_favorite_nickname.text.toString(), viewModel.showingPlaceId)
             } else {
-                viewModel.toastEvent.value = R.string.map_favorite_edit_length_not_enough
+                MapToast.makeText(BaseApp.context, R.string.map_favorite_edit_length_not_enough, Toast.LENGTH_SHORT).show()
             }
         }
 

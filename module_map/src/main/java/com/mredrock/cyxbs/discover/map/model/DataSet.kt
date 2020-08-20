@@ -5,10 +5,7 @@ import com.google.gson.reflect.TypeToken
 import com.mredrock.cyxbs.common.BaseApp
 import com.mredrock.cyxbs.common.utils.extensions.editor
 import com.mredrock.cyxbs.common.utils.extensions.sharedPreferences
-import com.mredrock.cyxbs.discover.map.bean.ButtonInfo
-import com.mredrock.cyxbs.discover.map.bean.FavoritePlace
-import com.mredrock.cyxbs.discover.map.bean.MapInfo
-import com.mredrock.cyxbs.discover.map.bean.PlaceItem
+import com.mredrock.cyxbs.discover.map.bean.*
 
 /**
  *@author zhangzhe
@@ -219,6 +216,60 @@ object DataSet {
         sharedPreferences.editor {
             putString("SearchHistory", gson.toJson(searchHistory))
         }
+    }
+
+    fun savePlaceDetails(placeDetails: PlaceDetails, id: String) {
+        val s = sharedPreferences.getString("PlaceDetailsStore", "")
+        var list: MutableList<PlaceDetailsStoreBean>? =
+                if (s != "") {
+                    gson.fromJson(s, object : TypeToken<MutableList<PlaceDetailsStoreBean>>() {}.type)
+                } else {
+                    null
+                }
+        val placeDetailsStoreBean = PlaceDetailsStoreBean(placeDetails, id)
+        if (list != null) {
+            var flag = true
+            for (i: Int in list.indices) {
+                if (list[i].id == id) {
+
+                    list[i] = placeDetailsStoreBean
+                    flag = false
+                    break
+                }
+            }
+            if (flag) {
+                list.add(placeDetailsStoreBean)
+            }
+        } else {
+            list = mutableListOf(placeDetailsStoreBean)
+        }
+        sharedPreferences.editor {
+            putString("PlaceDetailsStore", gson.toJson(list))
+        }
+    }
+
+    fun clearPlaceDetails() {
+        sharedPreferences.editor {
+            putString("PlaceDetailsStore", gson.toJson(mutableListOf<PlaceDetailsStoreBean>()))
+        }
+    }
+
+    fun getPlaceDetails(id: String): PlaceDetails? {
+        val s = sharedPreferences.getString("PlaceDetailsStore", "")
+        val list: MutableList<PlaceDetailsStoreBean>? =
+                if (s != "") {
+                    gson.fromJson(s, object : TypeToken<MutableList<PlaceDetailsStoreBean>>() {}.type)
+                } else {
+                    null
+                }
+        if (list != null) {
+            for (i: Int in list.indices) {
+                if (list[i].id == id) {
+                    return list[i].placeDetails
+                }
+            }
+        }
+        return null
     }
 
 

@@ -19,6 +19,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.mredrock.cyxbs.common.BaseApp
 import com.mredrock.cyxbs.common.component.CyxbsToast
 import com.mredrock.cyxbs.common.utils.extensions.doPermissionAction
@@ -35,12 +36,14 @@ import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
 import com.mredrock.cyxbs.discover.map.widget.MapDialog
 import com.mredrock.cyxbs.discover.map.widget.OnSelectListener
 import com.mredrock.cyxbs.discover.map.widget.ProgressDialog
+import kotlinx.android.synthetic.main.map_fragment_favorite_edit.*
 import kotlinx.android.synthetic.main.map_fragment_place_detail_container.*
 
 
 class PlaceDetailBottomSheetFragment : Fragment() {
     private lateinit var viewModel: MapViewModel
     private lateinit var mBinding: MapFragmentPlaceDetailContainerBinding
+    private var isFavoritePlace = false
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.map_fragment_place_detail_container, container, false)
@@ -123,13 +126,21 @@ class PlaceDetailBottomSheetFragment : Fragment() {
         /**
          * 添加点击事件
          */
-        map_iv_detail_favorite.setOnClickListener {
-            //打开收藏编辑页面
-            viewModel.fragmentFavoriteEditIsShowing.value = true
+        val onClickListener = View.OnClickListener {
+            //不再打开收藏编辑页面，故注释
+            //viewModel.fragmentFavoriteEditIsShowing.value = true
+            if (isFavoritePlace) {
+                viewModel.deleteCollect(viewModel.showingPlaceId)
+                map_iv_detail_favorite.setImageResource(R.drawable.map_ic_no_like)
+            } else {
+                viewModel.addCollect(viewModel.placeDetails.value?.placeName
+                        ?: "我的收藏", viewModel.showingPlaceId)
+                map_iv_detail_favorite.setImageResource(R.drawable.map_ic_like)
+            }
+            viewModel.bottomSheetStatus.postValue(BottomSheetBehavior.STATE_COLLAPSED)
         }
-        map_tv_detail_place_nickname.setOnClickListener {
-            viewModel.fragmentFavoriteEditIsShowing.value = true
-        }
+        map_iv_detail_favorite.setOnClickListener(onClickListener)
+        map_tv_detail_place_nickname.setOnClickListener(onClickListener)
         map_tv_detail_more.setOnClickListener {
             viewModel.fragmentAllPictureIsShowing.value = true
         }
@@ -162,10 +173,13 @@ class PlaceDetailBottomSheetFragment : Fragment() {
             if (isFavor != null) {
                 map_iv_detail_favorite.setImageResource(R.drawable.map_ic_like)
                 map_tv_detail_place_nickname.visible()
-                map_tv_detail_place_nickname.text = isFavor
+                isFavoritePlace = true
+                //不显示地点备注名了，故注释掉
+                //map_tv_detail_place_nickname.text = isFavor
             } else {
                 map_iv_detail_favorite.setImageResource(R.drawable.map_ic_no_like)
                 map_tv_detail_place_nickname.gone()
+                isFavoritePlace = false
             }
         }
     }
@@ -214,7 +228,7 @@ class PlaceDetailBottomSheetFragment : Fragment() {
              * 上传图片
              */
             ProgressDialog.show(requireContext(), "正在上传图片", "请稍后", false)
-            viewModel.uploadPicture(imgPath)
+            viewModel.uploadPicture(imgPath, requireContext())
         }
     }
 

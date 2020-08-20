@@ -9,6 +9,7 @@ import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatCheckedTextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.mredrock.cyxbs.common.utils.extensions.invisible
 import com.mredrock.cyxbs.common.utils.extensions.visible
 import com.mredrock.cyxbs.discover.map.R
@@ -64,7 +65,7 @@ class SymbolRvAdapter(val context: Context, val viewModel: MapViewModel, private
                     animator2.start()
                     viewModel.isClickSymbol.value = false
                     //清除所有标签
-                    viewModel.showSomeIconsId.postValue(mutableListOf())
+                    viewModel.showSomePlaceIconById.postValue(mutableListOf())
                     return@setOnClickListener
                 }
             }
@@ -89,8 +90,8 @@ class SymbolRvAdapter(val context: Context, val viewModel: MapViewModel, private
             }
             animator.start()
             //显示标签到地图上
-            viewModel.getSearchType(mList[position].code)
-            viewModel.bottomSheetIsShowing.value = false
+            viewModel.showSomePlaceIconById.value = mList[position].placeIdList.toMutableList()
+            viewModel.bottomSheetStatus.value = BottomSheetBehavior.STATE_HIDDEN
             viewModel.isClickSymbol.value = true
         }
     }

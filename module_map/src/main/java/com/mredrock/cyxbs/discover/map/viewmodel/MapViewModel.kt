@@ -1,11 +1,12 @@
 package com.mredrock.cyxbs.discover.map.viewmodel
 
+import android.content.Context
 import android.widget.Toast
 import androidx.databinding.ObservableArrayList
 import androidx.lifecycle.MutableLiveData
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.mredrock.cyxbs.common.BaseApp
 import com.mredrock.cyxbs.common.bean.isSuccessful
-import com.mredrock.cyxbs.common.component.CyxbsToast
 import com.mredrock.cyxbs.common.network.ApiGenerator
 import com.mredrock.cyxbs.common.utils.extensions.doOnErrorWithDefaultErrorHandler
 import com.mredrock.cyxbs.common.utils.extensions.safeSubscribeBy
@@ -14,8 +15,11 @@ import com.mredrock.cyxbs.common.viewmodel.BaseViewModel
 import com.mredrock.cyxbs.discover.map.BuildConfig
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.bean.*
+import com.mredrock.cyxbs.discover.map.component.MapToast
 import com.mredrock.cyxbs.discover.map.model.DataSet
 import com.mredrock.cyxbs.discover.map.network.MapApiService
+import com.mredrock.cyxbs.discover.map.widget.MapDialogTips
+import com.mredrock.cyxbs.discover.map.widget.OnSelectListenerTips
 import com.mredrock.cyxbs.discover.map.widget.ProgressDialog
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -44,23 +48,23 @@ class MapViewModel : BaseViewModel() {
     //喜欢列表内容
     val collectList = MutableLiveData<MutableList<FavoritePlace>>()
 
-    //地点详细弹出框要显示的内容（由PlaceDetailBottomSheetFragment观察）
+    //地点详细弹出框要显示的内容
     val placeDetails = MutableLiveData<PlaceDetails>()
 
     //是否正在显示收藏页面
-    val fragmentFavoriteEditIsShowing = MutableLiveData(false)
+    val fragmentFavoriteEditIsShowing = MutableLiveData<Boolean>()
 
     //是否正在显示全部图片界面
-    val fragmentAllPictureIsShowing = MutableLiveData(false)
+    val fragmentAllPictureIsShowing = MutableLiveData<Boolean>()
 
     //详细页面正在显示的地点id
     var showingPlaceId = "-1"
 
     //是否显示bottomSheet，用于监听并隐藏
-    val bottomSheetIsShowing = MutableLiveData(false)
+    val bottomSheetStatus = MutableLiveData<Int>()
 
     //是否在动画中
-    val isAnimation = MutableLiveData(false)
+    val mapViewIsInAnimation = MutableLiveData<Boolean>()
 
     //搜索框的文字，只用在搜索界面fragment观察本变量即可实现搜索
     val searchText = MutableLiveData("")
@@ -72,28 +76,29 @@ class MapViewModel : BaseViewModel() {
     var searchHistory = mutableListOf<String>()
 
     //当历史记录点击，通知输入框更新
-    val searchTextHistory = MutableLiveData<String>("")
+    val searchHistoryString = MutableLiveData<String>("")
 
     //显示的地点id
-    val showSomeIconsId = MutableLiveData<MutableList<String>>()
+    val showSomePlaceIconById = MutableLiveData<MutableList<String>>()
+
+    //缩放到某一个地点id
+    val showIconById = MutableLiveData<String>()
 
     //用于通知mainFragment关闭搜索框
-    val closeSearchFragment = MutableLiveData(false)
+    val closeSearchFragment = MutableLiveData<Boolean>()
 
     //网络请求失败，使用本地缓存
-    val loadFail = MutableLiveData(false)
+    val loadFail = MutableLiveData<Boolean>()
 
     //是否锁定
-    val isLock = MutableLiveData(false)
+    val isLock = MutableLiveData<Boolean>(false)
 
     //是否点击了标签或收藏
-    val isClickSymbol = MutableLiveData(false)
+    val isClickSymbol = MutableLiveData<Boolean>()
 
     //通知收藏列表关闭
-    val dismissPopUpWindow = MutableLiveData(false)
+    val showPopUpWindow = MutableLiveData<Boolean>()
 
-    //查看大图的url
-    val showPictureUrl = MutableLiveData<String>()
 
     fun init() {
 
@@ -120,7 +125,7 @@ class MapViewModel : BaseViewModel() {
         mapApiService.getMapInfo()//网络请求替换为：apiService.getMapInfo()
                 .setSchedulers()
                 .doOnErrorWithDefaultErrorHandler {
-                    toastEvent.value = R.string.map_network_connect_error
+                    MapToast.makeText(BaseApp.context, R.string.map_network_connect_error, Toast.LENGTH_SHORT).show()
                     //使用缓存数据
                     val mapInfoStore = DataSet.getMapInfo()
                     if (mapInfoStore != null) {
@@ -136,7 +141,7 @@ class MapViewModel : BaseViewModel() {
         mapApiService.getButtonInfo()
                 .setSchedulers()
                 .doOnErrorWithDefaultErrorHandler {
-                    toastEvent.value = R.string.map_network_connect_error
+                    MapToast.makeText(BaseApp.context, R.string.map_network_connect_error, Toast.LENGTH_SHORT).show()
                     //使用缓存数据
                     val buttonInfoStore = DataSet.getButtonInfo()
                     if (buttonInfoStore != null) {
@@ -155,19 +160,36 @@ class MapViewModel : BaseViewModel() {
 
 
     //当地图标签被点击，执行此网络请求，在对应的fragment观察数据即可
-    fun showPlaceDetails(placeId: String) {
+    fun getPlaceDetails(placeId: String) {
         mapApiService.getPlaceDetails(placeId)
                 .setSchedulers()
                 .doOnErrorWithDefaultErrorHandler {
-                    toastEvent.value = R.string.map_network_connect_error
+                    MapToast.makeText(BaseApp.context, R.string.map_network_connect_error, Toast.LENGTH_SHORT).show()
+
+                    //有缓存则使用缓存
+                    val t = DataSet.getPlaceDetails(placeId)
+                    if (t != null) {
+                        showingPlaceId = placeId
+                        placeDetails.postValue(t)
+                        bottomSheetStatus.postValue(BottomSheetBehavior.STATE_COLLAPSED)
+                    } else {
+                        bottomSheetStatus.postValue(BottomSheetBehavior.STATE_HIDDEN)
+                    }
+
                     true
                 }
-                .safeSubscribeBy {
+                .safeSubscribeBy() {
                     showingPlaceId = placeId
                     placeDetails.postValue(it.data)
-                    bottomSheetIsShowing.postValue(true)
+                    if (bottomSheetStatus.value == BottomSheetBehavior.STATE_HIDDEN) {
+                        bottomSheetStatus.postValue(BottomSheetBehavior.STATE_COLLAPSED)
+                    }
+                    DataSet.savePlaceDetails(it.data, placeId)
+
+
                 }.lifeCycle()
     }
+
 
     fun refreshCollectList() {
         mapApiService.getCollect()
@@ -178,35 +200,28 @@ class MapViewModel : BaseViewModel() {
                         collectList.postValue(list)
                     }
                     if (collectList.value?.size == 0) {
-                        toastEvent.value = R.string.map_favorite_empty
+                        MapToast.makeText(BaseApp.context, R.string.map_favorite_empty, Toast.LENGTH_SHORT).show()
                     }
                     true
                 }
                 .safeSubscribeBy {
 
-                    it.data.placeId.forEach { item ->
+                    it.data.placeIdList.forEach { item ->
                         DataSet.addCollect(item)
                     }
 
                     collectList.value = DataSet.getCollect()
 
                     if (collectList.value?.size == 0) {
-                        toastEvent.value = R.string.map_favorite_empty
+                        MapToast.makeText(BaseApp.context, R.string.map_favorite_empty, Toast.LENGTH_SHORT).show()
+                    } else {
+                        if (bottomSheetStatus.value == BottomSheetBehavior.STATE_HIDDEN || showPopUpWindow.value == true) {
+                            showSomePlaceIconById.value = it.data.placeIdList
+                        }
                     }
                 }.lifeCycle()
     }
 
-    fun getSearchType(code: String) {
-        mapApiService.getSearchType(code)
-                .setSchedulers()
-                .doOnErrorWithDefaultErrorHandler {
-                    toastEvent.value = R.string.map_network_connect_error
-                    true
-                }
-                .safeSubscribeBy {
-                    showSomeIconsId.value = it.data
-                }.lifeCycle()
-    }
 
     fun addCollect(placeNickname: String, id: String) {
         var notExist = true
@@ -222,15 +237,17 @@ class MapViewModel : BaseViewModel() {
             mapApiService.addCollect(id)
                     .setSchedulers()
                     .doOnErrorWithDefaultErrorHandler {
-                        toastEvent.value = R.string.map_network_connect_error
+                        MapToast.makeText(BaseApp.context, R.string.map_network_connect_error, Toast.LENGTH_SHORT).show()
                         ProgressDialog.hide()
+                        refreshCollectList()
                         true
                     }
                     .safeSubscribeBy {
                         if (it.isSuccessful) {
                             DataSet.addCollect(FavoritePlace(placeNickname, id))
+                            MapToast.makeText(BaseApp.context, "收藏成功！", Toast.LENGTH_SHORT).show()
                         } else {
-                            toastEvent.value = R.string.map_network_connect_error
+                            MapToast.makeText(BaseApp.context, R.string.map_network_connect_error, Toast.LENGTH_SHORT).show()
                         }
                         ProgressDialog.hide()
                         refreshCollectList()
@@ -248,15 +265,16 @@ class MapViewModel : BaseViewModel() {
         mapApiService.deleteCollect(id.toInt())
                 .setSchedulers()
                 .doOnErrorWithDefaultErrorHandler {
-                    toastEvent.value = R.string.map_network_connect_error
+                    MapToast.makeText(BaseApp.context, R.string.map_network_connect_error, Toast.LENGTH_SHORT).show()
                     ProgressDialog.hide()
+                    refreshCollectList()
                     true
                 }
                 .safeSubscribeBy {
                     if (it.isSuccessful) {
                         DataSet.deleteCollect(id)
                     } else {
-                        toastEvent.value = R.string.map_network_connect_error
+                        MapToast.makeText(BaseApp.context, R.string.map_network_connect_error, Toast.LENGTH_SHORT).show()
                     }
                     ProgressDialog.hide()
                     refreshCollectList()
@@ -269,7 +287,7 @@ class MapViewModel : BaseViewModel() {
         searchHistory.reverse()
     }
 
-    fun uploadPicture(imgPath: String?) {
+    fun uploadPicture(imgPath: String?, context: Context) {
         if (imgPath == null) {
             return
         }
@@ -284,15 +302,17 @@ class MapViewModel : BaseViewModel() {
                 .setSchedulers()
                 .doOnErrorWithDefaultErrorHandler {
                     ProgressDialog.hide()
-                    CyxbsToast.makeText(BaseApp.context, "上传失败~", Toast.LENGTH_LONG).show()
+                    MapToast.makeText(BaseApp.context, "上传失败，网络似乎有问题", Toast.LENGTH_LONG).show()
                     true
                 }
                 .safeSubscribeBy {
                     ProgressDialog.hide()
                     if (it.isSuccessful) {
-                        CyxbsToast.makeText(BaseApp.context, "上传成功~ 审核通过后就可以看到啦", Toast.LENGTH_LONG).show()
+                        MapDialogTips.show(context, "上传成功", "上传的照片审核通过就可以在这里看到啦~", object : OnSelectListenerTips {
+                            override fun onPositive() {}
+                        })
                     } else {
-                        CyxbsToast.makeText(BaseApp.context, "上传失败~", Toast.LENGTH_LONG).show()
+                        MapToast.makeText(BaseApp.context, "上传失败，服务器拒绝", Toast.LENGTH_LONG).show()
 
                     }
                 }.lifeCycle()

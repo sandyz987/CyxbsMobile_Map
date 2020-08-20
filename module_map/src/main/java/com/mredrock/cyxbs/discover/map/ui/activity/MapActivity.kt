@@ -54,7 +54,6 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.map_activity_map)
-        ProgressDialog.show(this, "提示", "加载中...", false)
         val path = DataSet.getPath()
         /**
          * 如果有保存路径且地图存在，则不展示dialog

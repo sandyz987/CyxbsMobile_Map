@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
@@ -53,15 +54,12 @@ class AllPictureFragment : Fragment() {
 
         allPictureAdapter.setOnItemClickListener(object : AllPictureRvAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
-                viewModel.showPictureUrl.value = imageData[position]
-                val showPictureFragment = ShowPictureFragment()
                 val transaction = manager?.beginTransaction()?.setCustomAnimations(
                         R.animator.map_slide_from_right,
                         R.animator.map_slide_to_left,
                         R.animator.map_slide_from_left,
                         R.animator.map_slide_to_right)
-                transaction?.add(R.id.map_root_all_picture, showPictureFragment)
-                transaction?.show(showPictureFragment)
+                transaction?.add(R.id.map_root_all_picture, ShowPictureFragment::class.java, bundleOf(Pair("pictureUrl", imageData[position])))
                 transaction?.addToBackStack("showPicture")?.commit()
             }
 
@@ -180,7 +178,7 @@ class AllPictureFragment : Fragment() {
              * 上传图片
              */
             ProgressDialog.show(requireContext(), "正在上传图片", "请稍后", false)
-            viewModel.uploadPicture(imgPath)
+            viewModel.uploadPicture(imgPath, requireContext())
         }
     }
 

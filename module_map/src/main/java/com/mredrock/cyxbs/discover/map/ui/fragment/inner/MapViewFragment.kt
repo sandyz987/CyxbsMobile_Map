@@ -13,12 +13,14 @@ import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import android.widget.FrameLayout
 import android.widget.PopupWindow
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.mredrock.cyxbs.common.BaseApp
 import com.mredrock.cyxbs.common.utils.extensions.dp2px
 import com.mredrock.cyxbs.common.utils.extensions.invisible
 import com.mredrock.cyxbs.common.utils.extensions.visible
@@ -26,20 +28,23 @@ import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.bean.IconBean
 import com.mredrock.cyxbs.discover.map.bean.PlaceItem
 import com.mredrock.cyxbs.discover.map.component.MapLayout
+import com.mredrock.cyxbs.discover.map.component.MapToast
 import com.mredrock.cyxbs.discover.map.model.DataSet
 import com.mredrock.cyxbs.discover.map.ui.activity.VRActivity
 import com.mredrock.cyxbs.discover.map.ui.adapter.FavoriteListAdapter
 import com.mredrock.cyxbs.discover.map.ui.adapter.SymbolRvAdapter
 import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
+import com.mredrock.cyxbs.discover.map.widget.OnUpdateSelectListener
+import com.mredrock.cyxbs.discover.map.widget.UpdateMapDialog
 import kotlinx.android.synthetic.main.map_fragment_map_view.*
 import java.io.File
+import java.lang.Exception
 
 
 class MapViewFragment : Fragment() {
     private lateinit var viewModel: MapViewModel
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<FrameLayout>
     private val placeData = mutableListOf<PlaceItem>()
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.map_fragment_map_view, container, false)
@@ -81,13 +86,25 @@ class MapViewFragment : Fragment() {
              * 根据时间戳判断是否清除缓存重新加载
              */
             val version = DataSet.getPictureVersion()
-            if (data.pictureVersion != version) {
-                val path = DataSet.getPath()
-                if (path != null)
-                    deleteFile(path)
+            val path = DataSet.getPath()
+            if (data.pictureVersion != version && path != null && fileIsExists(path)) {
+                UpdateMapDialog.show(requireContext(), "地图更新",
+                        "有最新的地图信息可用，推荐更新获取校内最新的地点信息",
+                        object : OnUpdateSelectListener {
+                            override fun onDeny() {
+                                map_layout.setUrl("noUpdate")
+                            }
+
+                            override fun onPositive() {
+                                deleteFile(path)
+                                DataSet.savePictureVersion(data.pictureVersion)
+                                map_layout.setUrl(data.mapUrl)
+                            }
+                        })
+            } else {
                 DataSet.savePictureVersion(data.pictureVersion)
+                map_layout.setUrl(data.mapUrl)
             }
-            map_layout.setUrl(data.mapUrl)
 
         })
 
@@ -98,23 +115,16 @@ class MapViewFragment : Fragment() {
         })
 
         /**
-         * 设置地点点击事件
+         * 设置地点大头针（水滴）点击事件
          */
         map_layout.setMyOnIconClickListener(object : MapLayout.OnIconClickListener {
             override fun onIconClick(v: View) {
                 val bean = v.tag as IconBean
                 map_layout.focusToPoint(bean.sx, bean.sy)
-                viewModel.showPlaceDetails(bean.id.toString())
+                viewModel.getPlaceDetails(bean.id.toString())
+                viewModel.bottomSheetStatus.postValue(BottomSheetBehavior.STATE_EXPANDED)
             }
 
-        })
-        /**
-         *
-         */
-        map_layout.setMyOnNoPlaceClickListener(object : MapLayout.OnNoPlaceClickListener {
-            override fun onNoPlaceClick() {
-
-            }
         })
         /**
          * 监听点击到建筑区域的点击事件
@@ -122,9 +132,16 @@ class MapViewFragment : Fragment() {
         map_layout.setMyOnPlaceClickListener(object : MapLayout.OnPlaceClickListener {
             override fun onPlaceClick(v: View) {
                 val bean = v.tag as IconBean
-                //viewModel.showPlaceDetails(bean.id)
+                viewModel.getPlaceDetails(bean.id.toString())
             }
 
+        })
+
+        /**
+         * 监听显示某一个地点
+         */
+        viewModel.showIconById.observe(viewLifecycleOwner, Observer {
+            map_layout.focusToPoint(it)
         })
 
         /**
@@ -133,22 +150,26 @@ class MapViewFragment : Fragment() {
         map_layout.setMyOnNoPlaceClickListener(object : MapLayout.OnNoPlaceClickListener {
             override fun onNoPlaceClick() {
                 //通知隐藏底部栏
-                viewModel.bottomSheetIsShowing.value = false
+                if (viewModel.placeDetails.value?.placeName == "") {
+                    viewModel.bottomSheetStatus.value = BottomSheetBehavior.STATE_HIDDEN
+                } else {
+                    viewModel.bottomSheetStatus.value = BottomSheetBehavior.STATE_COLLAPSED
+                }
             }
         })
 
         viewModel.isClickSymbol.observe(viewLifecycleOwner, Observer {
-            if (it && viewModel.isLock.value!!) {
+            if (it && viewModel.isLock.value == true) {
                 val animator = ValueAnimator.ofFloat(1f, 0.8f, 1.2f, 1f)
                 animator.duration = 500
-                animator.addUpdateListener {
-                    val currentValue: Float = it.animatedValue as Float
+                animator.addUpdateListener { t ->
+                    val currentValue: Float = t.animatedValue as Float
                     map_iv_lock.scaleX = currentValue
                     map_iv_lock.scaleY = currentValue
                 }
                 animator.start()
                 map_iv_lock.setImageResource(R.drawable.map_ic_unlock)
-                viewModel.toastEvent.value = R.string.map_unlock
+                MapToast.makeText(BaseApp.context, R.string.map_unlock, Toast.LENGTH_SHORT).show()
                 viewModel.isLock.value = false
                 map_layout.setIsLock(false)
             }
@@ -159,18 +180,20 @@ class MapViewFragment : Fragment() {
          */
         map_iv_lock.setOnClickListener {
             if (viewModel.isLock.value!!) {
-                val animator = ValueAnimator.ofFloat(1f, 0.8f, 1.2f, 1f)
-                animator.duration = 500
-                animator.addUpdateListener {
-                    val currentValue: Float = it.animatedValue as Float
-                    map_iv_lock.scaleX = currentValue
-                    map_iv_lock.scaleY = currentValue
+                if (viewModel.isLock.value!!) {
+                    val animator = ValueAnimator.ofFloat(1f, 0.8f, 1.2f, 1f)
+                    animator.duration = 500
+                    animator.addUpdateListener {
+                        val currentValue: Float = it.animatedValue as Float
+                        map_iv_lock.scaleX = currentValue
+                        map_iv_lock.scaleY = currentValue
+                    }
+                    animator.start()
+                    map_iv_lock.setImageResource(R.drawable.map_ic_unlock)
+                    MapToast.makeText(BaseApp.context, R.string.map_unlock, Toast.LENGTH_SHORT).show()
+                    viewModel.isLock.value = false
+                    map_layout.setIsLock(false)
                 }
-                animator.start()
-                map_iv_lock.setImageResource(R.drawable.map_ic_unlock)
-                viewModel.toastEvent.value = R.string.map_unlock
-                viewModel.isLock.value = false
-                map_layout.setIsLock(false)
             } else {
                 val animator = ValueAnimator.ofFloat(1f, 1.2f, 0.8f, 1f)
                 animator.duration = 500
@@ -181,7 +204,7 @@ class MapViewFragment : Fragment() {
                 }
                 animator.start()
                 map_iv_lock.setImageResource(R.drawable.map_ic_lock)
-                viewModel.toastEvent.value = R.string.map_lock
+                MapToast.makeText(BaseApp.context, R.string.map_lock, Toast.LENGTH_SHORT).show()
                 viewModel.isLock.value = true
                 map_layout.setIsLock(true)
             }
@@ -193,7 +216,7 @@ class MapViewFragment : Fragment() {
          */
         bottomSheetBehavior = BottomSheetBehavior.from(map_bottom_sheet_content)
         map_bottom_sheet_content.invisible()
-        activity?.supportFragmentManager?.beginTransaction()?.apply {
+        childFragmentManager.beginTransaction().apply {
             add(R.id.map_bottom_sheet_content, PlaceDetailBottomSheetFragment())
             commit()
         }
@@ -221,7 +244,11 @@ class MapViewFragment : Fragment() {
         mapFavoriteRecyclerView.adapter = favoriteListAdapter
         //设置点击事件
         map_ll_map_view_my_favorite.setOnClickListener {
+            viewModel.showPopUpWindow.value = true
             viewModel.isClickSymbol.value = true
+            if (viewModel.bottomSheetStatus.value == BottomSheetBehavior.STATE_EXPANDED) {
+                viewModel.bottomSheetStatus.postValue(BottomSheetBehavior.STATE_COLLAPSED)
+            }
             viewModel.refreshCollectList()
             if (!popupWindow.isShowing) {
                 popupWindow.showAsDropDown(map_ll_map_view_my_favorite, map_ll_map_view_my_favorite.width - (context?.dp2px(140f)
@@ -230,9 +257,11 @@ class MapViewFragment : Fragment() {
             }
         }
 
-        viewModel.dismissPopUpWindow.observe(viewLifecycleOwner, Observer {
-            viewModel.isClickSymbol.value = false
-            popupWindow.dismiss()
+        viewModel.showPopUpWindow.observe(viewLifecycleOwner, Observer {
+            if (!it) {
+                viewModel.isClickSymbol.value = false
+                popupWindow.dismiss()
+            }
         })
 
         /**
@@ -249,20 +278,31 @@ class MapViewFragment : Fragment() {
         )
 
 
-        viewModel.bottomSheetIsShowing.observe(
+        viewModel.bottomSheetStatus.observe(
                 viewLifecycleOwner,
                 Observer {
-                    if (it) {
-                        //展开底部栏
-                        map_bottom_sheet_content.visible()
-                        //下面这两句，因为低版本依赖的bottomSheetBehavior，当内部view高度发生变化时，不会及时修正高度，故手动测量
-                        //换成高版本依赖可以删除
-                        map_bottom_sheet_content.requestLayout()
-                        map_bottom_sheet_content.invalidate()
-                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-                    } else {
-                        //半隐藏底部栏
-                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                    when (it) {
+                        BottomSheetBehavior.STATE_COLLAPSED -> {
+                            //半隐藏底部栏
+                            map_bottom_sheet_content.visible()
+                            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                        }
+
+                        BottomSheetBehavior.STATE_EXPANDED -> {
+                            //展开底部栏
+                            map_bottom_sheet_content.visible()
+                            //下面这两句，因为低版本依赖的bottomSheetBehavior，当内部view高度发生变化时，不会及时修正高度，故手动测量
+                            //换成高版本依赖可以删除
+                            map_bottom_sheet_content.requestLayout()
+                            map_bottom_sheet_content.invalidate()
+                            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                        }
+
+                        BottomSheetBehavior.STATE_HIDDEN -> {
+                            map_bottom_sheet_content.invisible()
+                            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                        }
+
                     }
                 }
         )
@@ -274,7 +314,7 @@ class MapViewFragment : Fragment() {
                 }
         )
 
-        viewModel.showSomeIconsId.observe(viewLifecycleOwner, Observer {
+        viewModel.showSomePlaceIconById.observe(viewLifecycleOwner, Observer {
             map_layout.closeAllIcon()
             map_layout.setOnCloseFinishListener(object : MapLayout.OnCloseFinishListener {
                 override fun onCloseFinish() {
@@ -317,7 +357,7 @@ class MapViewFragment : Fragment() {
                 }
 
                 override fun onAnimationStart(p0: Animator?) {
-                    viewModel.isAnimation.value = true
+                    viewModel.mapViewIsInAnimation.value = true
                     map_root_map_view.animate().alpha(0f).duration = 1000
                 }
 
@@ -330,7 +370,7 @@ class MapViewFragment : Fragment() {
 
     override fun onResume() {
         map_root_map_view.animate().alpha(1f).duration = 1000
-        viewModel.isAnimation.value = false
+        viewModel.mapViewIsInAnimation.value = false
         super.onResume()
     }
 
@@ -344,5 +384,17 @@ class MapViewFragment : Fragment() {
         return if (file.isFile && file.exists()) {
             file.delete()
         } else false
+    }
+
+    //判断文件是否存在
+    private fun fileIsExists(strFile: String?): Boolean {
+        try {
+            if (!File(strFile).exists()) {
+                return false
+            }
+        } catch (e: Exception) {
+            return false
+        }
+        return true
     }
 }

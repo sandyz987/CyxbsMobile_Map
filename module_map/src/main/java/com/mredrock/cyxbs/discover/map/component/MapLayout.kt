@@ -12,18 +12,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.Toast
 import com.bumptech.glide.load.model.GlideUrl
 import com.davemorrissey.labs.subscaleview.ImageSource
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.mredrock.cyxbs.common.utils.extensions.dp2px
 import com.mredrock.cyxbs.common.utils.extensions.gone
-import com.mredrock.cyxbs.common.utils.extensions.toast
 import com.mredrock.cyxbs.common.utils.extensions.visible
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.bean.IconBean
 import com.mredrock.cyxbs.discover.map.model.DataSet
 import com.mredrock.cyxbs.discover.map.util.SubsamplingScaleImageViewTarget
-import com.mredrock.cyxbs.discover.map.widget.*
+import com.mredrock.cyxbs.discover.map.widget.GlideApp
+import com.mredrock.cyxbs.discover.map.widget.GlideProgressDialog
+import com.mredrock.cyxbs.discover.map.widget.ProgressInterceptor
+import com.mredrock.cyxbs.discover.map.widget.ProgressListener
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -91,7 +94,6 @@ class MapLayout : FrameLayout, View.OnClickListener {
      */
     @SuppressLint("ClickableViewAccessibility")
     private fun initView() {
-
         val rootParams =
                 LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         /** 真实dpi<400的手机会非常卡，需要适配*/
@@ -121,39 +123,62 @@ class MapLayout : FrameLayout, View.OnClickListener {
 
         setOnUrlGetListener(object : OnUrlGetListener {
             override fun onUrlGet() {
-                if (url == "loadFail") {
-                    GlobalScope.launch(Dispatchers.Main) {
-                        context.toast("使用本地缓存")
-                    }
-                    val path = DataSet.getPath()
-                    try {
-                        if (path != null && File(path).exists()) {
-                            GlobalScope.launch(Dispatchers.Main) {
-                                subsamplingScaleImageView.setImage(ImageSource.uri(Uri.fromFile(File(path))))
-                            }
-                        } else {
-                            GlobalScope.launch(Dispatchers.Main) {
-                                subsamplingScaleImageView.setImage(imageSource)
-                            }
+                when (url) {
+                    "loadFail" -> {
+                        GlobalScope.launch(Dispatchers.Main) {
+                            MapToast.makeText(context, "使用本地缓存", Toast.LENGTH_SHORT).show()
                         }
-                        GlideProgressDialog.hide()
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
-                } else {
-                    url?.let {
-                        ProgressInterceptor.addListener(it, object : ProgressListener {
-                            override fun onProgress(progress: Int) {
-                                GlideProgressDialog.setProcess(progress)
+                        val path = DataSet.getPath()
+                        try {
+                            if (path != null && File(path).exists()) {
+                                GlobalScope.launch(Dispatchers.Main) {
+                                    subsamplingScaleImageView.setImage(ImageSource.uri(Uri.fromFile(File(path))))
+                                }
+                            } else {
+                                GlobalScope.launch(Dispatchers.Main) {
+                                    subsamplingScaleImageView.setImage(imageSource)
+                                }
                             }
-
-                        })
+                            GlideProgressDialog.hide()
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
                     }
-                    GlideApp.with(context)
-                            .download(GlideUrl(url))
-                            .into(SubsamplingScaleImageViewTarget(context, subsamplingScaleImageView, url
-                                    ?: ""))
+
+                    "noUpdate" -> {
+                        val path = DataSet.getPath()
+                        try {
+                            if (path != null && File(path).exists()) {
+                                GlobalScope.launch(Dispatchers.Main) {
+                                    subsamplingScaleImageView.setImage(ImageSource.uri(Uri.fromFile(File(path))))
+                                }
+                            } else {
+                                GlobalScope.launch(Dispatchers.Main) {
+                                    subsamplingScaleImageView.setImage(imageSource)
+                                }
+                            }
+                            GlideProgressDialog.hide()
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                    }
+
+                    else -> {
+                        url?.let {
+                            ProgressInterceptor.addListener(it, object : ProgressListener {
+                                override fun onProgress(progress: Int) {
+                                    GlideProgressDialog.setProcess(progress)
+                                }
+
+                            })
+                        }
+                        GlideApp.with(context)
+                                .download(GlideUrl(url))
+                                .into(SubsamplingScaleImageViewTarget(context, subsamplingScaleImageView, url
+                                        ?: ""))
+                    }
                 }
+
             }
 
         })
@@ -163,9 +188,11 @@ class MapLayout : FrameLayout, View.OnClickListener {
         subsamplingScaleImageView.setOnImageEventListener(object :
                 SubsamplingScaleImageView.OnImageEventListener {
             override fun onImageLoaded() {
+
                 subsamplingScaleImageView.animateScaleAndCenter(1f, PointF(1734f, 9372f))
                         ?.withDuration(FOCUS_ANIMATION_DURATION)
                         ?.withInterruptible(true)?.start()
+
             }
 
             /**
@@ -180,7 +207,7 @@ class MapLayout : FrameLayout, View.OnClickListener {
                     addView(icon, layoutParams)
                 }
 
-                ProgressDialog.hide()
+
             }
 
             override fun onTileLoadError(e: Exception?) {
@@ -218,7 +245,7 @@ class MapLayout : FrameLayout, View.OnClickListener {
             var count = 0
             if (isLock) {
                 GlobalScope.launch(Dispatchers.Main) {
-                    context.toast("取消锁定后对地图进行操作")
+                    MapToast.makeText(context, "取消锁定后对地图进行操作", Toast.LENGTH_SHORT).show()
                 }
                 return@setOnClickListener
             }
@@ -320,7 +347,7 @@ class MapLayout : FrameLayout, View.OnClickListener {
      */
     private fun closeIcon(icon: ImageView) {
         val animator = ValueAnimator.ofFloat(1f, 1.5f, 0f, 0.5f, 0f)
-        animator.duration = 500
+        animator.duration = 300
         animator.addUpdateListener {
             val currentValue: Float = it.animatedValue as Float
             icon.scaleX = currentValue
@@ -339,7 +366,7 @@ class MapLayout : FrameLayout, View.OnClickListener {
     private fun showIcon(icon: ImageView) {
         icon.visible()
         val animator = ValueAnimator.ofFloat(0f, 1.2f, 0.8f, 1f)
-        animator.duration = 500
+        animator.duration = 300
         animator.addUpdateListener {
             val currentValue: Float = it.animatedValue as Float
             icon.scaleX = currentValue
@@ -361,7 +388,7 @@ class MapLayout : FrameLayout, View.OnClickListener {
         }
         closeList.forEach { icon ->
             val animator = ValueAnimator.ofFloat(1f, 1.5f, 0f, 0.5f, 0f)
-            animator.duration = 500
+            animator.duration = 300
             animator.addUpdateListener {
                 val currentValue: Float = it.animatedValue as Float
                 icon.scaleX = currentValue
@@ -380,7 +407,7 @@ class MapLayout : FrameLayout, View.OnClickListener {
         }
         android.os.Handler().postDelayed({
             onCloseFinishListener?.onCloseFinish()
-        }, delayTime + 500)
+        }, delayTime + 300)
 
     }
 
@@ -391,7 +418,7 @@ class MapLayout : FrameLayout, View.OnClickListener {
         iconList.forEach { icon ->
             icon.visibility = View.VISIBLE
             val animator = ValueAnimator.ofFloat(0f, 1.2f, 0.8f, 1f)
-            animator.duration = 500
+            animator.duration = 300
             animator.addUpdateListener {
                 val currentValue: Float = it.animatedValue as Float
                 icon.scaleX = currentValue
@@ -412,7 +439,7 @@ class MapLayout : FrameLayout, View.OnClickListener {
                 val icon = iconList[i]
                 icon.visibility = View.VISIBLE
                 val animator = ValueAnimator.ofFloat(0f, 1.2f, 0.8f, 1f)
-                animator.duration = 500
+                animator.duration = 300
                 animator.addUpdateListener {
                     val currentValue: Float = it.animatedValue as Float
                     icon.scaleX = currentValue
@@ -503,7 +530,7 @@ class MapLayout : FrameLayout, View.OnClickListener {
                 icon.visible()
             }, delayTime)
             val animator = ValueAnimator.ofFloat(0f, 1.2f, 0.8f, 1f)
-            animator.duration = 500
+            animator.duration = 300
             animator.addUpdateListener {
                 val currentValue: Float = it.animatedValue as Float
                 icon.scaleX = currentValue
@@ -520,7 +547,7 @@ class MapLayout : FrameLayout, View.OnClickListener {
         }
         android.os.Handler().postDelayed({
             onShowFinishListener?.onShowFinish()
-        }, delayTime + 500)
+        }, delayTime + 300)
     }
 
 

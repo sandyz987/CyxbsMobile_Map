@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.mredrock.cyxbs.common.utils.extensions.gone
 import com.mredrock.cyxbs.common.utils.extensions.visible
 import com.mredrock.cyxbs.discover.map.R
@@ -48,9 +49,10 @@ class FavoriteListAdapter(context: Context, val viewModel: MapViewModel, private
             holder.line.visible()
         }
         holder.itemView.setOnClickListener {
-            viewModel.showSomeIconsId.value = mutableListOf(mList[position].placeId)
-            viewModel.bottomSheetIsShowing.value = false
-            viewModel.dismissPopUpWindow.value = true
+            viewModel.showIconById.value = mList[position].placeId
+            viewModel.getPlaceDetails(mList[position].placeId)
+            viewModel.showPopUpWindow.value = false
+            viewModel.bottomSheetStatus.postValue(BottomSheetBehavior.STATE_COLLAPSED)
         }
     }
 
