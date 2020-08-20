@@ -196,17 +196,6 @@ class MapViewModel : BaseViewModel() {
                 }.lifeCycle()
     }
 
-    fun getSearchType(code: String) {
-        mapApiService.getSearchType(code)
-                .setSchedulers()
-                .doOnErrorWithDefaultErrorHandler {
-                    toastEvent.value = R.string.map_network_connect_error
-                    true
-                }
-                .safeSubscribeBy {
-                    showSomeIconsId.value = it.data
-                }.lifeCycle()
-    }
 
     fun addCollect(placeNickname: String, id: String) {
         var notExist = true

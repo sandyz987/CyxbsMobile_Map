@@ -10,7 +10,8 @@ import com.google.gson.annotations.SerializedName
 
 data class InfoItem(
         var title: String,
-        var code: String,
+        @SerializedName("place_id")
+        var placeIdList: List<String>,
         @SerializedName("is_hot")
         var isHot: Boolean
 )

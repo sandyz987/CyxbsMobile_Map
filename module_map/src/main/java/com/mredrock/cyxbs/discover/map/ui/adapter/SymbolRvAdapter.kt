@@ -89,7 +89,7 @@ class SymbolRvAdapter(val context: Context, val viewModel: MapViewModel, private
             }
             animator.start()
             //显示标签到地图上
-            viewModel.getSearchType(mList[position].code)
+            viewModel.showSomeIconsId.value = mList[position].placeIdList.toMutableList()
             viewModel.bottomSheetIsShowing.value = false
             viewModel.isClickSymbol.value = true
         }
