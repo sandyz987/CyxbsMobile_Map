@@ -101,6 +101,7 @@ class MapViewModel : BaseViewModel() {
 
     //通知标签栏取消选择
     val unCheck = MutableLiveData<Boolean>()
+
     fun init() {
 
         /**

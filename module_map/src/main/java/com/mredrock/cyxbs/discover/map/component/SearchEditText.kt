@@ -90,11 +90,12 @@ class SearchEditText : androidx.appcompat.widget.AppCompatEditText {
     override fun draw(canvas: Canvas?) {
         super.draw(canvas)
         //搜索图标和搜索默认显示文字
+        canvas?.translate((scrollX).toFloat(), 0f)
         canvas?.drawText(hintString, offsetXHint + (width - hintWidth) / 2f, hintBaseline, paint)
         canvas?.drawBitmap(searchBitmap, offsetXHint + (width - hintWidth) / 2 - searchBitmap.width - 10f, (height - searchBitmap.height) / 2f, Paint())
         //清空按钮
         canvas?.drawBitmap(clearBitmap, offsetXClear + width - clearBitmap.width - context.dp2px(8f), (height - clearBitmap.height) / 2f, Paint())
-
+        canvas?.translate((-scrollX).toFloat(), 0f)
     }
 
 
