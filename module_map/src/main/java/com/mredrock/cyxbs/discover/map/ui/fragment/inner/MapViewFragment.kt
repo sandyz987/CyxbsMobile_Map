@@ -249,6 +249,17 @@ class MapViewFragment : Fragment() {
             add(R.id.map_bottom_sheet_content, PlaceDetailBottomSheetFragment())
             commit()
         }
+        bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                when (newState) {
+                    BottomSheetBehavior.STATE_HIDDEN -> viewModel.bottomSheetStatus.value = newState
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+            }
+        }
+        )
 
         /**
          * 初始化标签adapter（搜索框下方按钮）
@@ -336,7 +347,7 @@ class MapViewFragment : Fragment() {
 
                         BottomSheetBehavior.STATE_HIDDEN -> {
                             map_bottom_sheet_content.invisible()
-                            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
                         }
 
                     }
