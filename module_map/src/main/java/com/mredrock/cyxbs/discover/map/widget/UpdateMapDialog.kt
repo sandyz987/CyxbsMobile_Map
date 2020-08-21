@@ -7,8 +7,8 @@ import kotlinx.android.synthetic.main.map_dialog_choose.view.*
 import org.jetbrains.anko.layoutInflater
 
 /**
- *@author zhangzhe
- *@date 2020/8/18
+ *@author 林潼
+ *@date 2020/8/20
  *@description
  */
 
@@ -25,8 +25,8 @@ object UpdateMapDialog {
         builder.setCancelable(true)
         view.map_tv_tip_title.text = title
         view.map_tv_tip_text.text = content
-        view.map_tv_tip_deny.text = "下次再说"
-        view.map_tv_tip_positive.text = "立即更新"
+        view.map_tv_tip_deny.text = context.getText(R.string.map_update_dialog_deny)
+        view.map_tv_tip_positive.text = context.getText(R.string.map_update_dialog_sure)
         val dialog = builder.create()
         dialog.show()
 

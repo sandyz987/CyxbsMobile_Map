@@ -54,8 +54,6 @@ class MapLayout : FrameLayout, View.OnClickListener {
     /** Sub-samplingScaleImageView第三方控件 */
     private val subsamplingScaleImageView = SubsamplingScaleImageView(context)
 
-    /** 图片来源 */
-    private var imageSource = ImageSource.resource(R.drawable.map_ic_high)
 
     /** 标签array list */
     private val iconList = mutableListOf<ImageView>()
@@ -120,7 +118,6 @@ class MapLayout : FrameLayout, View.OnClickListener {
         subsamplingScaleImageView.setDoubleTapZoomScale(1f)
 
 
-
         /**
          * 监听是否获得url
          * url = "loadFail"，加载失败，使用本地地图缓存
@@ -140,10 +137,6 @@ class MapLayout : FrameLayout, View.OnClickListener {
                                 GlobalScope.launch(Dispatchers.Main) {
                                     subsamplingScaleImageView.setImage(ImageSource.uri(Uri.fromFile(File(path))))
                                 }
-                            } else {
-                                GlobalScope.launch(Dispatchers.Main) {
-                                    subsamplingScaleImageView.setImage(imageSource)
-                                }
                             }
                             GlideProgressDialog.hide()
                         } catch (e: Exception) {
@@ -157,10 +150,6 @@ class MapLayout : FrameLayout, View.OnClickListener {
                             if (path != null && File(path).exists()) {
                                 GlobalScope.launch(Dispatchers.Main) {
                                     subsamplingScaleImageView.setImage(ImageSource.uri(Uri.fromFile(File(path))))
-                                }
-                            } else {
-                                GlobalScope.launch(Dispatchers.Main) {
-                                    subsamplingScaleImageView.setImage(imageSource)
                                 }
                             }
                             GlideProgressDialog.hide()

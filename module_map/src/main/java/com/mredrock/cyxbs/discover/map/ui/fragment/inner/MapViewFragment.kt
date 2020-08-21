@@ -38,7 +38,6 @@ import com.mredrock.cyxbs.discover.map.widget.OnUpdateSelectListener
 import com.mredrock.cyxbs.discover.map.widget.UpdateMapDialog
 import kotlinx.android.synthetic.main.map_fragment_map_view.*
 import java.io.File
-import java.lang.Exception
 
 
 class MapViewFragment : Fragment() {
@@ -95,8 +94,8 @@ class MapViewFragment : Fragment() {
              * 地图不存在则直接下载地图
              */
             if (data.pictureVersion != version && path != null && fileIsExists(path)) {
-                UpdateMapDialog.show(requireContext(), "地图更新",
-                        "有最新的地图信息可用，推荐更新获取校内最新的地点信息",
+                UpdateMapDialog.show(requireContext(), BaseApp.context.getString(R.string.map_update_title),
+                        BaseApp.context.getString(R.string.map_update_message),
                         object : OnUpdateSelectListener {
                             override fun onDeny() {
                                 map_layout.setUrl("noUpdate")
@@ -119,8 +118,19 @@ class MapViewFragment : Fragment() {
          * 加载失败时使用本地地图缓存
          */
         viewModel.loadFail.observe(viewLifecycleOwner, Observer {
-            if (it)
-                map_layout.setUrl("loadFail")
+            if (it) {
+                val path = DataSet.getPath()
+                if (path == null) {
+                    activity?.finish()
+                } else {
+                    if (fileIsExists(path)) {
+                        map_layout.setUrl("loadFail")
+                    } else {
+                        activity?.finish()
+                    }
+                }
+            }
+
         })
 
         /**
@@ -245,7 +255,7 @@ class MapViewFragment : Fragment() {
          */
         val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         map_rv_symbol_places.layoutManager = linearLayoutManager
-        val symbolRvAdapter = context?.let { SymbolRvAdapter(it, viewModel, mutableListOf(),viewLifecycleOwner) }
+        val symbolRvAdapter = context?.let { SymbolRvAdapter(it, viewModel, mutableListOf(), viewLifecycleOwner) }
         map_rv_symbol_places.adapter = symbolRvAdapter
 
         /**
@@ -347,7 +357,7 @@ class MapViewFragment : Fragment() {
                     /**
                      * 关闭动画结束
                      */
-                    map_layout.showSomeIcons(it)
+                    map_layout?.showSomeIcons(it)
                 }
             })
 
