@@ -52,6 +52,21 @@ class SubsamplingScaleImageViewTarget(val context: Context, view: SubsamplingSca
 
     override fun onResourceLoading(placeholder: Drawable?) {
         super.onResourceLoading(placeholder)
+        val path = DataSet.getPath()
+        /**
+         * 如果有保存路径且地图存在，则不展示dialog
+         */
+        try {
+            if (path == null){
+                GlideProgressDialog.show(context, "下载地图", "仅需初次载入时下载地图哦",false)
+            }else{
+                if (!fileIsExists(path)) {
+                    GlideProgressDialog.show(context, "下载地图", "仅需初次载入时下载地图哦",false)
+                }
+            }
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+        }
     }
 
     /**
