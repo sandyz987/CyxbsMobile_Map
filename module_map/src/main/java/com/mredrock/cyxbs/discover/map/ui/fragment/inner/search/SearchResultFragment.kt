@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.mredrock.cyxbs.common.ui.BaseFragment
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.bean.PlaceItem
 import com.mredrock.cyxbs.discover.map.ui.adapter.SearchResultAdapter
@@ -18,7 +19,7 @@ import kotlinx.android.synthetic.main.map_fragment_search_result.*
 import org.jetbrains.anko.support.v4.runOnUiThread
 import java.util.regex.Pattern
 
-class SearchResultFragment : Fragment() {
+class SearchResultFragment : BaseFragment() {
     private lateinit var viewModel: MapViewModel
     private lateinit var observer: Observer<String>
     private var isSearching = false

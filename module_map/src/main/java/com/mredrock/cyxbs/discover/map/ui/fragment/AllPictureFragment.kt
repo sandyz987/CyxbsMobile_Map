@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.mredrock.cyxbs.common.BaseApp
 import com.mredrock.cyxbs.common.component.CyxbsToast
+import com.mredrock.cyxbs.common.ui.BaseFragment
 import com.mredrock.cyxbs.common.utils.extensions.doPermissionAction
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.ui.adapter.AllPictureRvAdapter
@@ -31,7 +32,7 @@ import com.mredrock.cyxbs.discover.map.widget.ProgressDialog
 import kotlinx.android.synthetic.main.map_fragment_all_picture.*
 
 
-class AllPictureFragment : Fragment() {
+class AllPictureFragment : BaseFragment() {
     private lateinit var viewModel: MapViewModel
     private lateinit var allPictureAdapter: AllPictureRvAdapter
     private val imageData = mutableListOf<String>()

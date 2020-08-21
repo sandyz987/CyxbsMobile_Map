@@ -22,6 +22,7 @@ import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.mredrock.cyxbs.common.BaseApp
 import com.mredrock.cyxbs.common.component.CyxbsToast
+import com.mredrock.cyxbs.common.ui.BaseFragment
 import com.mredrock.cyxbs.common.utils.extensions.doPermissionAction
 import com.mredrock.cyxbs.common.utils.extensions.gone
 import com.mredrock.cyxbs.common.utils.extensions.visible
@@ -39,7 +40,7 @@ import com.mredrock.cyxbs.discover.map.widget.ProgressDialog
 import kotlinx.android.synthetic.main.map_fragment_place_detail_container.*
 
 
-class PlaceDetailBottomSheetFragment : Fragment() {
+class PlaceDetailBottomSheetFragment : BaseFragment() {
     private lateinit var viewModel: MapViewModel
     private lateinit var mBinding: MapFragmentPlaceDetailContainerBinding
     private var isFavoritePlace = false

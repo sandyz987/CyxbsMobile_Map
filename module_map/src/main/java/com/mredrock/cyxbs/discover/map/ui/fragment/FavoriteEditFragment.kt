@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.mredrock.cyxbs.common.BaseApp
+import com.mredrock.cyxbs.common.ui.BaseFragment
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.component.MapToast
 import com.mredrock.cyxbs.discover.map.databinding.MapFragmentFavoriteEditBinding
@@ -18,7 +19,7 @@ import com.mredrock.cyxbs.discover.map.widget.OnSelectListener
 import com.mredrock.cyxbs.discover.map.widget.ProgressDialog
 import kotlinx.android.synthetic.main.map_fragment_favorite_edit.*
 
-class FavoriteEditFragment : Fragment() {
+class FavoriteEditFragment : BaseFragment() {
     private lateinit var viewModel: MapViewModel
     private lateinit var mBinding: MapFragmentFavoriteEditBinding
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

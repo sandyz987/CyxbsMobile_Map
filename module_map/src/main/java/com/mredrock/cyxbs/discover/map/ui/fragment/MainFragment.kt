@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.mredrock.cyxbs.common.BaseApp
+import com.mredrock.cyxbs.common.ui.BaseFragment
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.ui.fragment.inner.MapViewFragment
 import com.mredrock.cyxbs.discover.map.ui.fragment.inner.SearchFragment
@@ -20,7 +21,7 @@ import kotlinx.android.synthetic.main.map_fragment_main.*
 
 //该MainFragment使用FragmentTransaction管理两个Fragment
 
-class MainFragment : Fragment() {
+class MainFragment : BaseFragment() {
     private lateinit var viewModel: MapViewModel
 
     private val manager: FragmentManager?

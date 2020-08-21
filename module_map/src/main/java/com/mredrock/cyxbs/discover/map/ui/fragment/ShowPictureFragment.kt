@@ -17,6 +17,7 @@ import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import com.mredrock.cyxbs.common.BaseApp
+import com.mredrock.cyxbs.common.ui.BaseFragment
 import com.mredrock.cyxbs.common.utils.extensions.doPermissionAction
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.util.SubsamplingScaleImageViewShowPictureTarget
@@ -28,7 +29,7 @@ import java.io.File
 import java.io.FileOutputStream
 
 
-class ShowPictureFragment : Fragment() {
+class ShowPictureFragment : BaseFragment() {
     private lateinit var viewModel: MapViewModel
     private var pictureUrl: String? = null
 
