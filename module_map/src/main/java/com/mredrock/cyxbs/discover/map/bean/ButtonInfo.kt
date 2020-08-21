@@ -1,6 +1,7 @@
 package com.mredrock.cyxbs.discover.map.bean
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 /**
  *@author zhangzhe
@@ -14,7 +15,7 @@ data class InfoItem(
         var placeIdList: List<String>,
         @SerializedName("is_hot")
         var isHot: Boolean
-)
+) : Serializable
 
 data class ButtonInfo(
         @SerializedName("button_info")

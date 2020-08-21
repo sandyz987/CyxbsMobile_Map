@@ -2,6 +2,7 @@ package com.mredrock.cyxbs.discover.map.bean
 
 import android.text.style.BackgroundColorSpan
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 /**
  *@author zhangzhe
@@ -26,4 +27,4 @@ data class MapInfo(
         var pictureVersion: Long,
         @SerializedName("open_site")
         var openSiteId: Int
-)
+) : Serializable

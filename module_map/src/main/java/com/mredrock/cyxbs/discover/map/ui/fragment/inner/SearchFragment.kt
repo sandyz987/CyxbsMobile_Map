@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.mredrock.cyxbs.common.ui.BaseFragment
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.ui.fragment.inner.search.SearchHistoryFragment
 import com.mredrock.cyxbs.discover.map.ui.fragment.inner.search.SearchResultFragment
@@ -18,7 +19,7 @@ import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
  * 注意，要手动取消对viewModel的mutablelivedata的注册
  */
 
-class SearchFragment : Fragment() {
+class SearchFragment : BaseFragment() {
     private lateinit var viewModel: MapViewModel
     private val manager: FragmentManager?
         get() = childFragmentManager

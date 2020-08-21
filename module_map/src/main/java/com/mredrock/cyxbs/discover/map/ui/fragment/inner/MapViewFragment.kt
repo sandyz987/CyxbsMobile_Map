@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.mredrock.cyxbs.common.BaseApp
+import com.mredrock.cyxbs.common.ui.BaseFragment
 import com.mredrock.cyxbs.common.utils.extensions.dp2px
 import com.mredrock.cyxbs.common.utils.extensions.invisible
 import com.mredrock.cyxbs.common.utils.extensions.visible
@@ -39,7 +40,7 @@ import kotlinx.android.synthetic.main.map_fragment_map_view.*
 import java.io.File
 
 
-class MapViewFragment : Fragment() {
+class MapViewFragment : BaseFragment() {
     private lateinit var viewModel: MapViewModel
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<FrameLayout>
     private val placeData = mutableListOf<PlaceItem>()
@@ -267,6 +268,17 @@ class MapViewFragment : Fragment() {
             add(R.id.map_bottom_sheet_content, PlaceDetailBottomSheetFragment())
             commit()
         }
+        bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                when (newState) {
+                    BottomSheetBehavior.STATE_HIDDEN -> viewModel.bottomSheetStatus.value = newState
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+            }
+        }
+        )
 
         /**
          * 初始化标签adapter（搜索框下方按钮）
@@ -354,7 +366,7 @@ class MapViewFragment : Fragment() {
 
                         BottomSheetBehavior.STATE_HIDDEN -> {
                             map_bottom_sheet_content.invisible()
-                            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
                         }
 
                     }
@@ -454,5 +466,13 @@ class MapViewFragment : Fragment() {
             return false
         }
         return true
+    }
+
+    /**
+     * 销毁时移除所有view，防止二次创建
+     */
+    override fun onDestroy() {
+        map_layout?.removeMyViews()
+        super.onDestroy()
     }
 }

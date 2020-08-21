@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.mredrock.cyxbs.common.ui.BaseFragment
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.model.DataSet
 import com.mredrock.cyxbs.discover.map.ui.adapter.SearchHistoryAdapter
@@ -17,7 +18,7 @@ import com.mredrock.cyxbs.discover.map.widget.OnSelectListener
 import kotlinx.android.synthetic.main.map_fragment_search_history.*
 
 
-class SearchHistoryFragment : Fragment() {
+class SearchHistoryFragment : BaseFragment() {
     private lateinit var viewModel: MapViewModel
     private lateinit var adapter: SearchHistoryAdapter
 

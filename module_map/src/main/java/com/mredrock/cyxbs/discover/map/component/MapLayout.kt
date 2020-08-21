@@ -631,4 +631,7 @@ class MapLayout : FrameLayout, View.OnClickListener {
         this.onUrlGetListener = onUrlGetListener
     }
 
+    fun removeMyViews(){
+        this.removeAllViews()
+    }
 }

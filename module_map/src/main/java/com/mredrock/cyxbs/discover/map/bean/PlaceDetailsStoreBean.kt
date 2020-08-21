@@ -1,6 +1,7 @@
 package com.mredrock.cyxbs.discover.map.bean
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 /**
  *@author zhangzhe
@@ -13,4 +14,4 @@ data class PlaceDetailsStoreBean(
         @SerializedName("place_details")
         var placeDetails: PlaceDetails,
         var id: String
-)
+) : Serializable
