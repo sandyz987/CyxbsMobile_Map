@@ -54,6 +54,8 @@ class MapLayout : FrameLayout, View.OnClickListener {
     /** Sub-samplingScaleImageView第三方控件 */
     private val subsamplingScaleImageView = SubsamplingScaleImageView(context)
 
+    /**开始聚焦的id*/
+    private var openSiteId = "-1"
 
     /** 标签array list */
     private val iconList = mutableListOf<ImageView>()
@@ -190,9 +192,18 @@ class MapLayout : FrameLayout, View.OnClickListener {
              */
             override fun onImageLoaded() {
 
-                subsamplingScaleImageView.animateScaleAndCenter(1f, PointF(1734f, 9372f))
-                        ?.withDuration(FOCUS_ANIMATION_DURATION)
-                        ?.withInterruptible(true)?.start()
+                if (openSiteId != "-1") {
+                    iconList.forEach { icon ->
+                        val iconBean = icon.tag as IconBean
+                        if (iconBean.id.toString() == openSiteId) {
+                            subsamplingScaleImageView.animateScaleAndCenter(1f, PointF(iconBean.sx, iconBean.sy))
+                                    ?.withDuration(FOCUS_ANIMATION_DURATION)
+                                    ?.withInterruptible(true)?.start()
+                            return@forEach
+                        }
+                    }
+                }
+
 
             }
 
@@ -631,7 +642,11 @@ class MapLayout : FrameLayout, View.OnClickListener {
         this.onUrlGetListener = onUrlGetListener
     }
 
-    fun removeMyViews(){
+    fun removeMyViews() {
         this.removeAllViews()
+    }
+
+    fun setOpenSiteId(id: String) {
+        this.openSiteId = id
     }
 }

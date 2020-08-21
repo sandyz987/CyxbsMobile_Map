@@ -14,7 +14,6 @@ import android.view.animation.DecelerateInterpolator
 import android.widget.FrameLayout
 import android.widget.PopupWindow
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -84,6 +83,7 @@ class MapViewFragment : BaseFragment() {
 
             }
             map_layout.addSomeIcons(iconList)
+            map_layout.setOpenSiteId(data.openSiteId.toString())
             /**
              * 根据时间戳判断是否清除缓存重新加载
              */
