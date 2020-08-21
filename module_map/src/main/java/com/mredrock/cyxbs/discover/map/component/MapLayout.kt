@@ -221,10 +221,8 @@ class MapLayout : FrameLayout, View.OnClickListener {
                     /**
                      * 若icon有parent，则先移除再添加
                      */
-                    val p = icon.parent as ViewGroup
-                    if (icon.parent != null) {
-                        p.removeView(icon)
-                    }
+                    val p = icon.parent as ViewGroup?
+                    p?.removeView(icon)
                     addView(icon, layoutParams)
                 }
 
