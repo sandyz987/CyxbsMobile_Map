@@ -93,7 +93,7 @@ class SymbolRvAdapter(val context: Context, val viewModel: MapViewModel, private
             animator.start()
             //显示标签到地图上
             viewModel.showSomePlaceIconById.value = mList[position].placeIdList.toMutableList()
-            viewModel.bottomSheetStatus.value = BottomSheetBehavior.STATE_HIDDEN
+            viewModel.bottomSheetStatus.value = BottomSheetBehavior.STATE_COLLAPSED
             viewModel.isClickSymbol.value = true
         }
 

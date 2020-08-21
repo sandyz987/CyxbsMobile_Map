@@ -159,8 +159,7 @@ class MapViewFragment : BaseFragment() {
             override fun onIconClick(v: View) {
                 val bean = v.tag as IconBean
                 map_layout.focusToPoint(bean.sx, bean.sy)
-                viewModel.getPlaceDetails(bean.id.toString())
-                viewModel.bottomSheetStatus.postValue(BottomSheetBehavior.STATE_EXPANDED)
+                viewModel.getPlaceDetails(bean.id.toString(), true)
                 viewModel.unCheck.value = true
             }
 
@@ -171,7 +170,7 @@ class MapViewFragment : BaseFragment() {
         map_layout.setMyOnPlaceClickListener(object : MapLayout.OnPlaceClickListener {
             override fun onPlaceClick(v: View) {
                 val bean = v.tag as IconBean
-                viewModel.getPlaceDetails(bean.id.toString())
+                viewModel.getPlaceDetails(bean.id.toString(), false)
                 viewModel.unCheck.value = true
             }
 

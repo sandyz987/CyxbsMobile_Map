@@ -139,7 +139,7 @@ class MapViewModel : BaseViewModel() {
                     mapInfo.value = it.data
                     DataSet.saveMapInfo(it.data)
                     mapInfo.value?.openSiteId?.let { openSiteId ->
-                        getPlaceDetails(openSiteId.toString())
+                        getPlaceDetails(openSiteId.toString(), false)
                         bottomSheetStatus.value = BottomSheetBehavior.STATE_COLLAPSED
                     }
                 }.lifeCycle()
@@ -170,7 +170,7 @@ class MapViewModel : BaseViewModel() {
      * 获得地点详细信息，如 图片、标签 等
      * 当地图标签被点击，执行此网络请求，在对应的fragment观察数据即可
      */
-    fun getPlaceDetails(placeId: String) {
+    fun getPlaceDetails(placeId: String, showBottomSheetAfterSuccess: Boolean) {
         mapApiService.getPlaceDetails(placeId)
                 .setSchedulers()
                 .doOnErrorWithDefaultErrorHandler {
@@ -185,6 +185,9 @@ class MapViewModel : BaseViewModel() {
                         if (bottomSheetStatus.value == BottomSheetBehavior.STATE_HIDDEN) {
                             bottomSheetStatus.postValue(BottomSheetBehavior.STATE_COLLAPSED)
                         }
+                        if (showBottomSheetAfterSuccess) {
+                            bottomSheetStatus.postValue(BottomSheetBehavior.STATE_EXPANDED)
+                        }
                     } else {
                         bottomSheetStatus.postValue(BottomSheetBehavior.STATE_HIDDEN)
                     }
@@ -198,7 +201,9 @@ class MapViewModel : BaseViewModel() {
                         bottomSheetStatus.postValue(BottomSheetBehavior.STATE_COLLAPSED)
                     }
                     DataSet.savePlaceDetails(it.data, placeId)
-
+                    if (showBottomSheetAfterSuccess) {
+                        bottomSheetStatus.postValue(BottomSheetBehavior.STATE_EXPANDED)
+                    }
 
                 }.lifeCycle()
     }
