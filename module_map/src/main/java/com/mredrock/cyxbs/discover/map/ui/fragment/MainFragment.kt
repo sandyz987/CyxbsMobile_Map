@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.mredrock.cyxbs.common.BaseApp
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.ui.fragment.inner.MapViewFragment
 import com.mredrock.cyxbs.discover.map.ui.fragment.inner.SearchFragment
@@ -80,7 +81,7 @@ class MainFragment : Fragment() {
         })
 
         viewModel.mapInfo.observe(viewLifecycleOwner, Observer { t ->
-            map_et_search.hintString = "大家都在搜：" + if (t.hotWord == "") "风雨操场" else t.hotWord
+            map_et_search.hintString = BaseApp.context.getString(R.string.map_search_hint) + if (t.hotWord == "") BaseApp.context.getString(R.string.map_search_hint_default_place_name) else t.hotWord
         })
 
         /**

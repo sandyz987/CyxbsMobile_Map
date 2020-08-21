@@ -29,7 +29,6 @@ import com.mredrock.cyxbs.discover.map.widget.MapDialog
 import com.mredrock.cyxbs.discover.map.widget.OnSelectListener
 import com.mredrock.cyxbs.discover.map.widget.ProgressDialog
 import kotlinx.android.synthetic.main.map_fragment_all_picture.*
-import kotlinx.android.synthetic.main.map_fragment_place_detail_container.*
 
 
 class AllPictureFragment : Fragment() {
@@ -110,7 +109,7 @@ class AllPictureFragment : Fragment() {
 
         map_tv_all_picture_share.setOnClickListener {
             doPermissionAction(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA) {
-                reason = "访问相册需要权限"
+                reason = BaseApp.context.resources.getString(R.string.map_require_permission_tips)
                 doAfterGranted {
                     uploadPicture()
                 }
@@ -148,7 +147,7 @@ class AllPictureFragment : Fragment() {
                 return
             }
         }
-        MapDialog.show(requireContext(), "共享图片", BaseApp.context.resources.getString(R.string.map_share_picture), object : OnSelectListener {
+        MapDialog.show(requireContext(), BaseApp.context.getString(R.string.map_share_picture_title), BaseApp.context.resources.getString(R.string.map_share_picture), object : OnSelectListener {
             override fun onDeny() {
             }
 
@@ -177,7 +176,7 @@ class AllPictureFragment : Fragment() {
             /**
              * 上传图片
              */
-            ProgressDialog.show(requireContext(), "正在上传图片", "请稍后", false)
+            ProgressDialog.show(requireContext(), BaseApp.context.resources.getString(R.string.map_upload_picture_running), BaseApp.context.resources.getString(R.string.map_please_a_moment_text), false)
             viewModel.uploadPicture(imgPath, requireContext())
         }
     }

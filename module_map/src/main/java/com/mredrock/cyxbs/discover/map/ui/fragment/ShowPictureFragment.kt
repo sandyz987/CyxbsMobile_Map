@@ -45,7 +45,7 @@ class ShowPictureFragment : Fragment() {
         pictureUrl?.let { url ->
             val dialog = android.app.ProgressDialog(context)
             dialog.setProgressStyle(android.app.ProgressDialog.STYLE_HORIZONTAL)
-            dialog.setMessage("图片加载中")
+            dialog.setMessage(BaseApp.context.getString(R.string.map_picture_loading))
             dialog.setCancelable(true)
             dialog.show()
             ProgressInterceptor.addListener(url, object : ProgressListener {

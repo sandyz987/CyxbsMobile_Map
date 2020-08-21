@@ -16,6 +16,7 @@ import android.widget.Toast
 import com.bumptech.glide.load.model.GlideUrl
 import com.davemorrissey.labs.subscaleview.ImageSource
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
+import com.mredrock.cyxbs.common.BaseApp
 import com.mredrock.cyxbs.common.utils.extensions.dp2px
 import com.mredrock.cyxbs.common.utils.extensions.gone
 import com.mredrock.cyxbs.common.utils.extensions.visible
@@ -131,7 +132,7 @@ class MapLayout : FrameLayout, View.OnClickListener {
                 when (url) {
                     "loadFail" -> {
                         GlobalScope.launch(Dispatchers.Main) {
-                            MapToast.makeText(context, "使用本地缓存", Toast.LENGTH_SHORT).show()
+                            MapToast.makeText(context, BaseApp.context.getString(R.string.map_use_local_map_data), Toast.LENGTH_SHORT).show()
                         }
                         val path = DataSet.getPath()
                         try {
@@ -257,7 +258,7 @@ class MapLayout : FrameLayout, View.OnClickListener {
             var count = 0
             if (isLock) {
                 GlobalScope.launch(Dispatchers.Main) {
-                    MapToast.makeText(context, "取消锁定后对地图进行操作", Toast.LENGTH_SHORT).show()
+                    MapToast.makeText(context, BaseApp.context.getString(R.string.map_please_unlock), Toast.LENGTH_SHORT).show()
                 }
                 return@setOnClickListener
             }

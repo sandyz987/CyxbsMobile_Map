@@ -261,21 +261,23 @@ class MapViewFragment : Fragment() {
         mapFavoriteRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         val favoriteListAdapter = FavoriteListAdapter(requireContext(), viewModel, mutableListOf())
         mapFavoriteRecyclerView.adapter = favoriteListAdapter
-        //设置点击事件
+        //设置“我的收藏”点击事件
         map_ll_map_view_my_favorite.setOnClickListener {
             viewModel.showPopUpWindow.value = true
             viewModel.isClickSymbol.value = true
             if (viewModel.bottomSheetStatus.value == BottomSheetBehavior.STATE_EXPANDED) {
                 viewModel.bottomSheetStatus.postValue(BottomSheetBehavior.STATE_COLLAPSED)
             }
-            viewModel.refreshCollectList()
+            viewModel.refreshCollectList(true)
             if (!popupWindow.isShowing) {
                 popupWindow.showAsDropDown(map_ll_map_view_my_favorite, map_ll_map_view_my_favorite.width - (context?.dp2px(140f)
                         ?: 30), context?.dp2px(15f) ?: 30)
                 popupWindow.update()
             }
         }
-
+        /**
+         * 监听是否关闭收藏弹窗
+         */
         viewModel.showPopUpWindow.observe(viewLifecycleOwner, Observer {
             if (!it) {
                 viewModel.isClickSymbol.value = false

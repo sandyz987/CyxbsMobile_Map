@@ -8,6 +8,7 @@ import com.bumptech.glide.request.target.CustomViewTarget
 import com.bumptech.glide.request.transition.Transition
 import com.davemorrissey.labs.subscaleview.ImageSource
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
+import com.mredrock.cyxbs.common.BaseApp
 import com.mredrock.cyxbs.common.utils.extensions.defaultSharedPreferences
 import com.mredrock.cyxbs.common.utils.extensions.editor
 import com.mredrock.cyxbs.common.utils.extensions.toast
@@ -31,7 +32,7 @@ class SubsamplingScaleImageViewTarget(val context: Context, view: SubsamplingSca
         // Ignore
         view.setImage(ImageSource.resource(R.drawable.map_ic_high))
         GlideProgressDialog.hide()
-        MapToast.makeText(context, "地图加载失败，使用本地缓存", Toast.LENGTH_SHORT).show()
+        MapToast.makeText(context, BaseApp.context.getString(R.string.map_map_load_failed), Toast.LENGTH_SHORT).show()
     }
 
     override fun onResourceCleared(placeholder: Drawable?) {

@@ -67,7 +67,7 @@ class SymbolRvAdapter(val context: Context, val viewModel: MapViewModel, private
                     animator2.start()
                     viewModel.isClickSymbol.value = false
                     //清除所有标签
-                    viewModel.showSomePlaceIconById.postValue(mutableListOf())
+                    viewModel.showSomePlaceIconById.value = mutableListOf()
                     return@setOnClickListener
                 }
             }

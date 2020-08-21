@@ -121,7 +121,7 @@ class MapViewModel : BaseViewModel() {
         }, true)
         mapApiService = ApiGenerator.getApiService(1234, MapApiService::class.java)
         /**
-         * 下载地图可以放在这里，但必须开线程！
+         * 获得地图基本信息，地点坐标等
          */
         mapApiService.getMapInfo()//网络请求替换为：apiService.getMapInfo()
                 .setSchedulers()
@@ -136,8 +136,12 @@ class MapViewModel : BaseViewModel() {
                     true
                 }
                 .safeSubscribeBy {
-                    mapInfo.postValue(it.data)
+                    mapInfo.value = it.data
                     DataSet.saveMapInfo(it.data)
+                    mapInfo.value?.openSiteId?.let { openSiteId ->
+                        getPlaceDetails(openSiteId.toString())
+                        bottomSheetStatus.value = BottomSheetBehavior.STATE_COLLAPSED
+                    }
                 }.lifeCycle()
         mapApiService.getButtonInfo()
                 .setSchedulers()
@@ -154,20 +158,26 @@ class MapViewModel : BaseViewModel() {
                     buttonInfo.postValue(it.data)
                     DataSet.saveButtonInfo(it.data)
                 }.lifeCycle()
-
-        refreshCollectList()
+        /**
+         * 刷新收藏列表
+         */
+        refreshCollectList(false)
 
     }
 
 
-    //当地图标签被点击，执行此网络请求，在对应的fragment观察数据即可
+    /**
+     * 获得地点详细信息，如 图片、标签 等
+     * 当地图标签被点击，执行此网络请求，在对应的fragment观察数据即可
+     */
     fun getPlaceDetails(placeId: String) {
         mapApiService.getPlaceDetails(placeId)
                 .setSchedulers()
                 .doOnErrorWithDefaultErrorHandler {
                     MapToast.makeText(BaseApp.context, R.string.map_network_connect_error, Toast.LENGTH_SHORT).show()
 
-                    //有缓存则使用缓存
+                    //有缓存则使用缓存（上面和下面的逻辑基本和这里是一样的，所有缓存在DataSet里
+                    //去掉有DataSet的语句就是基本的业务逻辑了（逻辑就很清晰了））
                     val t = DataSet.getPlaceDetails(placeId)
                     if (t != null) {
                         showingPlaceId = placeId
@@ -193,8 +203,11 @@ class MapViewModel : BaseViewModel() {
                 }.lifeCycle()
     }
 
-
-    fun refreshCollectList() {
+    /**
+     * 刷新收藏列表
+     * @param showCollectedPlace 是否在获得网络数据后，显示全部收藏地点并缩放
+     */
+    fun refreshCollectList(showCollectedPlace: Boolean) {
         mapApiService.getCollect()
                 .setSchedulers()
                 .doOnErrorWithDefaultErrorHandler {
@@ -204,11 +217,23 @@ class MapViewModel : BaseViewModel() {
                     }
                     if (collectList.value?.size == 0) {
                         MapToast.makeText(BaseApp.context, R.string.map_favorite_empty, Toast.LENGTH_SHORT).show()
+                    } else {
+                        if (showCollectedPlace) {
+                            val listTmp = mutableListOf<String>()
+                            if (list != null) {
+                                listTmp.addAll(list.map { t -> t.placeId })
+                            }
+                            showSomePlaceIconById.value = listTmp
+                        }
                     }
+
                     true
                 }
                 .safeSubscribeBy {
-
+                    /**
+                     * 同步服务端与缓存。因为之前是可以取placeNickname的所以这里还可以简化，
+                     * 但保留功能扩展性，而且本来这里数据量很小，故下列代码也可以接受
+                     */
                     it.data.placeIdList.forEach { item ->
                         DataSet.addCollect(item)
                     }
@@ -231,14 +256,16 @@ class MapViewModel : BaseViewModel() {
                     if (collectList.value?.size == 0) {
                         MapToast.makeText(BaseApp.context, R.string.map_favorite_empty, Toast.LENGTH_SHORT).show()
                     } else {
-                        if (bottomSheetStatus.value == BottomSheetBehavior.STATE_HIDDEN || showPopUpWindow.value == true) {
+                        if (showCollectedPlace) {
                             showSomePlaceIconById.value = it.data.placeIdList
                         }
                     }
                 }.lifeCycle()
     }
 
-
+    /**
+     * 添加收藏
+     */
     fun addCollect(placeNickname: String, id: String) {
         var notExist = true
         if (collectList.value != null) {
@@ -255,35 +282,38 @@ class MapViewModel : BaseViewModel() {
                     .doOnErrorWithDefaultErrorHandler {
                         MapToast.makeText(BaseApp.context, R.string.map_network_connect_error, Toast.LENGTH_SHORT).show()
                         ProgressDialog.hide()
-                        refreshCollectList()
+                        refreshCollectList(true)
                         true
                     }
                     .safeSubscribeBy {
                         if (it.isSuccessful) {
                             DataSet.addCollect(FavoritePlace(placeNickname, id))
-                            MapToast.makeText(BaseApp.context, "收藏成功！", Toast.LENGTH_SHORT).show()
+                            MapToast.makeText(BaseApp.context, R.string.map_collect_success, Toast.LENGTH_SHORT).show()
                         } else {
                             MapToast.makeText(BaseApp.context, R.string.map_network_connect_error, Toast.LENGTH_SHORT).show()
                         }
                         ProgressDialog.hide()
-                        refreshCollectList()
+                        refreshCollectList(true)
                     }.lifeCycle()
         } else {
             DataSet.addCollect(FavoritePlace(placeNickname, id))
             ProgressDialog.hide()
-            refreshCollectList()
+            refreshCollectList(true)
         }
 
 
     }
 
+    /**
+     * 删除收藏
+     */
     fun deleteCollect(id: String) {
         mapApiService.deleteCollect(id.toInt())
                 .setSchedulers()
                 .doOnErrorWithDefaultErrorHandler {
                     MapToast.makeText(BaseApp.context, R.string.map_network_connect_error, Toast.LENGTH_SHORT).show()
                     ProgressDialog.hide()
-                    refreshCollectList()
+                    refreshCollectList(true)
                     true
                 }
                 .safeSubscribeBy {
@@ -293,15 +323,22 @@ class MapViewModel : BaseViewModel() {
                         MapToast.makeText(BaseApp.context, R.string.map_network_connect_error, Toast.LENGTH_SHORT).show()
                     }
                     ProgressDialog.hide()
-                    refreshCollectList()
+                    refreshCollectList(true)
                 }.lifeCycle()
 
     }
 
+    /**
+     * 历史记录变化，从缓存中重新读取，并通知更新
+     */
     fun notifySearchHistoryChange() {
         searchHistory = DataSet.getSearchHistory() ?: mutableListOf()
         searchHistory.reverse()
     }
+
+    /**
+     * 上传图片
+     */
 
     fun uploadPicture(imgPath: String?, context: Context) {
         if (imgPath == null) {
@@ -318,17 +355,17 @@ class MapViewModel : BaseViewModel() {
                 .setSchedulers()
                 .doOnErrorWithDefaultErrorHandler {
                     ProgressDialog.hide()
-                    MapToast.makeText(BaseApp.context, "上传失败，网络似乎有问题", Toast.LENGTH_LONG).show()
+                    MapToast.makeText(BaseApp.context, R.string.map_upload_picture_failed_network, Toast.LENGTH_LONG).show()
                     true
                 }
                 .safeSubscribeBy {
                     ProgressDialog.hide()
                     if (it.isSuccessful) {
-                        MapDialogTips.show(context, "上传成功", "上传的照片审核通过就可以在这里看到啦~", object : OnSelectListenerTips {
+                        MapDialogTips.show(context, context.resources.getString(R.string.map_upload_picture_success_title), context.resources.getString(R.string.map_upload_picture_success_content), object : OnSelectListenerTips {
                             override fun onPositive() {}
                         })
                     } else {
-                        MapToast.makeText(BaseApp.context, "上传失败，服务器拒绝", Toast.LENGTH_LONG).show()
+                        MapToast.makeText(BaseApp.context, R.string.map_upload_picture_failed_server, Toast.LENGTH_LONG).show()
 
                     }
                 }.lifeCycle()
