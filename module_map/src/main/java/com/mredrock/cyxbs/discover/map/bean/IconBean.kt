@@ -1,5 +1,7 @@
 package com.mredrock.cyxbs.discover.map.bean
 
+import java.io.Serializable
+
 /**
  * 添加icon的数据类，与MapLayout搭配使用
  */
@@ -15,4 +17,4 @@ data class IconBean(
         val tagRightX: Float,
         val tagBottomY: Float,
         val tagTopY: Float
-)
+) : Serializable

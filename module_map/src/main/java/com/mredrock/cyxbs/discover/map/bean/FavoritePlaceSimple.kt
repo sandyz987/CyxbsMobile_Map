@@ -1,6 +1,7 @@
 package com.mredrock.cyxbs.discover.map.bean
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 /**
  *@author zhangzhe
@@ -11,4 +12,4 @@ import com.google.gson.annotations.SerializedName
 data class FavoritePlaceSimple(
         @SerializedName("place_id")
         val placeIdList: MutableList<String>
-)
+) : Serializable

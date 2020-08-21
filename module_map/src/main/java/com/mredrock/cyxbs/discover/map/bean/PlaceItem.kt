@@ -1,6 +1,7 @@
 package com.mredrock.cyxbs.discover.map.bean
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 /**
  *@author zhangzhe
@@ -55,4 +56,4 @@ data class PlaceItem(
         var tagTop: Int,
         @SerializedName("tag_bottom")
         var tagBottom: Int
-)
+) : Serializable
