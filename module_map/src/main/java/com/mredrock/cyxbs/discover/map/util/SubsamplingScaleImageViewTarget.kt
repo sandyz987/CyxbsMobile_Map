@@ -14,6 +14,8 @@ import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.component.MapToast
 import com.mredrock.cyxbs.discover.map.model.DataSet
 import com.mredrock.cyxbs.discover.map.widget.GlideProgressDialog
+import com.mredrock.cyxbs.discover.map.widget.MapDialogTips
+import com.mredrock.cyxbs.discover.map.widget.OnSelectListenerTips
 import com.mredrock.cyxbs.discover.map.widget.ProgressInterceptor
 import java.io.File
 
@@ -33,8 +35,14 @@ class SubsamplingScaleImageViewTarget(val context: Context, view: SubsamplingSca
             view.setImage(ImageSource.uri(Uri.fromFile(File(path))))
             MapToast.makeText(context, BaseApp.context.getString(R.string.map_map_load_failed), Toast.LENGTH_SHORT).show()
         } else {
-            val activity = context as Activity
-            activity.finish()
+            MapDialogTips.show(context, context.getString(R.string.map_map_load_failed_title_tip)
+                    , context.getString(R.string.map_map_load_failed_message_tip)
+                    , false, object : OnSelectListenerTips {
+                override fun onPositive() {
+                    val activity = context as Activity
+                    activity.finish()
+                }
+            })
         }
     }
 

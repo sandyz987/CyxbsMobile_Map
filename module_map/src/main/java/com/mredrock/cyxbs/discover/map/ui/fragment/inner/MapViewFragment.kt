@@ -34,8 +34,7 @@ import com.mredrock.cyxbs.discover.map.ui.activity.VRActivity
 import com.mredrock.cyxbs.discover.map.ui.adapter.FavoriteListAdapter
 import com.mredrock.cyxbs.discover.map.ui.adapter.SymbolRvAdapter
 import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
-import com.mredrock.cyxbs.discover.map.widget.OnUpdateSelectListener
-import com.mredrock.cyxbs.discover.map.widget.UpdateMapDialog
+import com.mredrock.cyxbs.discover.map.widget.*
 import kotlinx.android.synthetic.main.map_fragment_map_view.*
 import java.io.File
 
@@ -121,13 +120,32 @@ class MapViewFragment : Fragment() {
             if (it) {
                 val path = DataSet.getPath()
                 if (path == null) {
-                    activity?.finish()
+                    GlideProgressDialog.hide()
+                    context?.let { it1 ->
+                        MapDialogTips.show(it1, it1.getString(R.string.map_map_load_failed_title_tip)
+                                , it1.getString(R.string.map_map_load_failed_message_tip)
+                                , false, object : OnSelectListenerTips {
+                            override fun onPositive() {
+                                activity?.finish()
+                            }
+                        })
+                    }
                 } else {
                     if (fileIsExists(path)) {
                         map_layout.setUrl("loadFail")
                     } else {
-                        activity?.finish()
+                        GlideProgressDialog.hide()
+                        context?.let { it1 ->
+                            MapDialogTips.show(it1, it1.getString(R.string.map_map_load_failed_title_tip)
+                                    , it1.getString(R.string.map_map_load_failed_message_tip)
+                                    , false, object : OnSelectListenerTips {
+                                override fun onPositive() {
+                                    activity?.finish()
+                                }
+                            })
+                        }
                     }
+                    GlideProgressDialog.hide()
                 }
             }
 

@@ -361,7 +361,7 @@ class MapViewModel : BaseViewModel() {
                 .safeSubscribeBy {
                     ProgressDialog.hide()
                     if (it.isSuccessful) {
-                        MapDialogTips.show(context, context.resources.getString(R.string.map_upload_picture_success_title), context.resources.getString(R.string.map_upload_picture_success_content), object : OnSelectListenerTips {
+                        MapDialogTips.show(context, context.resources.getString(R.string.map_upload_picture_success_title), context.resources.getString(R.string.map_upload_picture_success_content), true,object : OnSelectListenerTips {
                             override fun onPositive() {}
                         })
                     } else {

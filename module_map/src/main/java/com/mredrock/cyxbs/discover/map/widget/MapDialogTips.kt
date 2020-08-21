@@ -17,11 +17,11 @@ interface OnSelectListenerTips {
 }
 
 object MapDialogTips {
-    fun show(context: Context, title: String, content: String, listener: OnSelectListenerTips) {
+    fun show(context: Context, title: String, content: String,cancelable:Boolean, listener: OnSelectListenerTips) {
         val builder: AlertDialog.Builder = AlertDialog.Builder(context, R.style.map_transparent_dialog)
         val view = context.layoutInflater.inflate(R.layout.map_dialog_tips, null, false)
         builder.setView(view)
-        builder.setCancelable(true)
+        builder.setCancelable(cancelable)
         view.map_tv_tip_title.text = title
         view.map_tv_tip_text.text = content
 

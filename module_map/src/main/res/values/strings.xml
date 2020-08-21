@@ -42,6 +42,8 @@
     <string name="map_use_local_map_data">使用本地缓存</string>
     <string name="map_picture_loading">图片加载中</string>
     <string name="map_map_load_failed">地图加载失败，使用本地缓存</string>
+    <string name="map_map_load_failed_title_tip">地图下载失败</string>
+    <string name="map_map_load_failed_message_tip">点击确定后退出</string>
     <string name="map_please_unlock">取消锁定后对地图进行操作</string>
     <string name="map_update_title">地图更新</string>
     <string name="map_update_message">有最新的地图信息可用，推荐更新获取校内最新的地点信息</string>
