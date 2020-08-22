@@ -8,9 +8,7 @@ import com.mredrock.cyxbs.common.config.DISCOVER_MAP
 import com.mredrock.cyxbs.common.service.ServiceManager
 import com.mredrock.cyxbs.common.service.account.IAccountService
 import com.mredrock.cyxbs.common.ui.BaseViewModelActivity
-import com.mredrock.cyxbs.common.utils.extensions.defaultSharedPreferences
 import com.mredrock.cyxbs.discover.map.R
-import com.mredrock.cyxbs.discover.map.model.DataSet
 import com.mredrock.cyxbs.discover.map.ui.fragment.AllPictureFragment
 import com.mredrock.cyxbs.discover.map.ui.fragment.FavoriteEditFragment
 import com.mredrock.cyxbs.discover.map.ui.fragment.MainFragment
@@ -20,7 +18,6 @@ import com.mredrock.cyxbs.discover.map.widget.GlideProgressDialog
 import com.mredrock.cyxbs.discover.map.widget.ProgressDialog
 import kotlinx.android.synthetic.main.map_activity_map.*
 import java.io.File
-import java.lang.Exception
 
 /**
  * 单activity模式，所有fragment在此activity下，能拿到同一个viewModel实例
@@ -58,6 +55,10 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
 
         //初始化viewModel
         viewModel.init()
+
+        /**
+         * 获取MapInfo后进行地点搜索请求
+         */
         viewModel.mapInfo.observe(this, Observer {
             viewModel.getPlaceSearch(openString)
         })
