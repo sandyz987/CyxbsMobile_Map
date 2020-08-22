@@ -302,6 +302,7 @@ class MapViewFragment : BaseFragment() {
         mapFavoriteRecyclerView.adapter = favoriteListAdapter
         //设置“我的收藏”点击事件
         map_ll_map_view_my_favorite.setOnClickListener {
+            viewModel.unCheck.value = true
             viewModel.showPopUpWindow.value = true
             viewModel.isClickSymbol.value = true
             if (viewModel.bottomSheetStatus.value == BottomSheetBehavior.STATE_EXPANDED) {

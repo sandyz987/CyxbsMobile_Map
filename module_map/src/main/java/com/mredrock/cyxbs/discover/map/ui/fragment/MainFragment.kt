@@ -51,11 +51,13 @@ class MainFragment : BaseFragment() {
         }
         //当搜索框被点击，打开搜索Fragment
         map_et_search.setOnClickListener {
+            viewModel.unCheck.value = true
             openSearchFragment()
         }
         //上面这个事件在editText没有焦点时收不到事件，于是加一个
         map_et_search.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus) {
+                viewModel.unCheck.value = true
                 openSearchFragment()
             }
         }
