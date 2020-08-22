@@ -83,9 +83,6 @@ class MapViewFragment : BaseFragment() {
 
             }
             map_layout.addSomeIcons(iconList)
-            if (viewModel.openId.value == null){
-                context?.let { MapToast.makeText(it,it.getText(R.string.map_open_site_id_null),Toast.LENGTH_SHORT).show() }
-            }
             map_layout.setOpenSiteId(viewModel.openId.value?:data.openSiteId.toString())
             /**
              * 根据时间戳判断是否清除缓存重新加载
