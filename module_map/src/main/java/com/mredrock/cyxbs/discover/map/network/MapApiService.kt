@@ -44,5 +44,8 @@ internal interface MapApiService {
     @POST("rockmap/upload")
     fun uploadPicture(@Part photo: MultipartBody.Part, @PartMap params: Map<String, Int>): Observable<RedrockApiStatus>
 
+    @FormUrlEncoded
+    @POST("placesearch")
+    fun placeSearch(@Field("place_search") placeSearch:String):Observable<RedrockApiWrapper<PlaceSearch>>
 
 }

@@ -42,6 +42,10 @@ import java.io.File
 class MapViewFragment : BaseFragment() {
     private lateinit var viewModel: MapViewModel
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<FrameLayout>
+
+    // 两次点击按钮之间的点击间隔不能少于1000毫秒
+    private val minClickDelayTime = 1000
+    private var lastClickTime: Long = 0
     private val placeData = mutableListOf<PlaceItem>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -55,6 +59,7 @@ class MapViewFragment : BaseFragment() {
         /**
          * 初始化地图view
          */
+        var openSiteId: String = ""
         viewModel.mapInfo.observe(viewLifecycleOwner, Observer { data ->
             placeData.clear()
             placeData.addAll(data.placeList)
@@ -83,7 +88,7 @@ class MapViewFragment : BaseFragment() {
 
             }
             map_layout.addSomeIcons(iconList)
-            map_layout.setOpenSiteId(viewModel.openId.value?:data.openSiteId.toString())
+            openSiteId = data.openSiteId.toString()
             /**
              * 根据时间戳判断是否清除缓存重新加载
              */
@@ -112,6 +117,16 @@ class MapViewFragment : BaseFragment() {
                 map_layout.setUrl(data.mapUrl)
             }
 
+        })
+
+        viewModel.openId.observe(viewLifecycleOwner, Observer {
+            println(it)
+            if (it == "500") {
+                context?.let { MapToast.makeText(it, it.getText(R.string.map_open_site_id_null), Toast.LENGTH_SHORT).show() }
+                map_layout.setOpenSiteId(openSiteId)
+            } else {
+                viewModel.openId.value?.let { it1 -> map_layout.setOpenSiteId(it1) }
+            }
         })
 
         /**
@@ -302,17 +317,19 @@ class MapViewFragment : BaseFragment() {
         mapFavoriteRecyclerView.adapter = favoriteListAdapter
         //设置“我的收藏”点击事件
         map_ll_map_view_my_favorite.setOnClickListener {
-            viewModel.unCheck.value = true
-            viewModel.showPopUpWindow.value = true
-            viewModel.isClickSymbol.value = true
-            if (viewModel.bottomSheetStatus.value == BottomSheetBehavior.STATE_EXPANDED) {
-                viewModel.bottomSheetStatus.postValue(BottomSheetBehavior.STATE_COLLAPSED)
-            }
-            viewModel.refreshCollectList(true)
-            if (!popupWindow.isShowing) {
-                popupWindow.showAsDropDown(map_ll_map_view_my_favorite, map_ll_map_view_my_favorite.width - (context?.dp2px(140f)
-                        ?: 30), context?.dp2px(15f) ?: 30)
-                popupWindow.update()
+            if (isFastClick()) {
+                viewModel.unCheck.value = true
+                viewModel.showPopUpWindow.value = true
+                viewModel.isClickSymbol.value = true
+                if (viewModel.bottomSheetStatus.value == BottomSheetBehavior.STATE_EXPANDED) {
+                    viewModel.bottomSheetStatus.postValue(BottomSheetBehavior.STATE_COLLAPSED)
+                }
+                viewModel.refreshCollectList(true)
+                if (!popupWindow.isShowing) {
+                    popupWindow.showAsDropDown(map_ll_map_view_my_favorite, map_ll_map_view_my_favorite.width - (context?.dp2px(140f)
+                            ?: 30), context?.dp2px(15f) ?: 30)
+                    popupWindow.update()
+                }
             }
         }
         /**
@@ -474,5 +491,16 @@ class MapViewFragment : BaseFragment() {
     override fun onDestroy() {
         map_layout?.removeMyViews()
         super.onDestroy()
+    }
+
+
+    private fun isFastClick(): Boolean {
+        var flag = false
+        val curClickTime = System.currentTimeMillis()
+        if (curClickTime - lastClickTime >= minClickDelayTime) {
+            flag = true
+        }
+        lastClickTime = curClickTime
+        return flag
     }
 }

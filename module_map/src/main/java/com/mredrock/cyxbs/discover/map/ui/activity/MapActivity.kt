@@ -54,11 +54,13 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.map_activity_map)
-        val openId = intent.getStringExtra("OpenId")
-        viewModel.openId.value = openId
+        val openString = intent.getStringExtra("OpenString")
 
         //初始化viewModel
         viewModel.init()
+        viewModel.mapInfo.observe(this, Observer {
+            viewModel.getPlaceSearch(openString)
+        })
         fragmentManager.beginTransaction().add(R.id.map_fl_main_fragment, mainFragment).show(mainFragment).commit()
 
 

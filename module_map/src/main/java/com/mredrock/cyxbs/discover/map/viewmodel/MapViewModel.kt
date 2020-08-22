@@ -103,7 +103,8 @@ class MapViewModel : BaseViewModel() {
     val unCheck = MutableLiveData<Boolean>()
 
     //掌邮传过来的OpenSiteId
-    val openId = MutableLiveData<String>("1")
+    val openId = MutableLiveData<String>()
+
 
     fun init() {
 
@@ -124,6 +125,8 @@ class MapViewModel : BaseViewModel() {
             }
         }, true)
         mapApiService = ApiGenerator.getApiService(1234, MapApiService::class.java)
+
+
         /**
          * 获得地图基本信息，地点坐标等
          */
@@ -142,11 +145,9 @@ class MapViewModel : BaseViewModel() {
                 .safeSubscribeBy {
                     mapInfo.value = it.data
                     DataSet.saveMapInfo(it.data)
-                    mapInfo.value?.openSiteId?.let { openSiteId ->
-                        getPlaceDetails(openId.value?:openSiteId.toString(), false)
-                        bottomSheetStatus.value = BottomSheetBehavior.STATE_COLLAPSED
-                    }
                 }.lifeCycle()
+
+
         mapApiService.getButtonInfo()
                 .setSchedulers()
                 .doOnErrorWithDefaultErrorHandler {
@@ -167,6 +168,26 @@ class MapViewModel : BaseViewModel() {
          */
         refreshCollectList(false)
 
+    }
+
+    fun getPlaceSearch(openString: String?) {
+        mapApiService.placeSearch(openString ?: "-1")
+                .setSchedulers()
+                .doOnErrorWithDefaultErrorHandler {
+                    true
+                }
+                .safeSubscribeBy {
+                    if (it.status == 200) {
+                        openId.value = it.data.placeId
+                        getPlaceDetails(it.data.placeId, false)
+                        bottomSheetStatus.value = BottomSheetBehavior.STATE_COLLAPSED
+                    }
+                    if (it.status == 500) {
+                        openId.value = "500"
+                        getPlaceDetails(mapInfo.value!!.openSiteId.toString(), false)
+                        bottomSheetStatus.value = BottomSheetBehavior.STATE_COLLAPSED
+                    }
+                }.lifeCycle()
     }
 
 
@@ -370,7 +391,7 @@ class MapViewModel : BaseViewModel() {
                 .safeSubscribeBy {
                     ProgressDialog.hide()
                     if (it.isSuccessful) {
-                        MapDialogTips.show(context, context.resources.getString(R.string.map_upload_picture_success_title), context.resources.getString(R.string.map_upload_picture_success_content), true,object : OnSelectListenerTips {
+                        MapDialogTips.show(context, context.resources.getString(R.string.map_upload_picture_success_title), context.resources.getString(R.string.map_upload_picture_success_content), true, object : OnSelectListenerTips {
                             override fun onPositive() {}
                         })
                     } else {
