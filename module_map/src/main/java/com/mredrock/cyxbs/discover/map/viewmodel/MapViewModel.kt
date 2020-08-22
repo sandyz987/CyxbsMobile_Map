@@ -102,6 +102,9 @@ class MapViewModel : BaseViewModel() {
     //通知标签栏取消选择
     val unCheck = MutableLiveData<Boolean>()
 
+    //掌邮传过来的OpenSiteId
+    val openId = MutableLiveData<String>("1")
+
     fun init() {
 
         /**
@@ -140,7 +143,7 @@ class MapViewModel : BaseViewModel() {
                     mapInfo.value = it.data
                     DataSet.saveMapInfo(it.data)
                     mapInfo.value?.openSiteId?.let { openSiteId ->
-                        getPlaceDetails(openSiteId.toString(), false)
+                        getPlaceDetails(openId.value?:openSiteId.toString(), false)
                         bottomSheetStatus.value = BottomSheetBehavior.STATE_COLLAPSED
                     }
                 }.lifeCycle()
