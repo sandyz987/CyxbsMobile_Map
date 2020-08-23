@@ -30,7 +30,7 @@ class SearchEditText : androidx.appcompat.widget.AppCompatEditText {
     private var isEmpty = true
 
     private var offsetXHint = 0f
-    private var offsetXClear = 200f
+    private var offsetXClear = 300f
     private var textIsNotEmpty = false
         set(value) {
             if (value != field) {
@@ -130,7 +130,7 @@ class SearchEditText : androidx.appcompat.widget.AppCompatEditText {
         }
         anim1.start()
         //设置清空按钮的偏移动画，下同
-        val anim2 = ValueAnimator.ofFloat(0f, 200f)
+        val anim2 = ValueAnimator.ofFloat(0f, 300f)
         anim2.repeatCount = 0
         anim2.repeatMode = ValueAnimator.REVERSE
         anim2.duration = 300
@@ -153,7 +153,7 @@ class SearchEditText : androidx.appcompat.widget.AppCompatEditText {
             postInvalidate()
         }
         anim1.start()
-        val anim2 = ValueAnimator.ofFloat(200f, 0f)
+        val anim2 = ValueAnimator.ofFloat(300f, 0f)
         anim2.repeatCount = 0
         anim2.repeatMode = ValueAnimator.REVERSE
         anim2.duration = 300
