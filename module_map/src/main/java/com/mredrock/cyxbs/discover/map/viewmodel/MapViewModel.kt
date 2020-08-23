@@ -1,6 +1,7 @@
 package com.mredrock.cyxbs.discover.map.viewmodel
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.databinding.ObservableArrayList
 import androidx.lifecycle.MutableLiveData
@@ -392,9 +393,11 @@ class MapViewModel : BaseViewModel() {
         val file = File(imgPath)
         val requestFile: RequestBody = RequestBody.create("image/jpeg".toMediaTypeOrNull(), file)
         val fileNameByTimeStamp: String = System.currentTimeMillis().toString() + ".jpg"
-        val body: MultipartBody.Part = MultipartBody.Part.createFormData("upload_picture", fileNameByTimeStamp, requestFile)
+        val body: MultipartBody.Part = MultipartBody.Part.createFormData("file", fileNameByTimeStamp, requestFile)
         val params: MutableMap<String, Int> = HashMap()
         params["place_id"] = showingPlaceId.toInt()
+        Log.e("sandyzhang", fileNameByTimeStamp)
+
 
         mapApiService.uploadPicture(body, params)
                 .setSchedulers()
@@ -416,6 +419,24 @@ class MapViewModel : BaseViewModel() {
                 }.lifeCycle()
 
     }
+
+    /**
+     * 上传搜索热度
+     * @param placeId 增加该地点的搜索量
+     */
+    fun addHot(placeId: String) {
+        mapApiService.addHot(placeId.toInt()).setSchedulers()
+                .doOnErrorWithDefaultErrorHandler {
+                    true
+                }
+                .safeSubscribeBy {
+                    if (!it.isSuccessful) {
+                        MapToast.makeText(BaseApp.context, BaseApp.context.getString(R.string.map_add_hot_failed), Toast.LENGTH_SHORT).show()
+                    }
+                }.lifeCycle()
+    }
+
+
 }
 
 

@@ -29,6 +29,10 @@ internal interface MapApiService {
     @POST("searchtype")
     fun getSearchType(@Field("code") code: String): Observable<RedrockApiWrapper<MutableList<String>>>
 
+    @FormUrlEncoded
+    @POST("addhot")
+    fun addHot(@Field("id") placeId: Int): Observable<RedrockApiStatus>
+
     @GET("rockmap/collect")
     fun getCollect(): Observable<RedrockApiWrapper<FavoritePlaceSimple>>
 
