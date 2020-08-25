@@ -1,9 +1,8 @@
 package com.mredrock.cyxbs.discover.map.widget
 
-import android.app.ProgressDialog
+import android.app.Activity
 import android.content.Context
-
-//转圈圈的弹窗
+import android.view.KeyEvent
 
 object GlideProgressDialog {
     private var dialog: CustomProgressDialog? = null
@@ -12,7 +11,20 @@ object GlideProgressDialog {
         dialog = CustomProgressDialog.createDialog(context)
         dialog?.setMessage(message)
         dialog?.setTitle(title)
-        dialog?.setCancelable(cancelable)
+        dialog?.setCancelable(true)
+        dialog?.setCanceledOnTouchOutside(cancelable)
+        dialog?.setOnKeyListener { _, keyCode, _ ->
+            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                if (dialog?.isShowing == true) {
+                    dialog?.hide()
+                    val activity = context as Activity
+                    activity.finish()
+                }
+                true
+            } else {
+                false;//默认返回 false
+            }
+        }
         dialog?.show()
     }
 
@@ -28,7 +40,4 @@ object GlideProgressDialog {
         }
     }
 
-    fun dismiss() {
-        dialog?.dismiss()
-    }
 }
