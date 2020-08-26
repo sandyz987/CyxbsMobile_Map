@@ -396,7 +396,6 @@ class MapViewModel : BaseViewModel() {
         val body: MultipartBody.Part = MultipartBody.Part.createFormData("file", fileNameByTimeStamp, requestFile)
         val params: MutableMap<String, Int> = HashMap()
         params["place_id"] = showingPlaceId.toInt()
-        Log.e("sandyzhang", fileNameByTimeStamp)
 
 
         mapApiService.uploadPicture(body, params)
