@@ -6,18 +6,22 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Matrix
 import android.graphics.Paint
+import android.os.Build
 import android.util.AttributeSet
 import android.view.MotionEvent
+import androidx.annotation.RequiresApi
 import androidx.core.graphics.drawable.toBitmap
+import anet.channel.util.Utils
 import com.mredrock.cyxbs.common.utils.extensions.dp2px
 import com.mredrock.cyxbs.discover.map.R
+
 
 /**
  *@author zhangzhe
  *@date 2020/8/9
  *@description 带动画效果的搜索框自定义view，所有逻辑均在本类中
  */
-
+@RequiresApi(Build.VERSION_CODES.M)
 class SearchEditText : androidx.appcompat.widget.AppCompatEditText {
 
     private val clearBitmap: Bitmap by lazy {
@@ -74,9 +78,12 @@ class SearchEditText : androidx.appcompat.widget.AppCompatEditText {
         init()
     }
 
+
     private fun init() {
         paint = Paint()
-        paint.textSize = 35f
+        val fontScale = context.resources.displayMetrics.scaledDensity
+        paint.textSize = fontScale * 14 + 0.5f //设置字号为14sp
+        paint.color = context.resources.getColor(R.color.map_search_text_color_hint, null)
         paint.isAntiAlias = true
         hintString = ""
 
